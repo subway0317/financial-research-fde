@@ -5,6 +5,8 @@ Financial Research FDE Platform provides reliable financial data, daily point-in
 and reproducible research contexts. FDE Stage 1 — Deterministic Research Core builds a typed `ResearchContext` from
 an explicit ticker and as-of date. FDE Stage 2 — Research Tools & API Layer adds
 five deterministic research tools and a thin, typed, stateless FastAPI transport.
+FDE Stage 3 — Research Skills & Controlled Orchestration composes those tools into
+four reusable domain workflows and one quality-gated equity evidence package.
 
 This project is **not a demonstrated alpha-generating stock predictor**. Earlier
 Quant research found no robust multi-year predictive signal from Relative Market +
@@ -15,8 +17,9 @@ choice, not a predictive-performance claim.
 ## Setup and verification
 
 Requires Python **>=3.12**. Local verification used the existing Python **3.14.4**
-virtual environment. CI is configured for Python 3.12 and 3.14; Stage 1 CI passed at checkpoint `39893f0`. Stage 2 CI configuration is checked
-locally; the new workflow executes on GitHub after the user creates a checkpoint.
+virtual environment. CI is configured for Python 3.12 and 3.14. Stage 1 CI passed
+at `39893f0`; Stage 2 CI passed at `1adcc82`. Stage 3 changes are validated locally;
+the workflow executes on GitHub after the user creates a checkpoint.
 
 On a new machine:
 
@@ -28,6 +31,7 @@ source .venv/bin/activate
 python -m pip install -e ".[dev]"
 pytest
 ruff check .
+ruff format --check .
 mypy src/financial_research
 ```
 
@@ -58,6 +62,9 @@ External source
   -> tools (purpose-specific typed results, evidence and calculations)
   -> api (FastAPI transport only)
 ```
+
+The Python workflow direction is **core → tools → skills → future agent**.
+The existing API remains a transport over tools; Stage 3 adds no HTTP endpoints.
 
 - `schemas/`: frozen Pydantic models, extra fields forbidden, finite required
   numeric values, timezone-aware acquisition timestamps, OHLC/period validation.
@@ -258,8 +265,9 @@ reviewable diagnostic context, not approval to use it as a valid research input.
 
 Implemented: typed research core, SEC company/fundamental adapter, Yahoo-compatible
 market adapter, frozen deterministic features, daily PIT, structured quality,
-provenance, five deterministic research tools, typed FastAPI endpoints, offline
-tests, an opt-in live smoke and CI configuration.
+provenance, five deterministic research tools, typed FastAPI endpoints, five
+registered research skills, shared-context orchestration, evidence packages,
+offline tests, opt-in live smokes and CI configuration.
 
 Not implemented: LLM or model SDKs, agent orchestration, UI frameworks, reports,
 RAG, vector stores, news, sentiment, transcripts, predictive/walk-forward modeling,
@@ -277,7 +285,7 @@ snapshots. CI versions are configured; only Python 3.14.4 was run locally.
 The adapters use the [SEC EDGAR API documentation](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)
 and [SEC developer access guidance](https://www.sec.gov/about/developer-resources).
 Future work must preserve this independent core and these daily PIT/feature
-semantics. No Stage 3 implementation is included.
+semantics. Stage 3 workflows are documented below; no Stage 4 agent is included.
 
 
 ## Stage 2 tools and direct Python use
@@ -497,3 +505,187 @@ Live prices/companyfacts still use retrieved snapshots and may change; historica
 vintage warnings, SEC concept/period limitations, and observed-calendar freshness
 limits remain visible. Stage 2 adds no LLM, agent, valuation/predictive engine,
 database, UI, deployment or investment-signal capability.
+
+## Stage 3: tools, skills and the future agent
+
+A **Tool** supplies an atomic deterministic computation or analysis, such as
+period comparison or a descriptive market window. A **Skill** organizes those
+existing results through a fixed domain workflow with typed inputs/outputs,
+explicit evidence and quality behavior. A future **Agent** may understand user
+intent, choose skills, ask for clarification and synthesize natural language.
+**Stage 3 does not contain an LLM Agent or perform synthesis.**
+
+Core and tools never import skills. Skills never import FastAPI or LLM SDKs.
+Financial calculations, PIT filtering, comparable-period rules and data-quality
+rules stay in Stage 1/2. No new dependencies, external accounts, API keys, OAuth,
+extensions or external services are required. Live execution reuses the existing
+SEC/Yahoo-compatible composition and its explicitly supplied SEC User-Agent.
+
+### Registered skills and contracts
+
+| Skill ID | Fixed purpose | Input / output contract |
+| --- | --- | --- |
+| `company_overview` | Organize identity, latest market state, standard windows and registered source facts | `SkillInput` / `CompanyOverviewResult` |
+| `fundamental_analysis` | Organize legal comparable-period trends without repeating primitive comparisons | `FundamentalAnalysisInput` / `FundamentalAnalysisResult` |
+| `market_analysis` | Organize descriptive market window and relative SMA evidence | `MarketAnalysisInput` / `MarketAnalysisResult` |
+| `research_quality_audit` | Organize authoritative issues, ages, missing metrics and provenance | `SkillInput` / `ResearchQualityAuditResult` |
+| `equity_research` | Execute the four domain skills and assemble an evidence package | `EquityResearchInput` / `ResearchEvidencePackage` |
+
+Every skill definition has a stable ID, version `1.0`, name, objective description,
+required tools, input/output schema references and capabilities. The composite
+also declares its required subskills. `SkillRegistry.register`, `.get` and `.list`
+use explicit in-process registration; listing is ordered by ID. Duplicate IDs
+raise `DataValidationError`; unknown lookup raises `KeyError`. There is no discovery,
+remote registry, marketplace or downloaded plugin code.
+
+```python
+from datetime import date
+
+from financial_research.skills import create_skill_registry
+
+registry = create_skill_registry()
+skill = registry.get("equity_research")
+result = skill.run(ticker="NVDA", as_of_date=date(2026, 6, 30))
+print(result.model_dump_json(indent=2))
+```
+
+`create_skill_registry(builder=...)` injects an offline or alternative context
+builder. For explicit metric/window options, use the typed concrete skill:
+
+```python
+from financial_research.skills import EquityResearchSkill, SkillExecutionContext
+
+# context is an already-built Stage 1 ResearchContext.
+execution = SkillExecutionContext(
+    ticker=context.ticker,
+    as_of_date=context.as_of_date,
+    research_context=context,
+)
+package = EquityResearchSkill().run_from_context(
+    execution, metrics=["revenue", "net_income"], lookback_sessions=60
+)
+print(package.metadata.status, package.synthesis_readiness)
+```
+
+Input schemas reject malformed contracts before execution. A supported metric
+without comparable data yields UNAVAILABLE; a requested unregistered metric
+produces a sanitized FAILED execution before provider work. Comparison and
+market definitions are exactly the Stage 2 definitions documented above.
+
+### Shared execution and controlled workflow
+
+One standalone `.run` creates a UUID4 execution ID and builds one ResearchContext.
+One composite run shares that same context across every subskill and tool. The
+execution holds typed, temporary tool results, never persistent or global caches.
+Repeated identical tool requests reuse results. The market skill reuses snapshot
+windows for 5/20/60 sessions; other requested windows use the existing Stage 2
+window helper while retaining cached relative SMA evidence. Standalone market
+analysis calls the complete market tool. Trends do not call `compare_periods`
+again for each metric.
+
+The fixed order is context acquisition/reuse → quality gate → company overview →
+fundamental analysis → market analysis → quality audit → evidence merge → package
+assembly. Quality FAIL stops financial work; only quality diagnostics are then
+assembled. Other critical failures stop subsequent normal subskills. Evidence
+integrity failures return a failed package without publishing the suspect index.
+
+`SkillExecutionContext` is owned by one logical run. Create a fresh execution for
+another run; its context cannot be replaced after binding. No cross-run data cache
+is supplied, and the configured history still does not guarantee 504 sessions or
+all fiscal comparison pairs. An injected builder remains responsible for supplying
+the canonical Stage 1 context and authoritative quality report.
+
+### Status, quality and synthesis readiness
+
+Execution status and data quality remain separate:
+
+| SkillStatus | Meaning |
+| --- | --- |
+| `SUCCESS` | Core workflow and required evidence completed |
+| `PARTIAL` | Core purpose completed; some supporting metrics, windows or SMA/volatility evidence is unavailable |
+| `UNAVAILABLE` | Legal data is insufficient for the skill's core purpose |
+| `FAILED` | Provider, PIT, canonical validation, critical quality, integrity or unexpected execution failure |
+
+Company overview requires identity and current market state; unavailable registered
+fundamentals or standard windows are supporting gaps. Fundamental analysis requires
+at least one legal comparison among requested metrics. Market analysis requires its
+complete requested close window; volatility/SMA may be supporting gaps. A quality
+audit can complete successfully while faithfully reporting warnings/missing metrics;
+an authoritative FAIL instead gives FAILED and retains critical diagnostics.
+
+The composite requires all four sections, current market state, at least one legal
+fundamental comparison and a complete requested market window. Any failed subskill
+means FAILED; any core unavailable subskill means UNAVAILABLE. Supporting gaps mean
+PARTIAL. Missing percentage change for a zero/negative base preserves a valid
+absolute comparison and its existing limitation rather than changing data quality.
+
+| Condition | SynthesisReadiness |
+| --- | --- |
+| Successful, sufficient evidence; quality PASS; no limitations | `READY` |
+| Sufficient core evidence with warnings, supporting gaps or limitations | `READY_WITH_WARNINGS` |
+| FAILED or insufficient core evidence | `NOT_READY` |
+
+PASS_WITH_WARNINGS is preserved and can accompany SUCCESS or PARTIAL. Fundamental
+age never adds a second staleness rule. Readiness is permission metadata for a
+future synthesis layer, not synthesized text or an investment judgment.
+
+### ResearchEvidencePackage and trace
+
+Identity, as-of date, UUID4 execution ID, generation timestamp, skill version,
+overall status, quality and sanitized error metadata live in the typed `metadata`
+field. The package additionally contains the four structured sections, subskill
+metadata, `synthesis_readiness`, `evidence_index`, calculation provenance,
+limitations and `execution_trace`, with schema version `1.0`.
+
+`evidence_index` maps existing Stage 2 evidence IDs to their original typed
+`EvidenceReference`. Sections and metric summaries reference IDs rather than
+copying full evidence collections. Same ID/same content deduplicates; same ID/
+different content raises `EvidenceIntegrityError`. Conflicting calculation
+provenance also fails. Every computation and input reference must resolve.
+Formulas, parameters and source vintage remain intact. Limitations are preserved,
+deduplicated and sorted. Stage 3 generates no second evidence identity system.
+
+Trace steps contain only sequence, action type, target, status, quality status,
+safe error code and optional duration. They record context acquisition, tool calls/
+reuse, subskill completion, quality gate, evidence merge and package assembly.
+There are no reasoning, chain-of-thought, thesis or free-form thought fields.
+Skill exceptions remain FAILED with safe metadata; raw provider messages and
+credentials are not serialized. Logs include execution ID, skill and status/code.
+
+`normalized_business_json()` excludes execution/request IDs, build/retrieval
+timestamps and timing fields (`duration_ms`, `started_at`, `completed_at`). Fixed
+fixtures/input/version produce identical statuses, source vintage, evidence IDs,
+calculation provenance, sorted limitations and trace actions/targets/statuses.
+Changing retrieved live snapshots remains a real business-vintage difference.
+
+### Stage 3 verification and live composite smoke
+
+Use the existing offline validation commands above. Tests cover contracts, registry,
+domain composition, all status/readiness branches, gates, failures, evidence
+deduplication/collisions/reference resolution, deterministic output and trace,
+dependency direction, and counters proving one composite context/provider cycle.
+All Stage 1/2 tests, API/OpenAPI contracts and live infrastructure remain included.
+CI still runs offline tests and static checks on Python 3.12/3.14; live remains
+excluded by default.
+
+With the existing, explicitly supplied `SEC_USER_AGENT`:
+
+```bash
+export LIVE_AS_OF_DATE="2026-06-30"
+pytest -m live tests/live/test_nvda_equity_skill_smoke.py -s
+python -m financial_research.skills.smoke --ticker NVDA --as-of-date 2026-06-30
+```
+
+This opt-in path builds one live context and exercises all four subskills and the
+composite. It checks typed shape, legal dates, context count, sections, evidence
+integrity and preserved limitations without volatile exact-value assertions.
+The summary reports smoke status separately from SkillStatus, readiness and data
+quality: a legitimate data-unavailable result remains UNAVAILABLE/NOT_READY.
+Provider access/rate/outage/transport blocks are classified EXTERNAL BLOCKED;
+validation/integrity/execution failures are FAILED. The pytest smoke fails rather
+than skips on non-PASS. CLI exit codes remain PASS=0, EXTERNAL BLOCKED=2, FAILED=1.
+
+Source concept/period coverage, observed-calendar freshness and retrieved historical
+vintage limitations remain unchanged. Stage 3 adds no LLM SDK, agent, routing,
+natural-language report/thesis, recommendations, valuation, prediction, portfolio,
+database, persistent sessions, authentication, UI, deployment or remote marketplace.
