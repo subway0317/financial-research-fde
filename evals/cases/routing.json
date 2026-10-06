@@ -1,0 +1,319 @@
+[
+  {
+    "case_id": "routing-company_overview-en",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "Give me a company overview of NVDA.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "COMPANY_OVERVIEW",
+    "expected_skill_id": "company_overview",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-company_overview-zh",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "请介绍 NVDA 的公司情况。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "COMPANY_OVERVIEW",
+    "expected_skill_id": "company_overview",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "zh",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-company_overview-mixed",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "帮我介绍 NVDA company profile。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "COMPANY_OVERVIEW",
+    "expected_skill_id": "company_overview",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "mixed"
+    ]
+  },
+  {
+    "case_id": "routing-fundamental_focus-en",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "How have NVDA's fundamentals changed?",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-fundamental_focus-zh",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "分析 NVDA 的营收和利润趋势。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "zh",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-fundamental_focus-mixed",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "帮我 analyze NVDA fundamentals。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "mixed",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-market_focus-en",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "Describe NVDA market price behavior and volatility.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "MARKET_FOCUS",
+    "expected_skill_id": "market_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-market_focus-zh",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "描述 NVDA 股价表现和波动情况。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "MARKET_FOCUS",
+    "expected_skill_id": "market_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "zh",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-market_focus-mixed",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "帮我分析 NVDA market price behavior。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "MARKET_FOCUS",
+    "expected_skill_id": "market_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "mixed"
+    ]
+  },
+  {
+    "case_id": "routing-quality_focus-en",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "Audit NVDA data quality and source limitations.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "QUALITY_FOCUS",
+    "expected_skill_id": "research_quality_audit",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-quality_focus-zh",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "检查 NVDA 数据质量和来源限制。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "QUALITY_FOCUS",
+    "expected_skill_id": "research_quality_audit",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "zh",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-quality_focus-mixed",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "请检查 NVDA data quality。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "QUALITY_FOCUS",
+    "expected_skill_id": "research_quality_audit",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "mixed"
+    ]
+  },
+  {
+    "case_id": "routing-broad_research-en",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "Research NVDA fundamentals, market behavior and data quality together.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "BROAD_RESEARCH",
+    "expected_skill_id": "equity_research",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-broad_research-zh",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "综合研究 NVDA 的基本面、市场表现和数据质量。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "BROAD_RESEARCH",
+    "expected_skill_id": "equity_research",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "zh",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "routing-broad_research-mixed",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "综合分析 NVDA fundamentals、market 和数据质量。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "BROAD_RESEARCH",
+    "expected_skill_id": "equity_research",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "mixed"
+    ]
+  },
+  {
+    "case_id": "routing-ambiguous-en",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "How has NVDA performed?",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": null,
+    "expected_skill_id": null,
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "AMBIGUOUS",
+    "tags": [
+      "en"
+    ]
+  },
+  {
+    "case_id": "routing-ambiguous-zh",
+    "case_version": "1.0",
+    "suite": "routing",
+    "question": "NVDA 表现怎么样？",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": null,
+    "expected_skill_id": null,
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "AMBIGUOUS",
+    "tags": [
+      "zh"
+    ]
+  }
+]

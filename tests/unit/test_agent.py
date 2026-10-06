@@ -540,5 +540,5 @@ def test_provider_messages_and_question_never_logged(registry, caplog):
         request
     )
     assert "private-user-text" not in caplog.text
-    assert "prompt_version=stage4-planner-v1" in caplog.text
+    assert "prompt_version=stage5-planner-v1" in caplog.text
     assert "repair_count=0" in caplog.text

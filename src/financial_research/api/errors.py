@@ -11,6 +11,7 @@ from financial_research.agent.errors import (
     AgentIntegrityError,
     AgentPlanValidationError,
     GroundingValidationError,
+    PayloadBudgetExceeded,
 )
 from financial_research.api.schemas import ErrorResponse
 from financial_research.exceptions import (
@@ -28,6 +29,12 @@ from financial_research.skills.errors import EvidenceIntegrityError
 
 logger = logging.getLogger(__name__)
 ERROR_MAP = (
+    (
+        PayloadBudgetExceeded,
+        503,
+        "SYNTHESIS_PAYLOAD_BUDGET_EXCEEDED",
+        "Research evidence exceeds the synthesis payload budget.",
+    ),
     (AgentConfigurationError, 503, "AGENT_CONFIGURATION_ERROR", "Agent service is not configured."),
     (LLMProviderError, 502, "LLM_PROVIDER_ERROR", "An LLM provider request failed."),
     (AgentPlanValidationError, 500, "AGENT_PLAN_VALIDATION_ERROR", "Agent plan validation failed."),

@@ -18,3 +18,12 @@ class AgentPlanValidationError(AgentIntegrityError):
 
 class GroundingValidationError(AgentIntegrityError):
     """Synthesis failed citation, output schema or recommendation validation."""
+
+
+class PayloadBudgetExceeded(AgentIntegrityError):
+    """No synthesis request is sent when its serialized input exceeds the ceiling."""
+
+    def __init__(self, *, actual_bytes: int, budget_bytes: int) -> None:
+        super().__init__("SYNTHESIS_PAYLOAD_BUDGET_EXCEEDED")
+        self.actual_bytes = actual_bytes
+        self.budget_bytes = budget_bytes

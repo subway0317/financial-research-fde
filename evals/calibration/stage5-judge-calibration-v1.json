@@ -1,0 +1,290 @@
+{
+  "calibration_version": "stage5-judge-calibration-v1",
+  "cases": [
+    {
+      "case_id": "source-supported-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "source-supported-en",
+        "section": "FUNDAMENTALS",
+        "claim_type": "SOURCE_FACT",
+        "statement": "NVDA supplied revenue for 2025-01-01 through 2025-03-31 is 150 USD.",
+        "evidence_ids": [
+          "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "source-contradicted-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "source-contradicted-en",
+        "section": "FUNDAMENTALS",
+        "claim_type": "SOURCE_FACT",
+        "statement": "Revenue for 2025-01-01 through 2025-03-31 is 149 USD.",
+        "evidence_ids": [
+          "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1"
+        ]
+      },
+      "expected_verdict": "CONTRADICTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "source-insufficient-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "source-insufficient-en",
+        "section": "FUNDAMENTALS",
+        "claim_type": "SOURCE_FACT",
+        "statement": "Revenue is 150 USD and product Alpha contributes 80 USD of that revenue.",
+        "evidence_ids": [
+          "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1"
+        ]
+      },
+      "expected_verdict": "INSUFFICIENT",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "computed-supported-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "computed-supported-en",
+        "section": "FUNDAMENTALS",
+        "claim_type": "COMPUTED_FACT",
+        "statement": "For the quarter ending 2025-03-31, revenue absolute change is 50 USD and the year-over-year ratio is 0.5; percentage-change status is MEANINGFUL.",
+        "evidence_ids": [
+          "computation:12bf060ecd9d7de970abac2380cef2b952ea67edc2b2745b314a1fa3c8f24741",
+          "computation:3e7e4e26cc4d9571ac50beb6785bb8cd0a3b012ebe81ba01ad0266b09ad7694b"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "computed-missing-state-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "computed-missing-state-en",
+        "section": "FUNDAMENTALS",
+        "claim_type": "COMPUTED_FACT",
+        "statement": "For the quarter ending 2025-03-31, revenue absolute change is 50 USD and the year-over-year ratio is 0.5; percentage-change status is MEANINGFUL.",
+        "evidence_ids": [
+          "computation:12bf060ecd9d7de970abac2380cef2b952ea67edc2b2745b314a1fa3c8f24741",
+          "computation:3e7e4e26cc4d9571ac50beb6785bb8cd0a3b012ebe81ba01ad0266b09ad7694b"
+        ]
+      },
+      "expected_verdict": "INSUFFICIENT",
+      "withheld_categories": [
+        "COMPARISON_STATE"
+      ]
+    },
+    {
+      "case_id": "quality-supported-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "quality-supported-en",
+        "section": "QUALITY",
+        "claim_type": "SOURCE_FACT",
+        "statement": "CURRENT_COMPANY_REFERENCE is a WARNING diagnostic with count 1 and message \"company reference snapshot; historical identity unverified\".",
+        "evidence_ids": []
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "readiness-supported-zh",
+      "language": "CHINESE",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "readiness-supported-zh",
+        "section": "QUALITY",
+        "claim_type": "SOURCE_FACT",
+        "statement": "技能执行状态为 PARTIAL，综合准备状态为 READY_WITH_WARNINGS。",
+        "evidence_ids": []
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "compound-supported-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "compound-supported-en",
+        "section": "FUNDAMENTALS",
+        "claim_type": "SOURCE_FACT",
+        "statement": "Revenue and net income for 2025-01-01 through 2025-03-31 are each 150 USD.",
+        "evidence_ids": [
+          "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1",
+          "fact:272602e262f86a17f685421afcd946cdaa24e943177f47c73854f09daf8d1ebd"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "compound-partial-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "compound-partial-en",
+        "section": "FUNDAMENTALS",
+        "claim_type": "SOURCE_FACT",
+        "statement": "Revenue is 150 USD and market share is 80%.",
+        "evidence_ids": [
+          "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1"
+        ]
+      },
+      "expected_verdict": "INSUFFICIENT",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "compound-contradicted-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "compound-contradicted-en",
+        "section": "FUNDAMENTALS",
+        "claim_type": "SOURCE_FACT",
+        "statement": "Revenue and net income for 2025-01-01 through 2025-03-31 are 150 USD and 149 USD respectively.",
+        "evidence_ids": [
+          "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1",
+          "fact:272602e262f86a17f685421afcd946cdaa24e943177f47c73854f09daf8d1ebd"
+        ]
+      },
+      "expected_verdict": "CONTRADICTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "baseline-surprising-broad-zh",
+      "language": "CHINESE",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "baseline-surprising-broad-zh",
+        "section": "FUNDAMENTALS",
+        "claim_type": "SOURCE_FACT",
+        "statement": "2025-01-01 至 2025-03-31 的收入为 150 USD、营业利润为 10 USD、净利润为 150 USD、资本支出为 20 USD；2024-01-01 至 2024-03-31 的对应数值分别为 100 USD、0 USD、-100 USD、30 USD。",
+        "evidence_ids": [
+          "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1",
+          "fact:74302ed14457b6d0854718c8257fc19288071af2a016f232bff8c907a9ddc4cd",
+          "fact:e8c1a984c0ff64db1d47bbd0a93f0d6f73e93f7cef060c5d4f3790c61a07c3e0",
+          "fact:74f6cc2de11a226166695f7593ca6e1c60389e73fa1eda5270c9b85a702e5c6b",
+          "fact:272602e262f86a17f685421afcd946cdaa24e943177f47c73854f09daf8d1ebd",
+          "fact:de5ead925fa42b87a29296f5d370171dfea3002ec5c0181853f5454e8c99e98f",
+          "fact:7281da20ac534f3e73651c79963f8d716114ee64f3f09f5cd1e53865f456e06f",
+          "fact:6ac9d413cb3046a3e5f2deab4ef75b9299e46053ccd50de553da9b09b3ffeac6"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "baseline-surprising-mixed-zh",
+      "language": "CHINESE",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "baseline-surprising-mixed-zh",
+        "section": "FUNDAMENTALS",
+        "claim_type": "SOURCE_FACT",
+        "statement": "NVDA 所供数据中，2025-01-01 至 2025-03-31 的营收为 150 USD、净利润为 150 USD、营业利润为 10 USD、资本支出为 20 USD；2024-01-01 至 2024-03-31 的对应值分别为 100 USD、-100 USD、0 USD、30 USD。",
+        "evidence_ids": [
+          "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1",
+          "fact:272602e262f86a17f685421afcd946cdaa24e943177f47c73854f09daf8d1ebd",
+          "fact:e8c1a984c0ff64db1d47bbd0a93f0d6f73e93f7cef060c5d4f3790c61a07c3e0",
+          "fact:7281da20ac534f3e73651c79963f8d716114ee64f3f09f5cd1e53865f456e06f",
+          "fact:74302ed14457b6d0854718c8257fc19288071af2a016f232bff8c907a9ddc4cd",
+          "fact:de5ead925fa42b87a29296f5d370171dfea3002ec5c0181853f5454e8c99e98f",
+          "fact:74f6cc2de11a226166695f7593ca6e1c60389e73fa1eda5270c9b85a702e5c6b",
+          "fact:6ac9d413cb3046a3e5f2deab4ef75b9299e46053ccd50de553da9b09b3ffeac6"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "company-supported-en",
+      "language": "ENGLISH",
+      "fixture_scenario": "warnings",
+      "skill_id": "company_overview",
+      "claim": {
+        "claim_id": "company-supported-en",
+        "section": "COMPANY",
+        "claim_type": "SOURCE_FACT",
+        "statement": "The supplied NVDA company name is NVIDIA (synthetic fixture), as of 2025-05-25.",
+        "evidence_ids": []
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "availability-supported-zh",
+      "language": "CHINESE",
+      "fixture_scenario": "warnings",
+      "skill_id": "company_overview",
+      "claim": {
+        "claim_id": "availability-supported-zh",
+        "section": "QUALITY",
+        "claim_type": "SOURCE_FACT",
+        "statement": "经营现金流和股东权益的状态均为 UNAVAILABLE，限制为 NO_CURRENT_OBSERVATION。",
+        "evidence_ids": []
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "negative-base-supported-zh",
+      "language": "CHINESE",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "negative-base-supported-zh",
+        "section": "FUNDAMENTALS",
+        "claim_type": "COMPUTED_FACT",
+        "statement": "净利润同比绝对变化为 250 USD，由于 NEGATIVE_PRIOR_BASE，百分比变化状态为 NOT_MEANINGFUL。",
+        "evidence_ids": [
+          "computation:26962f72e3bc179b10c871030bb1bb9a464a67d4b3a5d70639eadce4adabeec2",
+          "fact:de5ead925fa42b87a29296f5d370171dfea3002ec5c0181853f5454e8c99e98f"
+        ]
+      },
+      "expected_verdict": "SUPPORTED",
+      "withheld_categories": []
+    },
+    {
+      "case_id": "quality-missing-context-zh",
+      "language": "CHINESE",
+      "fixture_scenario": "warnings",
+      "skill_id": "fundamental_analysis",
+      "claim": {
+        "claim_id": "quality-missing-context-zh",
+        "section": "QUALITY",
+        "claim_type": "SOURCE_FACT",
+        "statement": "CURRENT_COMPANY_REFERENCE 诊断的严重程度为 WARNING，计数为 1。",
+        "evidence_ids": []
+      },
+      "expected_verdict": "INSUFFICIENT",
+      "withheld_categories": [
+        "QUALITY_DIAGNOSTIC"
+      ]
+    }
+  ]
+}

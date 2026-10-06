@@ -6,7 +6,7 @@ from typing import Annotated, Literal
 
 from pydantic import UUID4, AwareDatetime, BeforeValidator, Field, model_validator
 
-from financial_research.schemas.agent import GroundedResearchAnswer
+from financial_research.schemas.agent import GroundedResearchAnswer, ResponseLanguage
 from financial_research.schemas.base import CanonicalModel, NonEmpty, Ticker
 from financial_research.schemas.quality import QualityReport
 from financial_research.schemas.tools import ComparisonSpec, ToolResult
@@ -27,6 +27,7 @@ class ResearchRequest(CanonicalModel):
 
 class AgentResearchRequest(ResearchRequest):
     question: Annotated[NonEmpty, Field(max_length=8000)]
+    response_language: ResponseLanguage = ResponseLanguage.AUTO
 
 
 class AgentResearchEnvelope(CanonicalModel):

@@ -1,0 +1,111 @@
+[
+  {
+    "case_id": "grounding-source-en",
+    "case_version": "1.1",
+    "suite": "grounding",
+    "question": "Describe the supplied NVDA revenue observations with periods and units.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "grounding-computed-zh",
+    "case_version": "1.0",
+    "suite": "grounding",
+    "question": "解释 NVDA 已提供的营收同比变化，引用计算证据，不要重新计算。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "zh"
+    ]
+  },
+  {
+    "case_id": "grounding-zero-base-en",
+    "case_version": "1.0",
+    "suite": "grounding",
+    "question": "Describe NVDA operating income changes and any limitations for percentage comparisons.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en"
+    ]
+  },
+  {
+    "case_id": "grounding-cash-zh",
+    "case_version": "1.0",
+    "suite": "grounding",
+    "question": "描述 NVDA 现金和资产的可比期间变化及数据限制。",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "CHINESE",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "zh"
+    ]
+  },
+  {
+    "case_id": "grounding-unsupported-en",
+    "case_version": "1.0",
+    "suite": "grounding",
+    "question": "Analyze supplied NVDA fundamentals; identify unavailable metrics without inventing values.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en"
+    ]
+  },
+  {
+    "case_id": "grounding-period-en",
+    "case_version": "1.0",
+    "suite": "grounding",
+    "question": "Compare the supplied NVDA fiscal periods and preserve their filing availability dates.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "FUNDAMENTAL_FOCUS",
+    "expected_skill_id": "fundamental_analysis",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en"
+    ]
+  }
+]

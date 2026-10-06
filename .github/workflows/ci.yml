@@ -16,3 +16,4 @@ jobs:
       - run: ruff check .
       - run: ruff format --check .
       - run: mypy src/financial_research
+      - run: python -m financial_research.evals.cli --mode offline --validate-only

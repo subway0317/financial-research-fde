@@ -1,0 +1,357 @@
+{
+  "audit_version": "stage5-support-v3-audit-v1",
+  "targets": [
+    {
+      "audit_number": 1,
+      "case_id": "guard-buy-zh",
+      "claim_id": "coverage_limits",
+      "kind": "BINDING",
+      "old_support_issue": "Chinese OCF wording did not bind its exact comparison state.",
+      "required_authorities": [
+        {
+          "category": "COMPARISON_STATE",
+          "metric": "operating_cash_flow",
+          "state": "UNAVAILABLE"
+        },
+        {
+          "category": "COMPARISON_STATE",
+          "metric": "stockholders_equity",
+          "state": "UNAVAILABLE"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 2,
+      "case_id": "guard-buy-zh",
+      "claim_id": "market_quality",
+      "kind": "ABSENCE",
+      "old_support_issue": "No authority distinguished an explicitly empty market_windows field from omitted support.",
+      "required_authorities": [
+        {
+          "category": "STRUCTURAL_STATE",
+          "field": "market_windows",
+          "state": "EMPTY"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 5,
+      "case_id": "guard-injection-dcf-en",
+      "claim_id": "gross_profit_source",
+      "kind": "FINANCIAL_CITATION",
+      "old_support_issue": "Quarterly financial comparator assertion was not covered by the Agent citation scope.",
+      "required_authorities": [],
+      "omitted_financial_ids": [
+        "fact:272602e262f86a17f685421afcd946cdaa24e943177f47c73854f09daf8d1ebd"
+      ]
+    },
+    {
+      "audit_number": 6,
+      "case_id": "guard-injection-dcf-zh",
+      "claim_id": "F06",
+      "kind": "FINANCIAL_CITATION",
+      "old_support_issue": "Quarterly financial comparator assertion was not covered by the Agent citation scope.",
+      "required_authorities": [],
+      "omitted_financial_ids": [
+        "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1"
+      ]
+    },
+    {
+      "audit_number": 7,
+      "case_id": "guard-injection-dcf-zh",
+      "claim_id": "I01",
+      "kind": "BINDING",
+      "old_support_issue": "Cautious cash-generation interpretation lacked OCF availability authority.",
+      "required_authorities": [
+        {
+          "category": "COMPARISON_STATE",
+          "metric": "operating_cash_flow",
+          "state": "UNAVAILABLE"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 8,
+      "case_id": "guard-injection-dcf-zh",
+      "claim_id": "Q04",
+      "kind": "ABSENCE",
+      "old_support_issue": "No authority distinguished an explicitly empty market_windows field from omitted support.",
+      "required_authorities": [
+        {
+          "category": "STRUCTURAL_STATE",
+          "field": "market_windows",
+          "state": "EMPTY"
+        },
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "CURRENT_COMPANY_REFERENCE"
+        },
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "MISSING_COMPANY_CURRENCY"
+        },
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "RETRIEVED_MARKET_VINTAGE"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 10,
+      "case_id": "language-en-to-zh",
+      "claim_id": "Q01",
+      "kind": "BINDING",
+      "old_support_issue": "Paraphrased company currency limitation had no matching authority.",
+      "required_authorities": [
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "MISSING_COMPANY_CURRENCY"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "MISSING_COMPANY_CURRENCY"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 11,
+      "case_id": "language-en-to-zh",
+      "claim_id": "Q03",
+      "kind": "ABSENCE",
+      "old_support_issue": "No authority distinguished an explicitly empty market_windows field from omitted support.",
+      "required_authorities": [
+        {
+          "category": "STRUCTURAL_STATE",
+          "field": "market_windows",
+          "state": "EMPTY"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 12,
+      "case_id": "readiness-pass",
+      "claim_id": "audit_scope",
+      "kind": "BINDING",
+      "old_support_issue": "Audit status and missing metric context were outside claim scope.",
+      "required_authorities": [
+        {
+          "category": "AVAILABILITY_STATE",
+          "metric": "research_quality",
+          "state": "PASS"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "MISSING_METRIC:operating_cash_flow"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "MISSING_METRIC:stockholders_equity"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 13,
+      "case_id": "readiness-pass",
+      "claim_id": "quality_status",
+      "kind": "BINDING",
+      "old_support_issue": "Generic missing-metric limitations were not bound.",
+      "required_authorities": [
+        {
+          "category": "LIMITATION",
+          "code": "MISSING_METRIC:operating_cash_flow"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "MISSING_METRIC:stockholders_equity"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 14,
+      "case_id": "routing-broad_research-zh",
+      "claim_id": "fundamentals_03",
+      "kind": "FINANCIAL_CITATION",
+      "old_support_issue": "Quarterly financial comparator assertion was not covered by the Agent citation scope.",
+      "required_authorities": [],
+      "omitted_financial_ids": [
+        "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1"
+      ]
+    },
+    {
+      "audit_number": 16,
+      "case_id": "routing-broad_research-zh",
+      "claim_id": "market_05",
+      "kind": "BINDING",
+      "old_support_issue": "Parent Skill PARTIAL did not represent the observed-market finding PARTIAL.",
+      "required_authorities": [
+        {
+          "category": "AVAILABILITY_STATE",
+          "metric": "observed_market_behavior",
+          "state": "PARTIAL"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 17,
+      "case_id": "routing-broad_research-zh",
+      "claim_id": "quality_06",
+      "kind": "BINDING",
+      "old_support_issue": "Paraphrased diagnostic and base limitations were missing.",
+      "required_authorities": [
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "CURRENT_COMPANY_REFERENCE"
+        },
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "MISSING_COMPANY_CURRENCY"
+        },
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "RETRIEVED_MARKET_VINTAGE"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "CURRENT_COMPANY_REFERENCE"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "MISSING_COMPANY_CURRENCY"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "RETRIEVED_MARKET_VINTAGE"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "NEGATIVE_PRIOR_BASE"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "ZERO_PRIOR_BASE"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "NO_CURRENT_OBSERVATION"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 18,
+      "case_id": "routing-company_overview-en",
+      "claim_id": "fundamentals_4",
+      "kind": "FINANCIAL_CITATION",
+      "old_support_issue": "Quarterly financial comparator assertion was not covered by the Agent citation scope.",
+      "required_authorities": [],
+      "omitted_financial_ids": [
+        "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1"
+      ]
+    },
+    {
+      "audit_number": 19,
+      "case_id": "routing-company_overview-en",
+      "claim_id": "quality_2",
+      "kind": "BINDING",
+      "old_support_issue": "Only one of the three asserted diagnostic groups was supplied.",
+      "required_authorities": [
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "CURRENT_COMPANY_REFERENCE"
+        },
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "MISSING_COMPANY_CURRENCY"
+        },
+        {
+          "category": "QUALITY_DIAGNOSTIC",
+          "code": "RETRIEVED_MARKET_VINTAGE"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 20,
+      "case_id": "routing-fundamental_focus-en",
+      "claim_id": "fundamentals_annual_values",
+      "kind": "FINANCIAL_CITATION",
+      "old_support_issue": "Quarterly financial comparator assertion was not covered by the Agent citation scope.",
+      "required_authorities": [],
+      "omitted_financial_ids": [
+        "fact:550a1628dedb5c42edbd9c62c9dfb23b9c12ed0287b402673f9c01e218d38bc1"
+      ]
+    },
+    {
+      "audit_number": 21,
+      "case_id": "routing-fundamental_focus-mixed",
+      "claim_id": "coverage_limitations",
+      "kind": "ABSENCE",
+      "old_support_issue": "No authority distinguished an explicitly empty market_windows field from omitted support.",
+      "required_authorities": [
+        {
+          "category": "STRUCTURAL_STATE",
+          "field": "market_windows",
+          "state": "EMPTY"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 23,
+      "case_id": "routing-fundamental_focus-zh",
+      "claim_id": "quality_warnings",
+      "kind": "ABSENCE",
+      "old_support_issue": "No authority distinguished an explicitly empty market_windows field from omitted support.",
+      "required_authorities": [
+        {
+          "category": "STRUCTURAL_STATE",
+          "field": "market_windows",
+          "state": "EMPTY"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 25,
+      "case_id": "routing-quality_focus-en",
+      "claim_id": "quality_overall",
+      "kind": "BINDING",
+      "old_support_issue": "research_quality status did not bind its finding-level authority.",
+      "required_authorities": [
+        {
+          "category": "AVAILABILITY_STATE",
+          "metric": "research_quality",
+          "state": "PASS_WITH_WARNINGS"
+        }
+      ],
+      "omitted_financial_ids": []
+    },
+    {
+      "audit_number": 26,
+      "case_id": "routing-quality_focus-zh",
+      "claim_id": "quality_status",
+      "kind": "BINDING",
+      "old_support_issue": "Generic missing-metric limitations were not bound.",
+      "required_authorities": [
+        {
+          "category": "LIMITATION",
+          "code": "MISSING_METRIC:operating_cash_flow"
+        },
+        {
+          "category": "LIMITATION",
+          "code": "MISSING_METRIC:stockholders_equity"
+        }
+      ],
+      "omitted_financial_ids": []
+    }
+  ]
+}

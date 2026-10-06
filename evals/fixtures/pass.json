@@ -1,0 +1,2379 @@
+{
+  "scenario_id": "pass",
+  "fixture_version": "1.0",
+  "description": "Frozen synthetic Stage 1–4 fiscal/market fixture. Not actual NVDA financial data.",
+  "context": {
+    "schema_version": "1.0",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "generated_at": "2026-10-06T16:27:24.726043Z",
+    "company": {
+      "ticker": "NVDA",
+      "company_name": "NVIDIA (synthetic fixture)",
+      "cik": "0001045810",
+      "exchange": "Nasdaq",
+      "currency": null,
+      "provenance": {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://www.sec.gov/files/company_tickers_exchange.json",
+        "retrieved_at": "2026-10-06T16:27:24.614277Z",
+        "data_vintage": "sha256:302038af4e001f2d6d52dd054ad2c74b4d7ff6c8c7799f40802b83d43ef79396",
+        "transformation": [
+          "SEC directory identity normalization; currency unknown"
+        ],
+        "content_hash": "302038af4e001f2d6d52dd054ad2c74b4d7ff6c8c7799f40802b83d43ef79396"
+      }
+    },
+    "market": {
+      "observations": [
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-17",
+          "open": 100.0,
+          "high": 101.0,
+          "low": 99.0,
+          "close": 100.0,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-18",
+          "open": 101.0,
+          "high": 102.0,
+          "low": 100.0,
+          "close": 101.0,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-19",
+          "open": 98.98,
+          "high": 99.98,
+          "low": 97.98,
+          "close": 98.98,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-20",
+          "open": 99.9698,
+          "high": 100.9698,
+          "low": 98.9698,
+          "close": 99.9698,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-21",
+          "open": 97.970404,
+          "high": 98.970404,
+          "low": 96.970404,
+          "close": 97.970404,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-24",
+          "open": 98.95010804,
+          "high": 99.95010804,
+          "low": 97.95010804,
+          "close": 98.95010804,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-25",
+          "open": 96.9711058792,
+          "high": 97.9711058792,
+          "low": 95.9711058792,
+          "close": 96.9711058792,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-26",
+          "open": 97.940816937992,
+          "high": 98.940816937992,
+          "low": 96.940816937992,
+          "close": 97.940816937992,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-27",
+          "open": 95.98200059923215,
+          "high": 96.98200059923215,
+          "low": 94.98200059923215,
+          "close": 95.98200059923215,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-02-28",
+          "open": 96.94182060522448,
+          "high": 97.94182060522448,
+          "low": 95.94182060522448,
+          "close": 96.94182060522448,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-03",
+          "open": 95.00298419311999,
+          "high": 96.00298419311999,
+          "low": 94.00298419311999,
+          "close": 95.00298419311999,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-04",
+          "open": 95.95301403505118,
+          "high": 96.95301403505118,
+          "low": 94.95301403505118,
+          "close": 95.95301403505118,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-05",
+          "open": 94.03395375435015,
+          "high": 95.03395375435015,
+          "low": 93.03395375435015,
+          "close": 94.03395375435015,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-06",
+          "open": 94.97429329189366,
+          "high": 95.97429329189366,
+          "low": 93.97429329189366,
+          "close": 94.97429329189366,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-07",
+          "open": 93.07480742605578,
+          "high": 94.07480742605578,
+          "low": 92.07480742605578,
+          "close": 93.07480742605578,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-10",
+          "open": 94.00555550031635,
+          "high": 95.00555550031635,
+          "low": 93.00555550031635,
+          "close": 94.00555550031635,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-11",
+          "open": 92.12544439031002,
+          "high": 93.12544439031002,
+          "low": 91.12544439031002,
+          "close": 92.12544439031002,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-12",
+          "open": 93.04669883421312,
+          "high": 94.04669883421312,
+          "low": 92.04669883421312,
+          "close": 93.04669883421312,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-13",
+          "open": 91.18576485752885,
+          "high": 92.18576485752885,
+          "low": 90.18576485752885,
+          "close": 91.18576485752885,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-14",
+          "open": 92.09762250610414,
+          "high": 93.09762250610414,
+          "low": 91.09762250610414,
+          "close": 92.09762250610414,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-17",
+          "open": 90.25567005598207,
+          "high": 91.25567005598207,
+          "low": 89.25567005598207,
+          "close": 90.25567005598207,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-18",
+          "open": 91.1582267565419,
+          "high": 92.1582267565419,
+          "low": 90.1582267565419,
+          "close": 91.1582267565419,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-19",
+          "open": 89.33506222141105,
+          "high": 90.33506222141105,
+          "low": 88.33506222141105,
+          "close": 89.33506222141105,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-20",
+          "open": 90.22841284362516,
+          "high": 91.22841284362516,
+          "low": 89.22841284362516,
+          "close": 90.22841284362516,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-21",
+          "open": 88.42384458675267,
+          "high": 89.42384458675267,
+          "low": 87.42384458675267,
+          "close": 88.42384458675267,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-24",
+          "open": 89.30808303262019,
+          "high": 90.30808303262019,
+          "low": 88.30808303262019,
+          "close": 89.30808303262019,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-25",
+          "open": 87.52192137196778,
+          "high": 88.52192137196778,
+          "low": 86.52192137196778,
+          "close": 87.52192137196778,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-26",
+          "open": 88.39714058568745,
+          "high": 89.39714058568745,
+          "low": 87.39714058568745,
+          "close": 88.39714058568745,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-27",
+          "open": 86.6291977739737,
+          "high": 87.6291977739737,
+          "low": 85.6291977739737,
+          "close": 86.6291977739737,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-28",
+          "open": 87.49548975171344,
+          "high": 88.49548975171344,
+          "low": 86.49548975171344,
+          "close": 87.49548975171344,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-03-31",
+          "open": 85.74557995667917,
+          "high": 86.74557995667917,
+          "low": 84.74557995667917,
+          "close": 85.74557995667917,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-01",
+          "open": 86.60303575624596,
+          "high": 87.60303575624596,
+          "low": 85.60303575624596,
+          "close": 86.60303575624596,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-02",
+          "open": 84.87097504112104,
+          "high": 85.87097504112104,
+          "low": 83.87097504112104,
+          "close": 84.87097504112104,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-03",
+          "open": 85.71968479153226,
+          "high": 86.71968479153226,
+          "low": 84.71968479153226,
+          "close": 85.71968479153226,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-04",
+          "open": 84.00529109570161,
+          "high": 85.00529109570161,
+          "low": 83.00529109570161,
+          "close": 84.00529109570161,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-07",
+          "open": 84.84534400665862,
+          "high": 85.84534400665862,
+          "low": 83.84534400665862,
+          "close": 84.84534400665862,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-08",
+          "open": 83.14843712652545,
+          "high": 84.14843712652545,
+          "low": 82.14843712652545,
+          "close": 83.14843712652545,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-09",
+          "open": 83.97992149779071,
+          "high": 84.97992149779071,
+          "low": 82.97992149779071,
+          "close": 83.97992149779071,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-10",
+          "open": 82.3003230678349,
+          "high": 83.3003230678349,
+          "low": 81.3003230678349,
+          "close": 82.3003230678349,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-11",
+          "open": 83.12332629851325,
+          "high": 84.12332629851325,
+          "low": 82.12332629851325,
+          "close": 83.12332629851325,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-14",
+          "open": 81.46085977254299,
+          "high": 82.46085977254299,
+          "low": 80.46085977254299,
+          "close": 81.46085977254299,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-15",
+          "open": 82.27546837026841,
+          "high": 83.27546837026841,
+          "low": 81.27546837026841,
+          "close": 82.27546837026841,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-16",
+          "open": 80.62995900286305,
+          "high": 81.62995900286305,
+          "low": 79.62995900286305,
+          "close": 80.62995900286305,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-17",
+          "open": 81.43625859289168,
+          "high": 82.43625859289168,
+          "low": 80.43625859289168,
+          "close": 81.43625859289168,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-18",
+          "open": 79.80753342103384,
+          "high": 80.80753342103384,
+          "low": 78.80753342103384,
+          "close": 79.80753342103384,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-21",
+          "open": 80.60560875524418,
+          "high": 81.60560875524418,
+          "low": 79.60560875524418,
+          "close": 80.60560875524418,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-22",
+          "open": 78.9934965801393,
+          "high": 79.9934965801393,
+          "low": 77.9934965801393,
+          "close": 78.9934965801393,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-23",
+          "open": 79.78343154594069,
+          "high": 80.78343154594069,
+          "low": 78.78343154594069,
+          "close": 79.78343154594069,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-24",
+          "open": 78.18776291502188,
+          "high": 79.18776291502188,
+          "low": 77.18776291502188,
+          "close": 78.18776291502188,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-25",
+          "open": 78.9696405441721,
+          "high": 79.9696405441721,
+          "low": 77.9696405441721,
+          "close": 78.9696405441721,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-28",
+          "open": 77.39024773328865,
+          "high": 78.39024773328865,
+          "low": 76.39024773328865,
+          "close": 77.39024773328865,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-29",
+          "open": 78.16415021062153,
+          "high": 79.16415021062153,
+          "low": 77.16415021062153,
+          "close": 78.16415021062153,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-04-30",
+          "open": 76.60086720640909,
+          "high": 77.60086720640909,
+          "low": 75.60086720640909,
+          "close": 76.60086720640909,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-01",
+          "open": 77.36687587847318,
+          "high": 78.36687587847318,
+          "low": 76.36687587847318,
+          "close": 77.36687587847318,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-02",
+          "open": 75.81953836090372,
+          "high": 76.81953836090372,
+          "low": 74.81953836090372,
+          "close": 75.81953836090372,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-05",
+          "open": 76.57773374451276,
+          "high": 77.57773374451276,
+          "low": 75.57773374451276,
+          "close": 76.57773374451276,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-06",
+          "open": 75.0461790696225,
+          "high": 76.0461790696225,
+          "low": 74.0461790696225,
+          "close": 75.0461790696225,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-07",
+          "open": 75.79664086031872,
+          "high": 76.79664086031872,
+          "low": 74.79664086031872,
+          "close": 75.79664086031872,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-08",
+          "open": 74.28070804311234,
+          "high": 75.28070804311234,
+          "low": 73.28070804311234,
+          "close": 74.28070804311234,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-09",
+          "open": 75.02351512354346,
+          "high": 76.02351512354346,
+          "low": 74.02351512354346,
+          "close": 75.02351512354346,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-12",
+          "open": 73.52304482107259,
+          "high": 74.52304482107259,
+          "low": 72.52304482107259,
+          "close": 73.52304482107259,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-13",
+          "open": 74.25827526928332,
+          "high": 75.25827526928332,
+          "low": 73.25827526928332,
+          "close": 74.25827526928332,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-14",
+          "open": 72.77310976389765,
+          "high": 73.77310976389765,
+          "low": 71.77310976389765,
+          "close": 72.77310976389765,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-15",
+          "open": 73.50084086153663,
+          "high": 74.50084086153663,
+          "low": 72.50084086153663,
+          "close": 73.50084086153663,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-16",
+          "open": 72.0308240443059,
+          "high": 73.0308240443059,
+          "low": 71.0308240443059,
+          "close": 72.0308240443059,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-19",
+          "open": 72.75113228474896,
+          "high": 73.75113228474896,
+          "low": 71.75113228474896,
+          "close": 72.75113228474896,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-20",
+          "open": 71.29610963905398,
+          "high": 72.29610963905398,
+          "low": 70.29610963905398,
+          "close": 71.29610963905398,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-21",
+          "open": 72.00907073544452,
+          "high": 73.00907073544452,
+          "low": 71.00907073544452,
+          "close": 72.00907073544452,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-22",
+          "open": 70.56888932073564,
+          "high": 71.56888932073564,
+          "low": 69.56888932073564,
+          "close": 70.56888932073564,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        },
+        {
+          "ticker": "NVDA",
+          "date": "2025-05-23",
+          "open": 71.27457821394299,
+          "high": 72.27457821394299,
+          "low": 70.27457821394299,
+          "close": 71.27457821394299,
+          "volume": 1000,
+          "provider": "yahoo-chart",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z"
+        }
+      ],
+      "metadata": {
+        "price_adjustment_policy": "SPLIT_AND_DIVIDEND_ADJUSTED",
+        "currency": "USD",
+        "exchange_timezone": "America/New_York",
+        "requested_start": "2023-05-26",
+        "requested_end": "2025-05-25",
+        "provenance": {
+          "provider": "yahoo-chart",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?period1=1685059200&period2=1748217600&interval=1d&events=div%2Csplits",
+          "retrieved_at": "2026-10-06T16:27:24.614924Z",
+          "data_vintage": "sha256:b5985cc325ea30715e932dfb73beebce5ea27bd83a90dee339eb418497b09d4d",
+          "transformation": [
+            "all OHLC multiplied by adjclose/close; reported volume unchanged",
+            "timestamp converted to exchange-local session date"
+          ],
+          "content_hash": "b5985cc325ea30715e932dfb73beebce5ea27bd83a90dee339eb418497b09d4d"
+        }
+      },
+      "features": [
+        {
+          "date": "2025-02-17",
+          "simple_return": null,
+          "log_return": null,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": null,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-18",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": null,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-19",
+          "simple_return": -0.019999999999999907,
+          "log_return": -0.020202707317519355,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": null,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-20",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": null,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-21",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818577,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-24",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282994216,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-25",
+          "simple_return": -0.02000000000000013,
+          "log_return": -0.02020270731751958,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-26",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-27",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-02-28",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-03",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-04",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-05",
+          "simple_return": -0.02000000000000013,
+          "log_return": -0.02020270731751958,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818599,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-06",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-07",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-10",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-11",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818577,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-12",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-13",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": null,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-14",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": null,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-17",
+          "simple_return": -0.019999999999999907,
+          "log_return": -0.020202707317519355,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-18",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": -0.040752782143064326,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-19",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.015389675281277332,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-20",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277332,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.040752782143064326,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-21",
+          "simple_return": -0.019999999999999907,
+          "log_return": -0.020202707317519355,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818577,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-24",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-25",
+          "simple_return": -0.02000000000000013,
+          "log_return": -0.02020270731751958,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818599,
+          "close_to_sma_20": -0.0551429294256468,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-26",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282994216,
+          "close_to_sma_20": -0.04075278214306455,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-27",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.016203769068186102,
+          "close_to_sma_20": -0.055142929425646914,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-28",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282994216,
+          "close_to_sma_20": -0.04075278214306455,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-03-31",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818599,
+          "close_to_sma_20": -0.0551429294256468,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-01",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306455,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-02",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-03",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282990885,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-04",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-07",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-08",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.0551429294256468,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-09",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.040752782143064326,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-10",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818577,
+          "close_to_sma_20": -0.0551429294256468,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-11",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": -0.040752782143064326,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-14",
+          "simple_return": -0.019999999999999907,
+          "log_return": -0.020202707317519355,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818577,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-15",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-16",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.0551429294256468,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-17",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.040752782143064326,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-18",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818599,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-21",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282994216,
+          "close_to_sma_20": -0.040752782143064326,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-22",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-23",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-24",
+          "simple_return": -0.019999999999999907,
+          "log_return": -0.020202707317519355,
+          "rolling_volatility_20": 0.015389675281277314,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818577,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-25",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277314,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-28",
+          "simple_return": -0.02000000000000013,
+          "log_return": -0.02020270731751958,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818599,
+          "close_to_sma_20": -0.0551429294256468,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-29",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282994216,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-04-30",
+          "simple_return": -0.02000000000000013,
+          "log_return": -0.02020270731751958,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818599,
+          "close_to_sma_20": -0.0551429294256468,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-05-01",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282994216,
+          "close_to_sma_20": -0.04075278214306477,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-05-02",
+          "simple_return": -0.019999999999999907,
+          "log_return": -0.020202707317519355,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.055142929425646914,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-05-05",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282994216,
+          "close_to_sma_20": -0.04075278214306455,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-05-06",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.055142929425646914,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-05-07",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306466,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-05-08",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.055142929425647025,
+          "close_to_sma_60": null
+        },
+        {
+          "date": "2025-05-09",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": null,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": -0.04075278214306466,
+          "close_to_sma_60": -0.1372504666864497
+        },
+        {
+          "date": "2025-05-12",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": 0.015126584522688334,
+          "close_to_sma_5": -0.01620376906818599,
+          "close_to_sma_20": -0.055142929425647136,
+          "close_to_sma_60": -0.15019300393987822
+        },
+        {
+          "date": "2025-05-13",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": 0.015126584522688334,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306477,
+          "close_to_sma_60": -0.13725046668644958
+        },
+        {
+          "date": "2025-05-14",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": 0.015126584522688336,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.055142929425646914,
+          "close_to_sma_60": -0.15019300393987822
+        },
+        {
+          "date": "2025-05-15",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": 0.015126584522688336,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306455,
+          "close_to_sma_60": -0.1372504666864497
+        },
+        {
+          "date": "2025-05-16",
+          "simple_return": -0.019999999999999907,
+          "log_return": -0.020202707317519355,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": 0.015126584522688334,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": -0.1501930039398781
+        },
+        {
+          "date": "2025-05-19",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": 0.015126584522688334,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": -0.13725046668644958
+        },
+        {
+          "date": "2025-05-20",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": 0.015126584522688332,
+          "close_to_sma_5": -0.01620376906818577,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": -0.1501930039398781
+        },
+        {
+          "date": "2025-05-21",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.01538967528127732,
+          "rolling_volatility_60": 0.015126584522688332,
+          "close_to_sma_5": -0.0042662477282993105,
+          "close_to_sma_20": -0.04075278214306444,
+          "close_to_sma_60": -0.13725046668644947
+        },
+        {
+          "date": "2025-05-22",
+          "simple_return": -0.020000000000000018,
+          "log_return": -0.020202707317519466,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": 0.015126584522688332,
+          "close_to_sma_5": -0.01620376906818588,
+          "close_to_sma_20": -0.05514292942564669,
+          "close_to_sma_60": -0.1501930039398781
+        },
+        {
+          "date": "2025-05-23",
+          "simple_return": 0.010000000000000009,
+          "log_return": 0.009950330853168092,
+          "rolling_volatility_20": 0.015389675281277325,
+          "rolling_volatility_60": 0.015126584522688332,
+          "close_to_sma_5": -0.0042662477282991995,
+          "close_to_sma_20": -0.040752782143064326,
+          "close_to_sma_60": -0.13725046668644958
+        }
+      ],
+      "feature_provenance": {
+        "provider": "yahoo-chart",
+        "source_type": "COMPUTED_RESULT",
+        "source_reference": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?period1=1685059200&period2=1748217600&interval=1d&events=div%2Csplits",
+        "retrieved_at": "2026-10-06T16:27:24.614924Z",
+        "data_vintage": "sha256:b5985cc325ea30715e932dfb73beebce5ea27bd83a90dee339eb418497b09d4d",
+        "transformation": [
+          "all OHLC multiplied by adjclose/close; reported volume unchanged",
+          "timestamp converted to exchange-local session date",
+          "simple_return=close[t]/close[t-1]-1",
+          "log_return=log(close[t]/close[t-1])",
+          "rolling_volatility_20/60=sample std(simple returns); ddof=1; not annualized",
+          "close_to_sma_5/20/60=close/mean(last k closes)-1",
+          "windows count observed sessions; unavailable warm-up results are null"
+        ],
+        "content_hash": "b5985cc325ea30715e932dfb73beebce5ea27bd83a90dee339eb418497b09d4d"
+      }
+    },
+    "fundamentals": {
+      "observations": [
+        {
+          "ticker": "NVDA",
+          "metric": "revenue",
+          "value": "150",
+          "unit": "USD",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/revenue/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2026,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "revenue",
+          "value": "100",
+          "unit": "USD",
+          "period_start": "2024-01-01",
+          "period_end": "2024-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/revenue/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2025,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "net_income",
+          "value": "150",
+          "unit": "USD",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/net_income/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2026,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "net_income",
+          "value": "-100",
+          "unit": "USD",
+          "period_start": "2024-01-01",
+          "period_end": "2024-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/net_income/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2025,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "operating_income",
+          "value": "10",
+          "unit": "USD",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/operating_income/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2026,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "operating_income",
+          "value": "0",
+          "unit": "USD",
+          "period_start": "2024-01-01",
+          "period_end": "2024-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/operating_income/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2025,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "gross_profit",
+          "value": "600",
+          "unit": "USD",
+          "period_start": "2024-01-01",
+          "period_end": "2024-12-31",
+          "filed_at": "2025-05-22",
+          "form": "10-K",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/gross_profit/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "ANNUAL",
+            "fiscal_year": 2025,
+            "fiscal_quarter": null,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "gross_profit",
+          "value": "500",
+          "unit": "USD",
+          "period_start": "2023-01-01",
+          "period_end": "2023-12-31",
+          "filed_at": "2025-05-22",
+          "form": "10-K",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/gross_profit/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "ANNUAL",
+            "fiscal_year": 2024,
+            "fiscal_quarter": null,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "capital_expenditures",
+          "value": "20",
+          "unit": "USD",
+          "period_start": "2025-01-01",
+          "period_end": "2025-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/capital_expenditures/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2026,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "capital_expenditures",
+          "value": "30",
+          "unit": "USD",
+          "period_start": "2024-01-01",
+          "period_end": "2024-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/capital_expenditures/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2025,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "cash_and_equivalents",
+          "value": "200",
+          "unit": "USD",
+          "period_start": null,
+          "period_end": "2025-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/cash_and_equivalents/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2026,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "cash_and_equivalents",
+          "value": "250",
+          "unit": "USD",
+          "period_start": null,
+          "period_end": "2024-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/cash_and_equivalents/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2025,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "total_assets",
+          "value": "1000",
+          "unit": "USD",
+          "period_start": null,
+          "period_end": "2024-12-31",
+          "filed_at": "2025-05-22",
+          "form": "10-K",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/total_assets/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "ANNUAL",
+            "fiscal_year": 2025,
+            "fiscal_quarter": null,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "total_assets",
+          "value": "1000",
+          "unit": "USD",
+          "period_start": null,
+          "period_end": "2023-12-31",
+          "filed_at": "2025-05-22",
+          "form": "10-K",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/total_assets/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "ANNUAL",
+            "fiscal_year": 2024,
+            "fiscal_quarter": null,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "total_liabilities",
+          "value": "400",
+          "unit": "USD",
+          "period_start": null,
+          "period_end": "2025-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/total_liabilities/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2026,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        },
+        {
+          "ticker": "NVDA",
+          "metric": "total_liabilities",
+          "value": "300",
+          "unit": "USD",
+          "period_start": null,
+          "period_end": "2024-03-31",
+          "filed_at": "2025-05-22",
+          "form": "10-Q",
+          "accession_number": "synthetic-comparative-001",
+          "provider": "fixture",
+          "source_reference": "fixture://fiscal-facts/total_liabilities/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "fiscal_period": {
+            "frequency": "QUARTERLY",
+            "fiscal_year": 2025,
+            "fiscal_quarter": 2,
+            "source_reference": "fixture://explicit-issuer-fiscal-labels"
+          },
+          "available_date": "2025-05-23"
+        }
+      ],
+      "provenance": [
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/revenue/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/revenue/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/net_income/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/net_income/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/operating_income/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/operating_income/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/gross_profit/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/gross_profit/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/capital_expenditures/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/capital_expenditures/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/cash_and_equivalents/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/cash_and_equivalents/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/total_assets/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/total_assets/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/total_liabilities/current",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        },
+        {
+          "provider": "fixture",
+          "source_type": "SOURCE_FACT",
+          "source_reference": "fixture://fiscal-facts/total_liabilities/prior",
+          "retrieved_at": "2025-06-01T00:00:00Z",
+          "data_vintage": "synthetic-fiscal-v1",
+          "transformation": [],
+          "content_hash": null
+        }
+      ],
+      "issues": []
+    },
+    "provenance": [
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://www.sec.gov/files/company_tickers_exchange.json",
+        "retrieved_at": "2026-10-06T16:27:24.614277Z",
+        "data_vintage": "sha256:302038af4e001f2d6d52dd054ad2c74b4d7ff6c8c7799f40802b83d43ef79396",
+        "transformation": [
+          "SEC directory identity normalization; currency unknown"
+        ],
+        "content_hash": "302038af4e001f2d6d52dd054ad2c74b4d7ff6c8c7799f40802b83d43ef79396"
+      },
+      {
+        "provider": "yahoo-chart",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?period1=1685059200&period2=1748217600&interval=1d&events=div%2Csplits",
+        "retrieved_at": "2026-10-06T16:27:24.614924Z",
+        "data_vintage": "sha256:b5985cc325ea30715e932dfb73beebce5ea27bd83a90dee339eb418497b09d4d",
+        "transformation": [
+          "all OHLC multiplied by adjclose/close; reported volume unchanged",
+          "timestamp converted to exchange-local session date"
+        ],
+        "content_hash": "b5985cc325ea30715e932dfb73beebce5ea27bd83a90dee339eb418497b09d4d"
+      },
+      {
+        "provider": "yahoo-chart",
+        "source_type": "COMPUTED_RESULT",
+        "source_reference": "https://query1.finance.yahoo.com/v8/finance/chart/NVDA?period1=1685059200&period2=1748217600&interval=1d&events=div%2Csplits",
+        "retrieved_at": "2026-10-06T16:27:24.614924Z",
+        "data_vintage": "sha256:b5985cc325ea30715e932dfb73beebce5ea27bd83a90dee339eb418497b09d4d",
+        "transformation": [
+          "all OHLC multiplied by adjclose/close; reported volume unchanged",
+          "timestamp converted to exchange-local session date",
+          "simple_return=close[t]/close[t-1]-1",
+          "log_return=log(close[t]/close[t-1])",
+          "rolling_volatility_20/60=sample std(simple returns); ddof=1; not annualized",
+          "close_to_sma_5/20/60=close/mean(last k closes)-1",
+          "windows count observed sessions; unavailable warm-up results are null"
+        ],
+        "content_hash": "b5985cc325ea30715e932dfb73beebce5ea27bd83a90dee339eb418497b09d4d"
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [],
+        "content_hash": "cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b"
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/PaymentsToAcquirePropertyPlantAndEquipment/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:PaymentsToAcquirePropertyPlantAndEquipment -> canonical:capital_expenditures; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/CashAndCashEquivalentsAtCarryingValue/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:CashAndCashEquivalentsAtCarryingValue -> canonical:cash_and_equivalents; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/GrossProfit/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:GrossProfit -> canonical:gross_profit; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/NetIncomeLoss/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:NetIncomeLoss -> canonical:net_income; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/NetCashProvidedByUsedInOperatingActivities/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:NetCashProvidedByUsedInOperatingActivities -> canonical:operating_cash_flow; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/OperatingIncomeLoss/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:OperatingIncomeLoss -> canonical:operating_income; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/RevenueFromContractWithCustomerExcludingAssessedTax/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:RevenueFromContractWithCustomerExcludingAssessedTax -> canonical:revenue; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/StockholdersEquity/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:StockholdersEquity -> canonical:stockholders_equity; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/Assets/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:Assets -> canonical:total_assets; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "sec-edgar",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "https://data.sec.gov/api/xbrl/companyfacts/CIK0001045810.json#us-gaap/Liabilities/USD/synthetic-2025-001",
+        "retrieved_at": "2026-10-06T16:27:24.724513Z",
+        "data_vintage": "sha256:cbe0169347b8a96560214cd739659c00b9ab91e84239c4c2b216676b0fecfc1b",
+        "transformation": [
+          "us-gaap:Liabilities -> canonical:total_liabilities; ordered aliases per filing",
+          "daily PIT: strictly next observed market session after filed_at"
+        ],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/revenue/current",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/revenue/prior",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/net_income/current",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/net_income/prior",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/operating_income/current",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/operating_income/prior",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/gross_profit/current",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/gross_profit/prior",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/capital_expenditures/current",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/capital_expenditures/prior",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/cash_and_equivalents/current",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/cash_and_equivalents/prior",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/total_assets/current",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/total_assets/prior",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/total_liabilities/current",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      },
+      {
+        "provider": "fixture",
+        "source_type": "SOURCE_FACT",
+        "source_reference": "fixture://fiscal-facts/total_liabilities/prior",
+        "retrieved_at": "2025-06-01T00:00:00Z",
+        "data_vintage": "synthetic-fiscal-v1",
+        "transformation": [],
+        "content_hash": null
+      }
+    ],
+    "quality": {
+      "status": "PASS",
+      "issues": []
+    }
+  }
+}

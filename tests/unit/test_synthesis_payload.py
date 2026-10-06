@@ -302,6 +302,6 @@ def test_actual_service_sends_compact_payload_and_retains_canonical_answer(
     assert answer.citations == result.evidence_index
     assert answer.calculation_provenance == result.calculation_provenance
     assert answer.synthesis_payload_audit.request_bytes < 32_000
-    assert answer.synthesis_prompt_version == "stage4-synthesis-v2"
+    assert answer.synthesis_prompt_version == "stage5-synthesis-v1"
     assert "private-question-text" not in caplog.text
     assert "offline-accession-" not in answer.synthesis_payload_audit.model_dump_json()

@@ -370,3 +370,65 @@ def test_synthesis_timeout_keeps_external_block_classification_and_two_calls(
     assert result.llm_usage[-1].repair_count == 0
     assert "phase=SYNTHESIS exception_type=APITimeoutError http_status=None" in caplog.text
     assert "private-timeout-diagnostic" not in caplog.text + result.model_dump_json()
+
+
+def test_frozen_case_runs_planner_synthesis_and_judge_through_actual_sdk_without_sec(
+    configured, monkeypatch
+):
+    from financial_research.agent.config import AgentRuntimeConfig
+    from financial_research.evals.dataset import DEFAULT_ROOT, load_suite
+    from financial_research.evals.fixtures import load_fixtures
+    from financial_research.evals.judge import ClaimSupportJudge
+    from financial_research.evals.offline import scripted_judgment, scripted_synthesis
+    from financial_research.evals.runner import evaluate_case
+
+    monkeypatch.delenv("SEC_USER_AGENT", raising=False)
+    case = next(c for c in load_suite()[0].cases if c.case_id == "routing-fundamental_focus-en")
+    plan = {
+        **PLAN,
+        "intent": "FUNDAMENTAL_FOCUS",
+        "selected_skill_id": "fundamental_analysis",
+        "reason_code": "FUNDAMENTAL_ANALYSIS_REQUEST",
+    }
+    calls = []
+
+    def handler(http_request):
+        body = json.loads(http_request.content)
+        name = body["text"]["format"]["name"]
+        calls.append(name)
+        assert body["store"] is False and body["text"]["format"]["strict"] is True
+        assert http_request.url.host == "api.openai.com"
+        phase = "SEMANTIC_JUDGE" if name == "JudgeOutput" else "SYNTHESIS"
+        request = LLMRequest(
+            phase=phase,
+            prompt_version="offline-http-test",
+            system_prompt=body["input"][0]["content"],
+            user_payload=body["input"][1]["content"],
+            repair_count=0,
+        )
+        text = (
+            json.dumps(plan)
+            if name == "AgentPlan"
+            else scripted_synthesis(request)
+            if name == "SynthesisOutput"
+            else scripted_judgment(request)
+        )
+        return httpx.Response(
+            200, json=response_body([{"type": "output_text", "text": text, "annotations": []}])
+        )
+
+    with OpenAIResponsesClient(
+        http_client=httpx.Client(transport=httpx.MockTransport(handler))
+    ) as adapter:
+        result = evaluate_case(
+            case,
+            load_fixtures(DEFAULT_ROOT)[case.fixture_scenario],
+            adapter,
+            ClaimSupportJudge(adapter),
+            AgentRuntimeConfig(),
+        )
+    assert calls == ["AgentPlan", "SynthesisOutput", "JudgeOutput"]
+    assert result.status == "COMPLETED"
+    assert result.claim_evaluations[0].verdict == "SUPPORTED"
+    assert result.judge_usage[0].phase == "SEMANTIC_JUDGE"
+    assert result.judge_usage[0].input_tokens == 10

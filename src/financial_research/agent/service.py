@@ -8,13 +8,16 @@ from dataclasses import dataclass, field
 
 from pydantic import BaseModel, ValidationError
 
+from financial_research.agent.config import AgentRuntimeConfig
 from financial_research.agent.errors import (
     AgentIntegrityError,
     AgentPlanValidationError,
     GroundingValidationError,
+    PayloadBudgetExceeded,
 )
 from financial_research.agent.evidence_projection import project_evidence
 from financial_research.agent.grounding import validate_final_answer, validate_grounding
+from financial_research.agent.language import resolve_language, validate_response_language
 from financial_research.agent.planner import (
     INTENT_REASONS,
     INTENT_SKILLS,
@@ -116,9 +119,12 @@ class _Execution:
 
 
 class ResearchAgent:
-    def __init__(self, *, registry: SkillRegistry, llm: LLMClient) -> None:
+    def __init__(
+        self, *, registry: SkillRegistry, llm: LLMClient, config: AgentRuntimeConfig | None = None
+    ) -> None:
         self._registry = registry
         self._llm = llm
+        self._config = config or AgentRuntimeConfig.from_env()
 
     def run(self, request: ResearchAgentRequest) -> GroundedResearchAnswer:
         execution = _Execution()
@@ -151,8 +157,6 @@ class ResearchAgent:
             if execution.calls >= MAX_LLM_CALLS:
                 raise AgentIntegrityError("LLM_CALL_BOUND_EXCEEDED")
             call_phase = repair_phase if attempt else phase
-            execution.calls += 1
-            execution.record(request_action, call_phase)
             request = LLMRequest(
                 phase=call_phase,
                 prompt_version=prompt_version,
@@ -166,6 +170,13 @@ class ResearchAgent:
                 ),
                 repair_count=attempt,
             )
+            if phase == LLMPhase.SYNTHESIS:
+                actual_bytes = len(request.user_payload.encode("utf-8"))
+                budget = self._config.max_synthesis_payload_bytes
+                if actual_bytes > budget:
+                    raise PayloadBudgetExceeded(actual_bytes=actual_bytes, budget_bytes=budget)
+            execution.calls += 1
+            execution.record(request_action, call_phase)
             started = time.perf_counter()
             usage: LLMUsageMetadata | None = None
             try:
@@ -221,7 +232,7 @@ class ResearchAgent:
     def _run(self, request: ResearchAgentRequest, execution: _Execution) -> GroundedResearchAnswer:
         payload = json.dumps(
             {
-                "request": request.model_dump(mode="json"),
+                "request": request.model_dump(mode="json", exclude={"response_language"}),
                 "skill_manifest": [
                     entry.model_dump(mode="json") for entry in capability_manifest(self._registry)
                 ],
@@ -283,6 +294,7 @@ class ResearchAgent:
         calculations: tuple[CalculationProvenance, ...] = ()
         unavailable: tuple[str, ...] = ()
         payload_audit: SynthesisPayloadAudit | None = None
+        response_language, language_fallback = resolve_language(request)
         if readiness == SynthesisReadiness.NOT_READY:
             status = AgentStatus.BLOCKED
             missing_metrics = (
@@ -304,8 +316,15 @@ class ResearchAgent:
             projection = project_evidence(result)
             execution.record(AgentTraceAction.EVIDENCE_PROJECTION, "projection-v1")
             payload, payload_audit = synthesis_payload(
-                question=request.question, projection=projection
+                question=request.question,
+                projection=projection,
+                response_language=response_language,
             )
+
+            def validate_synthesis(output: SynthesisOutput) -> None:
+                validate_grounding(output, projection)
+                validate_response_language(output, response_language)
+
             synthesis = self._structured(
                 execution,
                 output_type=SynthesisOutput,
@@ -314,7 +333,7 @@ class ResearchAgent:
                 system_prompt=SYNTHESIS_PROMPT,
                 prompt_version=SYNTHESIS_PROMPT_VERSION,
                 payload=payload,
-                validate=lambda output: validate_grounding(output, projection),
+                validate=validate_synthesis,
                 error_type=GroundingValidationError,
                 request_action=AgentTraceAction.SYNTHESIS_REQUEST,
                 validation_action=AgentTraceAction.GROUNDING_VALIDATION,
@@ -344,6 +363,8 @@ class ResearchAgent:
             planner_prompt_version=PLANNER_PROMPT_VERSION,
             synthesis_prompt_version=SYNTHESIS_PROMPT_VERSION,
             synthesis_payload_audit=payload_audit,
+            response_language=response_language,
+            language_fallback=language_fallback,
         )
         if readiness != SynthesisReadiness.NOT_READY:
             validate_final_answer(answer, projection)

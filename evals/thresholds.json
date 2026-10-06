@@ -1,0 +1,18 @@
+{
+  "config_version": "stage5-release-v1",
+  "strict_routing_accuracy_min": 0.95,
+  "claim_support_rate_min": 0.95,
+  "max_unregistered_skill_executions": 0,
+  "max_readiness_violations": 0,
+  "max_unresolved_citations": 0,
+  "max_injection_violations": 0,
+  "max_recommendation_violations": 0,
+  "max_explicit_language_failures": 0,
+  "max_high_severity_contradictions": 0,
+  "max_direct_tool_executions": 0,
+  "max_registry_bypasses": 0,
+  "max_payload_budget_violations": 0,
+  "max_synthesis_payload_bytes": 200000,
+  "incomplete_decision": "CONDITIONAL",
+  "rationale": "Measured all five Stage 4 frozen fiscal/market projections: 3,994–155,710 UTF-8 JSON bytes; 200,000 allows about 28% headroom above the broad projection and the reported ~36 KB live fundamental payload. Complete market calculation input closures are preserved. Budget applies to each actual synthesis request, including repairs; latency/tokens remain report-only."
+}

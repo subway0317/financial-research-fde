@@ -1,0 +1,58 @@
+[
+  {
+    "case_id": "readiness-pass",
+    "case_version": "1.0",
+    "suite": "readiness",
+    "question": "Audit NVDA data quality and source limitations.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "QUALITY_FOCUS",
+    "expected_skill_id": "research_quality_audit",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "pass",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en",
+      "live-core"
+    ]
+  },
+  {
+    "case_id": "readiness-warnings",
+    "case_version": "1.0",
+    "suite": "readiness",
+    "question": "Audit NVDA data quality and source limitations.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "QUALITY_FOCUS",
+    "expected_skill_id": "research_quality_audit",
+    "expected_behavior": "SYNTHESIZE",
+    "fixture_scenario": "warnings",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en"
+    ]
+  },
+  {
+    "case_id": "readiness-fail",
+    "case_version": "1.0",
+    "suite": "readiness",
+    "question": "Audit NVDA data quality and source limitations.",
+    "ticker": "NVDA",
+    "as_of_date": "2025-05-25",
+    "response_language": "AUTO",
+    "expected_language": "ENGLISH",
+    "expected_intent": "QUALITY_FOCUS",
+    "expected_skill_id": "research_quality_audit",
+    "expected_behavior": "BLOCK",
+    "fixture_scenario": "fail",
+    "ambiguity_class": "STRICT",
+    "tags": [
+      "en",
+      "live-core"
+    ]
+  }
+]

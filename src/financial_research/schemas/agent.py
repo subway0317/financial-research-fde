@@ -17,10 +17,17 @@ from financial_research.schemas.tools import (
 )
 
 
+class ResponseLanguage(StrEnum):
+    AUTO = "AUTO"
+    ENGLISH = "ENGLISH"
+    CHINESE = "CHINESE"
+
+
 class ResearchAgentRequest(CanonicalModel):
     question: Annotated[NonEmpty, Field(max_length=8000)]
     ticker: Ticker
     as_of_date: date
+    response_language: ResponseLanguage = ResponseLanguage.AUTO
 
 
 class AgentIntent(StrEnum):
@@ -245,6 +252,7 @@ class LLMPhase(StrEnum):
     PLANNING_REPAIR = "PLANNING_REPAIR"
     SYNTHESIS = "SYNTHESIS"
     SYNTHESIS_REPAIR = "SYNTHESIS_REPAIR"
+    SEMANTIC_JUDGE = "SEMANTIC_JUDGE"
 
 
 class LLMUsageMetadata(CanonicalModel):
@@ -308,6 +316,10 @@ class GroundedResearchAnswer(CanonicalModel):
     planner_prompt_version: NonEmpty
     synthesis_prompt_version: NonEmpty
     synthesis_payload_audit: SynthesisPayloadAudit | None = None
+    response_language: Literal[ResponseLanguage.ENGLISH, ResponseLanguage.CHINESE] = (
+        ResponseLanguage.ENGLISH
+    )
+    language_fallback: bool = False
     rendered_answer: str = ""
 
     def normalized_business_json(self) -> str:

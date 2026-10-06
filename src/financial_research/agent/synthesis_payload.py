@@ -10,6 +10,7 @@ from financial_research.schemas.agent import (
     EvidenceProjection,
     QualityIssueGroup,
     QualityOccurrence,
+    ResponseLanguage,
     SynthesisCalculation,
     SynthesisEvidenceDefinition,
     SynthesisFinding,
@@ -129,13 +130,19 @@ def synthesis_projection(projection: EvidenceProjection) -> SynthesisProjection:
 
 
 def synthesis_payload(
-    *, question: str, projection: EvidenceProjection
+    *,
+    question: str,
+    projection: EvidenceProjection,
+    response_language: ResponseLanguage | None = None,
 ) -> tuple[str, SynthesisPayloadAudit]:
     compact = synthesis_projection(projection)
     data = compact.model_dump(mode="json", exclude_none=True)
-    payload = _json({"question": question, "projection": data})
+    language_metadata = (
+        {"response_language": response_language} if response_language is not None else {}
+    )
+    payload = _json({"question": question, **language_metadata, "projection": data})
     baseline_data = projection.model_dump(mode="json")
-    baseline = {"question": question, "projection": baseline_data}
+    baseline = {"question": question, **language_metadata, "projection": baseline_data}
     metadata = {
         key: value
         for key, value in data.items()
@@ -156,7 +163,7 @@ def synthesis_payload(
         # Pydantic schema before the SDK's small strict-format wrapper; no tokenizer estimate.
         output_schema_bytes=_bytes(SynthesisOutput.model_json_schema()),
         components=SynthesisPayloadComponents(
-            request_metadata_bytes=_bytes({"question": question, **metadata}),
+            request_metadata_bytes=_bytes({"question": question, **language_metadata, **metadata}),
             findings_bytes=_bytes(data["findings"]),
             evidence_definitions_bytes=_bytes(data["evidence_index"]),
             calculation_provenance_bytes=_bytes(data["calculation_provenance"]),

@@ -37,7 +37,9 @@ def test_skill_dependency_direction_and_no_transport_or_agent_imports() -> None:
                 else []
             )
             for module in modules:
-                if layer not in {"skills", "agent", "api"} and module.startswith(
+                # Evals is an independent upper-layer consumer of frozen registries.
+                # Core/Tools remain forbidden; the reverse Evals dependency is tested separately.
+                if layer not in {"skills", "agent", "api", "evals"} and module.startswith(
                     "financial_research.skills"
                 ):
                     violations.append((path, module))
