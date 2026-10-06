@@ -37,7 +37,9 @@ def test_skill_dependency_direction_and_no_transport_or_agent_imports() -> None:
                 else []
             )
             for module in modules:
-                if layer != "skills" and module.startswith("financial_research.skills"):
+                if layer not in {"skills", "agent", "api"} and module.startswith(
+                    "financial_research.skills"
+                ):
                     violations.append((path, module))
                 if layer == "skills" and module.startswith(
                     ("fastapi", "financial_research.api", *forbidden_sdks)

@@ -7,8 +7,9 @@ from uuid import uuid4
 
 from fastapi import FastAPI, Request, Response
 
-from financial_research.api.dependencies import ToolsFactory
+from financial_research.api.dependencies import AgentFactory, ToolsFactory
 from financial_research.api.errors import install_error_handlers
+from financial_research.api.routes.agent import router as agent_router
 from financial_research.api.routes.health import router as health_router
 from financial_research.api.routes.research import router as research_router
 from financial_research.config import ResearchConfig
@@ -19,9 +20,14 @@ logger = logging.getLogger(__name__)
 
 
 def create_app(
-    *, tools_factory: ToolsFactory | None = None, config: ResearchConfig | None = None
+    *,
+    tools_factory: ToolsFactory | None = None,
+    config: ResearchConfig | None = None,
+    agent_factory: AgentFactory | None = None,
 ) -> FastAPI:
-    application = FastAPI(title="Financial Research FDE", version="0.2.0")
+    application = FastAPI(title="Financial Research FDE", version="0.4.0")
+    application.state.agent_factory = agent_factory
+    application.state.research_config = config
     application.state.tools_factory = tools_factory or (
         lambda: ResearchTools(LiveContextBuilder(config))
     )
@@ -46,6 +52,7 @@ def create_app(
 
     application.include_router(health_router)
     application.include_router(research_router)
+    application.include_router(agent_router)
     return application
 
 

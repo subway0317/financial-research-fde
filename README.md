@@ -689,3 +689,286 @@ Source concept/period coverage, observed-calendar freshness and retrieved histor
 vintage limitations remain unchanged. Stage 3 adds no LLM SDK, agent, routing,
 natural-language report/thesis, recommendations, valuation, prediction, portfolio,
 database, persistent sessions, authentication, UI, deployment or remote marketplace.
+
+## Stage 4: Evidence-Grounded Research Agent
+
+Stage 4 answers one research question for an explicit ticker and calendar as-of
+date. It classifies intent, executes one registered Skill, and expresses the
+supplied evidence as typed, cited research claims. Financial calculations and
+point-in-time availability remain owned by the deterministic core and Tools.
+
+```text
+Core → Tools → Skills → Agent → API
+                        ↓
+                 LLMClient abstraction
+                        ↓
+                 OpenAI Responses adapter
+
+Question → typed plan → validator → ONE Skill → readiness gate
+         → evidence projection → typed synthesis → grounding/policy validation
+         → deterministic renderer
+```
+
+Tools calculate and expose canonical financial results. Skills compose controlled
+workflows and preserve provenance. The Agent selects a Skill and handles language;
+it never calls Tools, providers, financial helpers or the PIT engine directly.
+The service depends on the provider-neutral `LLMClient`; API dependencies and the
+opt-in CLI bind the official adapter. The OpenAI SDK is imported only in that adapter.
+
+The Agent has no memory, threads, sessions, autonomous tool loop, multi-company or
+portfolio workflow, web search, hosted tools, RAG, valuation or prediction engine.
+It does not provide trading instructions, buy/sell recommendations, target prices
+or expected-return predictions. Stage 4 adds no frontend, database or deployment.
+
+### Planning, execution and readiness
+
+The planner receives a capability manifest generated from `SkillRegistry`, including
+IDs, descriptions, capabilities and input contract metadata. Required Tool names
+and implementation dependencies are omitted. The typed plan contains one Skill ID,
+intent, enum reason code, original ticker/date and optional structured focus. Focus
+does not change Skill inputs. There are no thought or reasoning fields.
+
+| Intent | Registered Skill |
+| --- | --- |
+| `COMPANY_OVERVIEW` | `company_overview` |
+| `FUNDAMENTAL_FOCUS` | `fundamental_analysis` |
+| `MARKET_FOCUS` | `market_analysis` |
+| `QUALITY_FOCUS` | `research_quality_audit` |
+| `BROAD_RESEARCH` | `equity_research` |
+
+The intent mapping is a routing policy, while the manifest is always registry-derived.
+Cross-domain questions use the broad composite Skill. The validator rejects unknown
+or mismatched capabilities, multiple selections, extra fields and ticker/date
+changes. User questions remain untrusted text inside a JSON payload; execution
+authorization comes from typed validation and the registry allowlist.
+
+The composite's Stage 3 readiness is consumed unchanged. The additive Skill-layer
+`synthesis_readiness()` accessor exposes the same status/quality/limitations rules
+for existing domain results, whose Stage 3 schemas have no explicit readiness field.
+It does not change financial calculations, workflow behavior or existing schemas.
+
+| Readiness | Agent behavior |
+| --- | --- |
+| `READY` | Synthesize; return `COMPLETED` |
+| `READY_WITH_WARNINGS` | Synthesize; return `COMPLETED_WITH_WARNINGS`, retaining all issues and limitations |
+| `NOT_READY` | Return `BLOCKED`, without any synthesis LLM call |
+
+Legitimate data insufficiency and authoritative critical quality blocks retain
+diagnostics in a blocked response. Provider, PIT, canonical validation and evidence
+integrity execution failures raise typed errors rather than becoming partial answers.
+
+Normal execution uses one planner call and one synthesis call. Schema/routing failures
+allow one planner repair; schema/citation/policy failures allow one synthesis repair.
+Repairs resend the original structured input with machine-readable error codes only.
+No failed response text, reasoning request or conversation chain is reused. The maximum
+is four LLM calls, and SDK transport retries are explicitly disabled. Provider failures,
+refusals and incomplete responses are terminal rather than entering repair loops.
+
+### Evidence and structured answers
+
+`EvidenceProjection` selects relevant canonical findings and evidence definitions,
+sorts deterministically and deduplicates IDs. For broad research it omits redundant
+company-snapshot market windows when the market section supplies the requested window.
+Every selected computation retains its original formula, parameters and complete
+input-evidence closure; daily observations needed to audit volatility/high/low/SMA
+therefore remain canonical evidence references. Projections can still be large for
+market windows. No raw SEC/Yahoo JSON, HTTP response, runtime UUID, retrieval timestamp,
+Skill trace or full source payload is sent to synthesis. No financial values are
+recomputed. Fundamental source references retain values, units, fiscal period dates,
+availability dates, transformations and source vintage; calculated changes retain
+their exact supplied values and formulas. Percentage changes and returns are ratios.
+
+The canonical `EvidenceProjection` remains the input to `GroundingValidator`. For
+synthesis, `agent/synthesis_payload.py` serializes a compact `SynthesisProjection`
+version 2.0. Evidence IDs occur once as definition keys; findings and calculation
+inputs reference those keys. Calculation records use matching computation keys,
+and findings omit the redundant calculation-ID list. Optional null fields are
+omitted. Values, units, source references, dates, vintage, transformations, formulas,
+parameters and every calculation input remain supplied; no provenance is expanded
+recursively and no full Skill result or `ResearchEvidencePackage` is serialized.
+
+The previous request included the complete authoritative quality report, including
+one diagnostic per historical filing exclusion or duplicate SEC fact. The compact
+view groups only identical severity/code/message/affected-field combinations. Each
+group retains its exact message, severity, occurrence count and date range; recorded
+contexts/dates matching selected evidence retain individual occurrence counts.
+All warning messages, authoritative quality status and mandatory limitations remain
+visible to synthesis. Historical diagnostics are not evidence of a selected fact's
+defect. Individual historical contexts outside selected evidence are summarized
+only in the model input: the final answer still retains the complete, unchanged
+quality report and all original citation/provenance records. Readiness, PIT and
+grounding validation continue to use the original canonical data.
+
+An offline fundamental fixture with 30 evidence definitions, 14 calculations and
+2,000 additional historical diagnostics measures the following compact JSON sizes
+(UTF-8 bytes, without tokenization):
+
+| Component | Previous request | Compact request |
+| --- | ---: | ---: |
+| Entire synthesis request text | 492,411 | 21,894 |
+| Quality | 466,035 | 1,544 |
+| Findings | 5,405 | 4,097 |
+| Evidence definitions | 15,563 | 11,061 |
+| Calculation provenance | 4,899 | 4,703 |
+| Limitations | 148 | 148 |
+| Synthesis instructions | 1,109 | 1,483 |
+| SDK strict output format | 1,251 | 1,251 |
+
+The size test exercises repeated history diagnostics, preserving all diagnostic
+templates and evidence references rather than imposing a truncation limit. Payload
+size can still grow with distinct diagnostic messages and required market input
+chains. The plain Pydantic output schema is 1,180 bytes; the installed SDK's strict
+format wrapper is measured separately above. These measurements identify the
+application inflation path; they do not reconstruct a previous live request or
+estimate model tokens.
+
+The synthesizer emits `SynthesisOutput` with `GroundedClaim` objects, each containing
+`claim_id`, section, `SOURCE_FACT` / `COMPUTED_FACT` / `INTERPRETATION`, statement and
+nonempty evidence IDs. The validator checks supplied citations, unique claim IDs,
+source/computation categories, the actually executed Skill and explicit prohibited
+recommendations. A final validation also protects authoritative quality, limitations
+and provenance. Unknown evidence IDs or exhausted repairs fail with typed integrity
+errors; invalid text is never returned as a research answer.
+
+`GroundedResearchAnswer` is the source of truth. Its renderer presents the validated
+statements unchanged, attaches `[evidence_id]` citations, and displays status, quality,
+issues, blocked context and code-owned limitations. Limitations are merged by code,
+deduplicated and sorted; the LLM cannot remove them. Citation metadata and original
+calculation provenance remain available in JSON for auditing. Rendering introduces
+no new interpretation or arithmetic.
+
+Citation existence and claim categories are structural checks, not full semantic
+entailment verification. A real model can still misinterpret cited evidence or write
+an unsupported number; systematic claim faithfulness and adversarial evaluation are
+reserved for Stage 5. The deterministic policy rejects explicit instructions such as
+“Buy NVDA”, “Sell NVDA”, target prices and predictions, while allowing descriptive
+“share buyback” text. It is a conservative baseline rather than semantic moderation.
+
+### Prompts, trace and usage
+
+Prompts are versioned in `agent/prompts.py`: `stage4-planner-v1` and
+`stage4-synthesis-v2`. The result records both versions and actual per-call versions.
+Objective trace actions cover plan request/validation, Skill execution, readiness,
+projection, synthesis, grounding and rendering; repair failures have safe error codes.
+No prompt, hidden reasoning or raw OpenAI response is included in the API artifact.
+
+Usage records include provider, model, phase, latency, repair count, validation outcome
+and reported input/output/total tokens. Missing token reports stay `None`; when SDK
+parsing raises before returning a response, token usage is unavailable. Logs contain
+request ID, identity, selected Skill/status/readiness and safe call metadata, without
+question text, secrets or full prompts. Fake output business JSON is deterministic
+after excluding durations/latencies; real model wording is not guaranteed identical.
+
+`synthesis_payload_audit` records only byte/object counts in the answer, smoke result
+and safe log. It compares the original canonical serialization with the compact
+request, breaks down metadata, findings, evidence, calculations, quality and
+limitations, and counts instructions and the plain Pydantic output schema. Component
+counts exclude enclosing JSON keys/separators, so they need not sum to the whole
+request. The audit has no question text, evidence values, source contexts or provider
+payloads. Actual token usage comes exclusively from the provider's usage report.
+
+### OpenAI setup and Agent API
+
+The runtime dependency is the official `openai>=2.54,<3` SDK, checked locally at
+2.54.0. The adapter uses `responses.parse(text_format=...)`, strict JSON Schema,
+local Pydantic revalidation, `store=False`, zero SDK retries, a configurable timeout
+and an 8192-token output bound. Each call is stateless, with system/user text only:
+no tools, previous response ID or hosted conversation. Model configuration has no
+default and is centralized in `OpenAIConfig`.
+
+`OPENAI_TIMEOUT_SECONDS` defaults to 120 seconds and configures the SDK's HTTP
+timeout for each request. It accepts only positive, finite numbers, including
+fractional seconds; invalid values raise a safe `AgentConfigurationError` before
+the SDK client is constructed (HTTP 503 through the API). This setting is separate
+from financial providers' `HTTP_TIMEOUT_SECONDS`. To allow more time for synthesis,
+set `export OPENAI_TIMEOUT_SECONDS="180"` in the same shell that runs the application.
+The timeout is an HTTP operation limit rather than an overall Agent deadline.
+Increasing it does not add retries or change the two-phase/four-call execution bound.
+Provider failures log only the phase, SDK exception class (for example
+`APITimeoutError`) and HTTP status, without exception text, request bodies or secrets.
+
+In the WSL terminal that starts the application, configure your own API credentials
+and model, plus a legitimate SEC organization/contact identity for live financial data:
+
+```bash
+export OPENAI_API_KEY="<your-api-key>"
+export OPENAI_MODEL="<your-enabled-model-id>"
+export SEC_USER_AGENT="FinancialResearch <your-name> <your-email>"
+```
+
+The application reads shell variables and does not load `.env` automatically. The
+tracked `.env.example` contains placeholders; `.env` and `.env.*` remain ignored.
+No key needs to be shared in chat. Account/payment/key creation is a user action.
+These credentials are independent of any ChatGPT subscription.
+
+```bash
+uvicorn financial_research.api.app:app --host 127.0.0.1 --port 8000
+curl -X POST http://127.0.0.1:8000/v1/agent/research \
+  -H 'Content-Type: application/json' \
+  -d '{"question":"How have NVDA fundamentals changed?","ticker":"NVDA","as_of_date":"2026-06-30"}'
+```
+
+The thin route parses the request, injects the Agent and returns the existing envelope
+style: `request_id`, `schema_version`, `generated_at`, typed `data`, quality and
+limitations. `data` contains the plan, single used Skill, status, grounded claims,
+rendered answer, readiness, citations, calculation provenance, safe trace and usage.
+Factories are replaceable through `create_app(agent_factory=...)`; production clients
+are created per request and closed after use. Health/docs and all five Stage 2 research
+endpoints remain independent of OpenAI configuration. OpenAPI now has seven paths.
+
+| Condition | HTTP / code |
+| --- | --- |
+| Missing live Agent configuration | 503 / `AGENT_CONFIGURATION_ERROR` |
+| LLM provider failure | 502 / `LLM_PROVIDER_ERROR` |
+| Planner repair exhausted | 500 / `AGENT_PLAN_VALIDATION_ERROR` |
+| Grounding/policy repair exhausted | 500 / `GROUNDING_VALIDATION_ERROR` |
+| Internal Agent/evidence integrity failure | 500 / stable integrity code |
+| Valid NOT_READY result | 200 / `BLOCKED` |
+
+Original Stage 2 mappings remain in place. Errors expose only safe code/message/request
+ID, never provider diagnostics or tracebacks.
+
+### Offline validation and opt-in live smoke
+
+```bash
+pytest
+ruff check .
+ruff format --check .
+mypy src/financial_research
+python -m pip check
+git diff --check
+```
+
+Default tests use scripted `FakeLLMClient`, existing financial fixtures and SDK HTTP
+mock transport. The network-block fixture remains enabled; CI requires no API keys
+and runs no live providers. Coverage includes routing, injection, readiness, projection,
+grounding, repairs, call bounds, renderer/usage/trace, adapter and old/new API contracts.
+
+After configuring live variables:
+
+```bash
+python -m financial_research.skills.smoke --ticker NVDA --as-of-date 2026-06-30
+python -m financial_research.agent.smoke --ticker NVDA --as-of-date 2026-06-30
+pytest -m live tests/live/test_nvda_agent_smoke.py -s
+```
+
+The first command independently checks the real SEC/Yahoo/Stage 3 financial path.
+The Agent command asks “How have NVDA's fundamentals changed?”, verifies registered
+fundamental routing, and reports safe counts/usage rather than raw responses or secrets.
+For a token-payload comparison, rerun the same command in the configured shell and
+compare synthesis-phase token usage/latency, `synthesis_payload_audit`, claim/evidence
+counts, Skill, Agent status, readiness and repair count. A completed answer has passed
+the existing grounding and final integrity validators; a blocked answer did not
+enter synthesis.
+It accepts a legitimate blocked answer but explicitly reports its `BLOCKED` status and
+zero claims. Live tests avoid exact wording, token-count or volatile-value assertions.
+
+Agent CLI classifications/exit codes: PASS=0, USER_CONFIGURATION_REQUIRED=3,
+EXTERNAL_BLOCKED=2, FAIL=1. Missing variables are configuration requirements; provider
+access/quota/transport failures are external blocks; grounding/PIT/implementation failures
+are failures. A missing OpenAI configuration does not prevent offline completion and
+must never be reported as live PASS.
+
+Existing provider coverage, latest retrieved historical vintage and legal observed-session
+limitations remain. Stage 4 uses one registered Skill and no persistent state. It stops
+before Stage 5 evaluation, model comparison and advanced semantic guardrails.

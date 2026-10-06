@@ -7,6 +7,11 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from starlette.responses import JSONResponse
 
+from financial_research.agent.errors import (
+    AgentIntegrityError,
+    AgentPlanValidationError,
+    GroundingValidationError,
+)
 from financial_research.api.schemas import ErrorResponse
 from financial_research.exceptions import (
     ConfigurationError,
@@ -18,9 +23,27 @@ from financial_research.exceptions import (
     UnknownTickerError,
     UnsupportedMetricError,
 )
+from financial_research.llm.errors import AgentConfigurationError, LLMProviderError
+from financial_research.skills.errors import EvidenceIntegrityError
 
 logger = logging.getLogger(__name__)
 ERROR_MAP = (
+    (AgentConfigurationError, 503, "AGENT_CONFIGURATION_ERROR", "Agent service is not configured."),
+    (LLMProviderError, 502, "LLM_PROVIDER_ERROR", "An LLM provider request failed."),
+    (AgentPlanValidationError, 500, "AGENT_PLAN_VALIDATION_ERROR", "Agent plan validation failed."),
+    (
+        GroundingValidationError,
+        500,
+        "GROUNDING_VALIDATION_ERROR",
+        "Answer grounding validation failed.",
+    ),
+    (AgentIntegrityError, 500, "AGENT_INTEGRITY_ERROR", "Agent integrity validation failed."),
+    (
+        EvidenceIntegrityError,
+        500,
+        "EVIDENCE_INTEGRITY_ERROR",
+        "Evidence integrity validation failed.",
+    ),
     (PITViolationError, 500, "PIT_VIOLATION", "Research integrity validation failed."),
     (UnsupportedMetricError, 422, "UNSUPPORTED_METRIC", "Requested metric is not registered."),
     (

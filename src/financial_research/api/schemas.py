@@ -6,6 +6,7 @@ from typing import Annotated, Literal
 
 from pydantic import UUID4, AwareDatetime, BeforeValidator, Field, model_validator
 
+from financial_research.schemas.agent import GroundedResearchAnswer
 from financial_research.schemas.base import CanonicalModel, NonEmpty, Ticker
 from financial_research.schemas.quality import QualityReport
 from financial_research.schemas.tools import ComparisonSpec, ToolResult
@@ -22,6 +23,19 @@ def _date_input(value: object) -> date:
 class ResearchRequest(CanonicalModel):
     ticker: Ticker
     as_of_date: Annotated[date, BeforeValidator(_date_input)]
+
+
+class AgentResearchRequest(ResearchRequest):
+    question: Annotated[NonEmpty, Field(max_length=8000)]
+
+
+class AgentResearchEnvelope(CanonicalModel):
+    request_id: UUID4
+    schema_version: Literal["1.0"] = "1.0"
+    generated_at: AwareDatetime
+    data: GroundedResearchAnswer
+    quality: QualityReport
+    limitations: tuple[str, ...]
 
 
 class FundamentalTrendsRequest(ResearchRequest):

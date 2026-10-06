@@ -179,6 +179,7 @@ def test_health_openapi_and_docs_never_construct_providers() -> None:
         schema = client.get("/openapi.json").json()
     assert set(schema["paths"]) == {
         "/health",
+        "/v1/agent/research",
         *(
             f"/v1/research/{endpoint}"
             for endpoint in (
