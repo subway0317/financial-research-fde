@@ -11,6 +11,7 @@ from financial_research.exceptions import DataValidationError
 from financial_research.fundamentals.registry import METRIC_REGISTRY, PeriodType
 from financial_research.providers.http import JsonResponse
 from financial_research.providers.sec_concepts import SEC_CONCEPTS
+from financial_research.providers.sec_periods import FilingMetadata, corroborated_period
 from financial_research.schemas.base import canonical_cik
 from financial_research.schemas.company import CompanyProfile
 from financial_research.schemas.fundamentals import FundamentalSourceDataset, SourceFundamentalFact
@@ -28,7 +29,9 @@ class Candidate:
 
 
 def normalize_companyfacts(
-    company: CompanyProfile, response: JsonResponse
+    company: CompanyProfile,
+    response: JsonResponse,
+    filings: dict[str, FilingMetadata] | None = None,
 ) -> FundamentalSourceDataset:
     try:
         if canonical_cik(response.payload["cik"]) != company.cik:
@@ -77,7 +80,7 @@ def normalize_companyfacts(
                             )
                         )
                         continue
-                    fact = _normalize_row(company, response, metric, concept, row)
+                    fact = _normalize_row(company, response, metric, concept, row, filings)
                     if (definition.period_type == PeriodType.DURATION) != (
                         fact.period_start is not None
                     ):
@@ -128,11 +131,17 @@ def normalize_companyfacts(
 
 
 def _normalize_row(
-    company: CompanyProfile, response: JsonResponse, metric: str, concept: str, row: dict[str, Any]
+    company: CompanyProfile,
+    response: JsonResponse,
+    metric: str,
+    concept: str,
+    row: dict[str, Any],
+    filings: dict[str, FilingMetadata] | None,
 ) -> SourceFundamentalFact:
     provenance = response.provenance
     return SourceFundamentalFact.model_validate(
         {
+            "fiscal_period": corroborated_period(row, filings) if filings is not None else None,
             "ticker": company.ticker,
             "metric": metric,
             "value": row["val"],

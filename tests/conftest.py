@@ -86,3 +86,34 @@ def nvda_context(fixture_builder):
     from datetime import date
 
     return fixture_builder.build(ticker="NVDA", as_of_date=date(2025, 5, 25))
+
+
+@pytest.fixture
+def fiscal_context(nvda_context):
+    import json
+    from pathlib import Path
+
+    from financial_research.quality.checks import evaluate_quality
+    from financial_research.schemas.fundamentals import FundamentalObservation, FundamentalResearch
+    from financial_research.schemas.research import ResearchContext
+
+    rows = json.loads((Path(__file__).parent / "fixtures/fiscal_observations.json").read_text())
+    observations = tuple(FundamentalObservation.model_validate(row) for row in rows)
+    fundamentals = FundamentalResearch(
+        observations=observations, provenance=tuple(o.provenance_record() for o in observations)
+    )
+    quality = evaluate_quality(
+        ticker=nvda_context.ticker,
+        as_of_date=nvda_context.as_of_date,
+        company=nvda_context.company,
+        market=nvda_context.market,
+        fundamentals=fundamentals,
+    )
+    return ResearchContext.model_validate(
+        {
+            **nvda_context.model_dump(),
+            "fundamentals": fundamentals.model_dump(),
+            "quality": quality.model_dump(),
+            "provenance": (*nvda_context.provenance, *fundamentals.provenance),
+        }
+    )

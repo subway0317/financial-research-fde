@@ -1,6 +1,7 @@
 """SEC EDGAR identity adapter (companyfacts normalization is separate capability)."""
 
 import logging
+from datetime import date
 
 import httpx
 from pydantic import ValidationError
@@ -8,6 +9,7 @@ from pydantic import ValidationError
 from financial_research.exceptions import DataValidationError, UnknownTickerError
 from financial_research.providers.http import JsonTransport
 from financial_research.providers.sec_facts import normalize_companyfacts
+from financial_research.providers.sec_periods import filing_metadata
 from financial_research.schemas.base import canonical_ticker
 from financial_research.schemas.company import CompanyProfile
 from financial_research.schemas.fundamentals import FundamentalSourceDataset
@@ -18,10 +20,26 @@ DIRECTORY_URL = "https://www.sec.gov/files/company_tickers_exchange.json"
 
 class SECProvider:
     def __init__(
-        self, *, user_agent: str, client: httpx.Client | None = None, timeout: float = 30
+        self,
+        *,
+        user_agent: str,
+        client: httpx.Client | None = None,
+        timeout: float = 30,
+        fiscal_metadata_start: date | None = None,
+        fiscal_metadata_end: date | None = None,
     ) -> None:
         if not user_agent.strip() or "@" not in user_agent:
             raise DataValidationError("SEC requires an explicit User-Agent with contact email")
+        if (fiscal_metadata_start is None) != (fiscal_metadata_end is None):
+            raise DataValidationError("fiscal metadata scope requires both start and end")
+        if (
+            fiscal_metadata_start is not None
+            and fiscal_metadata_end is not None
+            and fiscal_metadata_start > fiscal_metadata_end
+        ):
+            raise DataValidationError("invalid fiscal metadata scope")
+        self._fiscal_metadata_start = fiscal_metadata_start
+        self._fiscal_metadata_end = fiscal_metadata_end
         self._transport = JsonTransport(
             "sec-edgar",
             client=client,
@@ -81,4 +99,10 @@ class SECProvider:
 
     def get_fundamentals(self, company: CompanyProfile) -> FundamentalSourceDataset:
         url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{company.cik}.json"
-        return normalize_companyfacts(company, self._transport.get(url))
+        response = self._transport.get(url)
+        metadata = None
+        if self._fiscal_metadata_start is not None and self._fiscal_metadata_end is not None:
+            metadata = filing_metadata(
+                self._transport, company.cik, self._fiscal_metadata_start, self._fiscal_metadata_end
+            )
+        return normalize_companyfacts(company, response, metadata)

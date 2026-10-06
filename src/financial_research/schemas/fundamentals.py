@@ -7,6 +7,7 @@ from typing import Annotated
 from pydantic import AwareDatetime, Field, model_validator
 
 from financial_research.schemas.base import CanonicalModel, NonEmpty, Ticker
+from financial_research.schemas.periods import FiscalPeriod, PeriodFrequency
 from financial_research.schemas.provenance import ProvenanceRecord, SourceType
 from financial_research.schemas.quality import QualityIssue
 
@@ -26,6 +27,7 @@ class SourceFundamentalFact(CanonicalModel):
     retrieved_at: AwareDatetime
     data_vintage: NonEmpty
     transformation: tuple[str, ...] = ()
+    fiscal_period: FiscalPeriod | None = None
 
     @model_validator(mode="after")
     def valid_chronology(self) -> "SourceFundamentalFact":
@@ -33,6 +35,17 @@ class SourceFundamentalFact(CanonicalModel):
             raise ValueError("period_start exceeds period_end")
         if self.period_end > self.filed_at:
             raise ValueError("period_end exceeds filed_at")
+        if self.fiscal_period is not None and self.period_start is not None:
+            duration = (self.period_end - self.period_start).days + 1
+            bounds = (
+                (70, 110)
+                if self.fiscal_period.frequency == PeriodFrequency.QUARTERLY
+                else (330, 400)
+            )
+            if not bounds[0] <= duration <= bounds[1]:
+                raise ValueError(
+                    "fiscal period frequency contradicts duration; stubs/YTD unsupported"
+                )
         return self
 
     def provenance_record(self) -> ProvenanceRecord:

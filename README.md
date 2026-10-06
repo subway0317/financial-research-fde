@@ -2,8 +2,9 @@
 
 Financial Research FDE Platform provides reliable financial data, daily point-in-time
 (PIT) selection, deterministic calculations, structured provenance, data quality,
-and reproducible research contexts. FDE Stage 1 — Deterministic Research Core takes
-an explicit ticker and as-of date and builds a typed `ResearchContext`.
+and reproducible research contexts. FDE Stage 1 — Deterministic Research Core builds a typed `ResearchContext` from
+an explicit ticker and as-of date. FDE Stage 2 — Research Tools & API Layer adds
+five deterministic research tools and a thin, typed, stateless FastAPI transport.
 
 This project is **not a demonstrated alpha-generating stock predictor**. Earlier
 Quant research found no robust multi-year predictive signal from Relative Market +
@@ -14,8 +15,8 @@ choice, not a predictive-performance claim.
 ## Setup and verification
 
 Requires Python **>=3.12**. Local verification used the existing Python **3.14.4**
-virtual environment. CI is configured for Python 3.12 and 3.14; CI execution itself
-is verified by GitHub after a push, not by this local implementation.
+virtual environment. CI is configured for Python 3.12 and 3.14; Stage 1 CI passed at checkpoint `39893f0`. Stage 2 CI configuration is checked
+locally; the new workflow executes on GitHub after the user creates a checkpoint.
 
 On a new machine:
 
@@ -32,7 +33,7 @@ mypy src/financial_research
 
 For the existing development environment, activate `.venv` and install; do not
 recreate it. `pyproject.toml` is the center for dependencies and tooling. Runtime
-uses only Pydantic and HTTPX; calculations use Python's standard library. No
+uses Pydantic, HTTPX, FastAPI and uvicorn; calculations use Python's standard library. No
 Poetry, Conda, uv, dataframe contract or database server is required.
 
 The default test suite is fully offline. Tests use small synthetic JSON fixtures
@@ -41,9 +42,9 @@ is the verified end-to-end fixture target; a second ticker verifies generic core
 behavior. All fixture values/filings are synthetic and documented in
 [tests/fixtures/README.md](tests/fixtures/README.md).
 
-There are **no live smoke tests** in this release. The `live` marker is registered
-and excluded by default (`-m "not live"`). Future live tests must be explicitly
-opted into with `pytest -m live`; CI uses the offline default.
+The `live` marker is excluded by default (`-m "not live"`).
+`tests/live/test_nvda_smoke.py` is a separate opt-in real-provider smoke; see the
+Stage 2 live instructions below. CI uses the offline default.
 
 ## Capability architecture
 
@@ -54,6 +55,8 @@ External source
   -> company / market / fundamentals services
   -> research.ResearchContextBuilder
   -> ResearchContext + structured quality + provenance
+  -> tools (purpose-specific typed results, evidence and calculations)
+  -> api (FastAPI transport only)
 ```
 
 - `schemas/`: frozen Pydantic models, extra fields forbidden, finite required
@@ -255,13 +258,14 @@ reviewable diagnostic context, not approval to use it as a valid research input.
 
 Implemented: typed research core, SEC company/fundamental adapter, Yahoo-compatible
 market adapter, frozen deterministic features, daily PIT, structured quality,
-provenance, offline tests and CI configuration.
+provenance, five deterministic research tools, typed FastAPI endpoints, offline
+tests, an opt-in live smoke and CI configuration.
 
-Not implemented: LLM or model SDKs, agent orchestration, API/UI frameworks, reports,
+Not implemented: LLM or model SDKs, agent orchestration, UI frameworks, reports,
 RAG, vector stores, news, sentiment, transcripts, predictive/walk-forward modeling,
 portfolios, trading, real-time feeds, authentication or cloud deployment.
 
-Live provider availability has not been smoke-tested in this implementation.
+Live availability is reported separately by the explicit Stage 2 smoke path.
 Yahoo's chart endpoint is an external compatibility interface and may reject or
 change responses. SEC may throttle/reject access; the adapter requires an identified
 User-Agent and paces sequential requests to at most approximately nine per second
@@ -273,4 +277,223 @@ snapshots. CI versions are configured; only Python 3.14.4 was run locally.
 The adapters use the [SEC EDGAR API documentation](https://www.sec.gov/search-filings/edgar-application-programming-interfaces)
 and [SEC developer access guidance](https://www.sec.gov/about/developer-resources).
 Future work must preserve this independent core and these daily PIT/feature
-semantics. No Stage 2 implementation is included.
+semantics. No Stage 3 implementation is included.
+
+
+## Stage 2 tools and direct Python use
+
+Tools have no FastAPI imports, HTTP request objects, or provider-specific parsing.
+Core modules do not import tools or API. The API delegates to `ResearchTools`,
+which accepts a replaceable context builder. Pure functions also accept an
+already-built `ResearchContext` for composing several tools from one acquisition.
+
+| Tool | Purpose |
+| --- | --- |
+| `get_company_snapshot` | Identity, latest observed close, 5/20/60-session market windows, relative SMA and latest registered source facts |
+| `analyze_fundamental_trends` | Registered metric universe (or requested subset), legal YoY comparisons and structured unavailability |
+| `compare_periods` | One metric, `latest_vs_prior_year_comparable`, using the same comparison engine as trends |
+| `summarize_market_behavior` | Observed-session close-to-close return, non-annualized daily volatility, OHLC extrema and latest relative SMA |
+| `inspect_research_quality` | Existing Stage 1 status/issues, objective ages, available/missing metrics and structured provenance |
+
+```python
+from datetime import date
+
+from financial_research.config import ResearchConfig
+from financial_research.research.live import LiveContextBuilder
+from financial_research.tools import ResearchTools
+
+tools = ResearchTools(LiveContextBuilder(ResearchConfig.from_env()))
+result = tools.analyze_fundamental_trends(
+    ticker="NVDA", as_of_date=date(2026, 6, 30), metrics=["revenue", "net_income"]
+)
+```
+
+To reuse one context, call `analyze_fundamental_trends(context, metrics=[...])`,
+`get_company_snapshot(context)`, or another exported pure function. Neither path
+requires the API package. `normalized_business_json()` excludes only request/build/
+retrieval timestamps, preserving business dates, vintages, evidence IDs and formulas.
+
+### Financial comparison rules
+
+The canonical registry exposes `metric_kind`: six FLOW and four STOCK metrics.
+Optional `FiscalPeriod` metadata requires explicit ANNUAL or QUARTERLY frequency,
+fiscal year, quarter when quarterly, and a source reference. Existing Stage 1
+facts without these labels remain valid. Absence means `UNVERIFIED_FISCAL_PERIOD`,
+not a guessed quarter. Flow duration guards support 70–110 inclusive days for
+quarters and 330–400 for annual periods; stub periods/YTD remain unsupported.
+
+The shared engine selects the greatest legal period end, then ANNUAL before
+QUARTERLY at the same endpoint, and the latest legally available filing vintage
+within that exact duration. Unlabeled competing durations produce structured
+unavailability. Conflicting latest filing values are invalid. YoY requires the
+same frequency and fiscal quarter (when applicable), fiscal year exactly one
+less, compatible durations (difference at most 14 days), and period-end spacing
+330–400 days. It never substitutes another quarter, a sequential comparison,
+an annual fact for a quarter, or a future filing. Revision selection never
+rewrites the underlying source history.
+
+The Stage 2 live composition enables optional SEC submissions metadata enrichment.
+SEC `fy/fp` describe filing context and cannot label all comparative facts. A
+label is accepted only when companyfacts end/filed/form match that accession's
+submissions report date/filing date/form, and duration agrees with its frequency.
+Only metadata archives overlapping the explicit filing scope are fetched (maximum
+20). Original filing facts can establish prior-year labels; later comparative
+rows are not relabeled using the later filing's year. YTD rows and annual-report
+standalone Q4 flows without explicit quarterly labels remain unlabeled. There is
+no fiscal/calendar-frame conversion or YTD-to-quarter aggregation. The default
+Stage 1 SEC adapter behavior remains unchanged unless enrichment bounds are supplied.
+
+For a legal pair, `absolute_change = current - prior`. When prior is positive,
+`percentage_change = (current - prior) / prior`, as a **fraction**, not multiplied
+by 100. A zero or negative prior gives null percentage and `NOT_MEANINGFUL` while
+retaining absolute change. Decimal arithmetic uses sufficient precision for exact
+subtraction and at least 50 digits for ratios. Direction is only INCREASED,
+DECREASED, UNCHANGED, or UNAVAILABLE. There are no investment judgments or signals.
+
+An unregistered requested metric raises `UnsupportedMetricError`; a registered
+metric without a legal current/prior pair returns a typed UNAVAILABLE result and
+reason. Metric lists must be nonempty and unique when supplied.
+
+### Evidence and calculation provenance
+
+`EvidenceReference` distinguishes SOURCE_FACT and COMPUTATION. IDs are content
+hashes of source identity/value/vintage or calculation/formula/input IDs/parameters,
+excluding volatile retrieval timestamps. Every successful derived calculation
+records its formula, parameters and input evidence IDs. Source references include
+financial periods/filing availability or market session dates. All calculation
+input IDs resolve to source evidence included in that result. Ratios, changes,
+returns, volatility, extrema, relative SMA and objective ages have calculation
+provenance; unavailable values do not acquire fabricated calculations.
+
+### Market windows and freshness
+
+Lookback is an integer **2–504 observed closes**, not calendar days. A complete
+N-close window contains **N−1 simple returns**. Cumulative return is
+`last_close / first_close - 1`; realized volatility is sample standard deviation
+of those returns, ddof=1 and non-annualized, explicitly exposed as
+`realized_volatility_daily` with `annualized=false`. Two closes permit a return
+but cannot provide sample volatility. Insufficient N-close history yields a
+structured unavailable window; partial history is counted but not used as if
+complete. Latest relative SMA reuses Stage 1 feature values and can refer to a
+longer history than the descriptive window. OHLC extrema use adjusted high/low.
+The configured 730-day core history does not guarantee 504 observed sessions.
+
+Quality preserves Stage 1's status, severity and market freshness rule. Age fields
+are calendar-day differences from the explicit as-of date. Fundamental age alone
+never causes a new 90-day staleness warning. A FAIL context blocks financial
+calculations; the quality inspector can expose existing FAIL diagnostics. Future
+market/fundamental information is always a PIT integrity error.
+
+## Stage 2 API
+
+Export an explicitly chosen SEC contact User-Agent, then start:
+
+```bash
+export SEC_USER_AGENT="Your Organization your-name your-email@example.com"
+uvicorn financial_research.api.app:app --reload
+```
+
+Swagger: **http://127.0.0.1:8000/docs**. OpenAPI: `/openapi.json`.
+`GET /health` returns process liveness independently of SEC/Yahoo availability.
+Importing the default `app` and accessing health/docs performs no provider requests.
+Each research request owns and closes its provider clients; only configuration/
+factory references persist. There are no caches, database/user sessions, queues,
+background jobs or authentication. `create_app(tools_factory=...)` and the
+`get_research_tools` dependency support offline injection.
+
+| Endpoint | Additional request fields |
+| --- | --- |
+| `POST /v1/research/company-snapshot` | None |
+| `POST /v1/research/fundamental-trends` | Optional `metrics` |
+| `POST /v1/research/compare-periods` | `metric`, optional `comparison` (only `latest_vs_prior_year_comparable`) |
+| `POST /v1/research/market-behavior` | Optional `lookback_sessions`, default 60 |
+| `POST /v1/research/quality` | None |
+
+Every request requires canonicalizable `ticker` and ISO date `as_of_date`.
+Dates must be YYYY-MM-DD; numeric timestamps, datetime strings and invalid dates
+are rejected. Lookback rejects booleans, strings and out-of-range integers.
+
+```bash
+curl -X POST http://127.0.0.1:8000/v1/research/company-snapshot \
+  -H 'Content-Type: application/json' \
+  -d '{"ticker":"NVDA","as_of_date":"2026-06-30"}'
+curl -X POST http://127.0.0.1:8000/v1/research/fundamental-trends \
+  -H 'Content-Type: application/json' \
+  -d '{"ticker":"NVDA","as_of_date":"2026-06-30","metrics":["revenue","net_income"]}'
+curl -X POST http://127.0.0.1:8000/v1/research/compare-periods \
+  -H 'Content-Type: application/json' \
+  -d '{"ticker":"NVDA","as_of_date":"2026-06-30","metric":"revenue","comparison":"latest_vs_prior_year_comparable"}'
+curl -X POST http://127.0.0.1:8000/v1/research/market-behavior \
+  -H 'Content-Type: application/json' \
+  -d '{"ticker":"NVDA","as_of_date":"2026-06-30","lookback_sessions":60}'
+curl -X POST http://127.0.0.1:8000/v1/research/quality \
+  -H 'Content-Type: application/json' \
+  -d '{"ticker":"NVDA","as_of_date":"2026-06-30"}'
+```
+
+Research responses contain `request_id` (new server-generated UUID4),
+`schema_version`, aware UTC `generated_at`, typed `data`, `quality`, and
+`limitations`. `X-Request-ID` matches the body ID. Runtime metadata is separate
+from deterministic business content. There is no public raw ResearchContext,
+chat, prediction, signal or report endpoint. Routes contain no financial calculations.
+
+| Error | HTTP status / stable code |
+| --- | --- |
+| Unknown ticker | 404 / UNKNOWN_TICKER |
+| Malformed request | 422 / REQUEST_VALIDATION_ERROR |
+| Unregistered metric | 422 / UNSUPPORTED_METRIC |
+| Invalid canonical data | 422 / DATA_VALIDATION_ERROR |
+| Required history missing | 422 / INSUFFICIENT_HISTORY |
+| Provider transport failure | 502 / PROVIDER_ERROR |
+| PIT integrity failure | 500 / PIT_VIOLATION |
+| Missing live provider configuration | 503 / CONFIGURATION_ERROR |
+| Unexpected internal exception | 500 / INTERNAL_ERROR |
+
+Errors expose only stable code, sanitized message and request ID, never raw
+exception/provider payload, traceback, filesystem path or secrets. Standard
+logging includes request ID, endpoint, ticker, as-of date, tool name, execution
+duration and result quality. Internal errors remain failures, not fallback results.
+
+## Stage 2 offline and live validation
+
+```bash
+pytest
+ruff check .
+ruff format --check .
+mypy src/financial_research
+python -m pip check
+git diff --check
+```
+
+Default pytest includes Stage 1, tool and API regression tests and excludes live.
+CI runs these offline tests and static checks on Python 3.12 / 3.14. API tests
+exercise all endpoints, errors, OpenAPI and docs with injected fixture contexts.
+Some restrictive execution sandboxes block local socketpair wakeups required by
+ASGI/thread bridges; run checks in a normal local shell in that case. The test
+suite's external socket/DNS guard must remain enabled.
+
+The live path is explicit and uses **real** SEC/Yahoo requests:
+
+```bash
+export LIVE_AS_OF_DATE="2026-06-30"
+pytest -m live tests/live/test_nvda_smoke.py -s
+python -m financial_research.tools.smoke --ticker NVDA --as-of-date 2026-06-30
+```
+
+It resolves company, fetches market and companyfacts/submissions data, builds a
+PIT context, then exercises company snapshot and fundamental trends. Assertions
+check typed shape, ticker/CIK, nonempty market, legal dates, quality and tool
+integration, not exact changing financial values. Smoke status is PASS, EXTERNAL
+BLOCKED for identifiable HTTP access/rate/outage or transport failures, or FAILED
+for validation/integrity/unclassified implementation errors. CLI exit codes are
+0/2/1 respectively. The pytest live test fails on any non-PASS status and prints
+the classification; external blocks are never skipped, mocked or called PASS.
+Missing SEC_USER_AGENT is configuration failure, not a provider outage. Contact
+identity must be explicitly supplied for live requests; the application does not
+read Git identity or send it automatically.
+
+Offline correctness and live availability are separate validation dimensions.
+Live prices/companyfacts still use retrieved snapshots and may change; historical
+vintage warnings, SEC concept/period limitations, and observed-calendar freshness
+limits remain visible. Stage 2 adds no LLM, agent, valuation/predictive engine,
+database, UI, deployment or investment-signal capability.

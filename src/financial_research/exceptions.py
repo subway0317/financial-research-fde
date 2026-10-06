@@ -27,3 +27,7 @@ class InsufficientHistoryError(DataValidationError):
 
 class UnsupportedMetricError(DataValidationError):
     """A requested metric is outside the registered universe."""
+
+
+class ConfigurationError(FinancialResearchError):
+    """Required live provider configuration is absent."""

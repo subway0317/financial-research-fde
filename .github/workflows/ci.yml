@@ -1,4 +1,4 @@
-name: Core CI
+name: Research CI
 on: [push, pull_request]
 jobs:
   checks:
@@ -14,4 +14,5 @@ jobs:
       - run: python -m pip install -e ".[dev]"
       - run: pytest
       - run: ruff check .
+      - run: ruff format --check .
       - run: mypy src/financial_research

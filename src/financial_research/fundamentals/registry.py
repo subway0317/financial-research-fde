@@ -8,6 +8,11 @@ from types import MappingProxyType
 from financial_research.exceptions import UnsupportedMetricError
 
 
+class MetricKind(StrEnum):
+    FLOW = "FLOW"
+    STOCK = "STOCK"
+
+
 class PeriodType(StrEnum):
     DURATION = "DURATION"
     INSTANT = "INSTANT"
@@ -19,6 +24,10 @@ class MetricDefinition:
     unit: str
     period_type: PeriodType
     meaning: str
+
+    @property
+    def metric_kind(self) -> MetricKind:
+        return MetricKind.FLOW if self.period_type == PeriodType.DURATION else MetricKind.STOCK
 
 
 METRIC_REGISTRY: Mapping[str, MetricDefinition] = MappingProxyType(

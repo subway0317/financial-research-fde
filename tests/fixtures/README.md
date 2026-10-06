@@ -10,3 +10,10 @@ available 2025-05-23; a revenue revision filed that day becomes available 2025-0
 A revenue alias tests deterministic per-filing concept priority. The exchange
 calendar is deliberately limited to these observed sessions, not a general market
 holiday calendar. `nvda_expected.json` freezes the selected business outputs.
+
+`fiscal_observations.json` adds explicit, synthetic issuer fiscal labels for
+Stage 2 flow/stock and quarterly/annual comparisons. The examples intentionally
+use fiscal year labels distinct from calendar years. Prior-year comparative facts
+are disclosed in a synthetic 2025 filing and are available only on that filing's
+next observed session. No values or fiscal labels are evidence of actual NVDA
+financial statements. The two absent canonical metrics exercise UNAVAILABLE.
