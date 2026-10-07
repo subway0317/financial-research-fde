@@ -11,6 +11,8 @@ Stage 4 adds a bounded, evidence-grounded Agent. Stage 5 evaluates that Agent wi
 frozen inputs, multilingual contracts and preregistered release rules.
 Stage 6 packages validated Agent claims into bilingual analyst research reports,
 with deterministic rendering, a stateless API and reproducible local audit bundles.
+Stage 7 consumes that frozen report contract in a React/TypeScript analyst workspace,
+with interactive evidence, calculation provenance, audit metadata and downloads.
 
 This project is **not a demonstrated alpha-generating stock predictor**. Earlier
 Quant research found no robust multi-year predictive signal from Relative Market +
@@ -1616,7 +1618,225 @@ are reported separately. The smoke invokes no Stage 5 Judge or large benchmark.
 Synthesis remains stochastic and existing deterministic grounding/policy checks
 retain their documented limits. Formal report support is EN/ZH only. The workflow
 is one fixed, single-company equity report; it includes no valuation, comparison,
-forecast, PDF/DOCX/Excel export, persistent history, database or Web UI. Existing
+forecast, PDF/DOCX/Excel export, persistent history or a database. Existing
 SEC/Yahoo coverage, daily PIT calendar and provider availability limitations remain;
 provider and LLM latency/token use vary per run. The stable typed contract can be
-consumed by a future Analyst Web Application. Stage 6 adds no Stage 7 implementation.
+consumed by the Stage 7 Analyst Web Application below. Stage 6 itself adds no Web UI.
+
+## Stage 7 — Analyst Web Application & Evidence Explorer
+
+The desktop-first analyst workspace consumes the frozen `ResearchReport v1`.
+**Stage 7 consumes research. Stage 7 does not create research.** React, TypeScript
+and Vite provide a single-page input/report/exploration workflow in `frontend/`.
+There is no Node backend, SSR, chat UI, price dashboard or second report schema.
+Vite is sufficient for this local browser application; it needs neither SEO nor
+server components. Plain CSS keeps the workspace readable on desktop and tablet;
+narrow screens stack the panels.
+
+```text
+Browser: ticker + as_of_date + ENGLISH / CHINESE
+  -> same-origin fetch /v1/reports/equity-research
+  -> Vite development proxy -> existing FastAPI (sole backend)
+  -> Stage 6 validated ResearchReport v1 + canonical Markdown + manifest summary
+  -> structured report, evidence/PIT, calculations, audit, browser downloads
+```
+
+### Local development
+
+Use Node 24.15+ (24 LTS recommended), npm, and the existing Python environment.
+`frontend/.nvmrc` selects Node 24. No global npm tooling or shell changes are needed.
+If using nvm, run `nvm use` from `frontend/` after installing Node 24 locally.
+The pinned package lock defines stable compatible versions; TypeScript 5.9 is
+within the supported range of the lint/type-generation tooling.
+
+Terminal A, at the repository root:
+
+```bash
+source .venv/bin/activate
+# Export the existing backend configuration in this terminal.
+# Optional: load a trusted local .env, which is ignored and never automatically loaded.
+set -a
+[ ! -f .env ] || source .env
+set +a
+uvicorn financial_research.api.app:app --host 127.0.0.1 --port 8000
+```
+
+Keep `OPENAI_API_KEY`, `OPENAI_MODEL`, `OPENAI_TIMEOUT_SECONDS` and `SEC_USER_AGENT`
+in the backend shell only. Existing project-specific shell helpers are optional;
+their personal configuration is not part of this repository. Never put credentials
+in frontend variables or send secrets to chat.
+
+Terminal B, at the repository root:
+
+```bash
+cd frontend
+npm ci
+npm run dev
+```
+
+Open **http://localhost:5173** in your Windows/WSL browser. Vite binds to loopback,
+uses a strict port, and proxies `/v1` and `/health` to `127.0.0.1:8000`; application
+fetch code uses relative paths. The report proxy allows up to five minutes of
+waiting. Backend/OpenAI configured timeouts still apply. No broad CORS change is
+needed. `vite preview` serves static build assets only; the documented integration
+workflow uses `npm run dev`. Production routing is reserved for Stage 8.
+
+### OpenAPI and the typed client
+
+The existing FastAPI/Pydantic contract is the source of frontend types. The small
+schema utility exports sorted JSON without credentials, provider construction,
+requests or a running API server:
+
+```bash
+.venv/bin/python -m financial_research.api.openapi > /tmp/financial-research-openapi.json
+cd frontend
+npm run api:generate
+npm run api:check
+```
+
+`api:generate` pipes that module's output directly through `openapi-typescript`
+into `frontend/src/api/generated.ts`; no second checked-in JSON schema is needed.
+It prefers the repository `.venv/bin/python`, otherwise `python`; set `PYTHON` to
+an alternate executable if needed. `api:check` regenerates in memory and compares
+exact bytes, exits nonzero for drift or a missing generated file, and leaves files
+unchanged. This also works before a new generated file has been staged.
+
+The Report router now documents its **existing** sanitized `ErrorResponse` for
+422/404/502/503/500, enabling generated error-envelope typing. Runtime handlers,
+report fields and report semantics are unchanged. The native-fetch client imports
+request/response types from the generated operation. It does not transform the
+report, calculate financial metrics or call an LLM. Error UX uses deterministic
+messages for invalid fields, unknown tickers, provider/configuration failures,
+integrity/server failures and network failures. It reads only safe diagnostic
+codes/request UUIDs, and never displays raw exception text, error bodies or
+validation input values.
+
+### Analyst workflow and evidence
+
+Enter any ticker accepted by the backend, a calendar as-of date and English or 中文.
+The form exposes exactly these three fields. Required validation and ticker
+trim/uppercase are presentation conveniences; ticker resolution, trading calendar,
+filing availability, PIT, policy, grounding and synthesis remain backend concerns.
+
+Request state is a typed `IDLE / LOADING / SUCCESS / ERROR` union. While loading,
+the controls are disabled, an immediate request guard prevents duplicate submits,
+and the UI shows explanatory text and elapsed seconds. There are no invented
+percentages or partial/streaming claims. Unmount aborts browser waiting only; it
+does not imply cancellation of the backend research execution. A failed request
+can be retried manually. No automatic expensive retry is performed.
+
+The main view reads `response.report`, retaining original claim statements,
+claim types, canonical codes and Stage 6 section order: Research Scope, Company,
+Fundamentals, Market Behavior, Data Quality and Limitations. Status, authoritative
+quality/readiness and warning banners are visible near the top. Diagnostics and
+limitations are displayed verbatim. A successful HTTP response with `BLOCKED`
+shows quality, blocking reasons, limitations and audit, and omits substantive
+Company/Fundamentals/Market conclusions.
+
+Citation buttons resolve canonical claim IDs to the existing `E#` aliases. A
+native modal detail drawer displays canonical ID, metric, value/unit, observation
+date, period start/end, filing date, available date, as-of context, provider,
+source reference, vintage and transformations. Missing metadata is `—` and never
+inferred. PIT explanation is fixed shell text; the frontend does no PIT calculation.
+Native dialog behavior traps browser focus, supports Escape and has a named close
+button; focus returns to the opening citation. Buttons support keyboard access,
+the UI has visible focus indicators, and statuses always have text.
+
+Computed evidence also links to the existing `C#` provenance. The calculation
+drawer shows the supplied operation, formula, parameters, input canonical IDs,
+input `E#` links, results, units and periods without evaluating the formula.
+The lower explorer provides Evidence, Calculations and Audit controls. Evidence
+search filters only the returned entries and never makes another network request.
+Aliases are preserved. Missing/duplicate references and inconsistent calculation
+input aliases cause a visible integrity alert rather than being silently omitted.
+
+Audit uses report/runtime fields and the backend manifest's counts, including
+model/provider, IDs, versions, quality/readiness, planner/synthesis calls, repair
+count and available latency/token metadata. `Planner used: No` is explicit; counts
+are not recomputed to override the manifest. Prompt **versions** are visible;
+prompt content and hidden reasoning are absent.
+
+A small typed dictionary translates the English/Chinese shell. Language selection
+changes the shell; existing backend claims, diagnostic text, limitations and
+canonical codes retain their original content. Generate again to request research
+in another language. The browser never translates substantive statements.
+
+### Downloads and security boundary
+
+Download JSON exports **only `response.report`**, the structured `ResearchReport`,
+with readable UTF-8 JSON. Download Markdown saves **`response.markdown` verbatim**;
+Markdown is not the primary HTML renderer and no frontend Markdown formatter exists.
+Both use browser Blobs and temporary object URLs, then revoke the URLs. Filenames
+sanitize ticker/date, for example `NVDA-2026-06-30-research-report.json` / `.md`.
+Downloads require no server persistence. PDF/DOCX/XLSX remain outside Stage 7.
+
+The browser makes zero direct OpenAI, SEC, Yahoo or other market-provider calls.
+It receives no credentials, raw provider payloads, system prompts or chain of
+thought. React renders backend strings as plain text, without raw HTML injection.
+Vite disables dotenv loading and public environment prefixes (`envDir: false`,
+`envPrefix: []`); no frontend environment variables are needed. The security
+script scans `src/` and `dist/` for sentinel credentials, configured secret values,
+forbidden API domains, sensitive field names and developer machine paths, reporting
+only the affected filename. CI builds under fake secret sentinels to detect leakage.
+Synthetic fixtures are restricted to tests and are not imported by the production
+application. No real live report is copied into the repository.
+
+### Validation and CI
+
+```bash
+cd frontend
+npm ci
+npm run api:check
+npm run typecheck
+npm run lint
+npm test -- --run
+npm run build
+```
+
+`build` also runs the source/bundle security scan. Tests use Vitest, React Testing
+Library, user-event and jsdom with mocked fetch and minimal synthetic report
+fixtures. They cover form/request/loading/duplicate protection, all three report
+outcomes, HTTP errors and retries, EN/ZH, exact claim preservation, evidence/PIT,
+calculation inputs, integrity failures, audit, safe downloads and security. jsdom
+does not verify actual browser layout or native focus trapping; those belong to
+the manual browser smoke below. No browser automation dependency is installed.
+
+The existing Python CI matrix remains intact. A separate frontend job installs the
+Python package for offline schema export, uses Node 24 and `npm ci`, then checks
+OpenAPI drift, types, lint, tests, production build and security. Both jobs make
+zero live research/provider calls and require no API secrets. Backend regression
+commands remain the Stage 6 commands above.
+
+### Manual browser smoke and current limits
+
+After starting both terminals, execute one formal smoke to control API cost:
+
+1. Open `http://localhost:5173`; enter `NVDA`, `2026-06-30`, English.
+2. Click Generate Research once. Confirm explanatory loading text, elapsed seconds,
+   disabled controls and then a completed report. This generates real backend research.
+3. Verify ticker/as-of, status, quality and readiness, all six report sections,
+   warnings when present, original diagnostics and visible limitations.
+4. Tab to an `E#` citation and press Enter. Check canonical ID, metric/value/unit,
+   periods, filed/available/as-of dates, provider and vintage. Close with Escape and
+   confirm focus returns to the citation. Check the drawer at a narrow window width.
+5. Open `C#`, inspect supplied formula/result/parameters, then open an input `E#`.
+6. Filter Evidence without regenerating. Open Calculations and Audit; verify IDs,
+   manifest counts, `Planner used: No`, zero planner calls and synthesis/repair counts.
+7. Download JSON and Markdown. Check safe filenames, parsed JSON matching the shown
+   report and Markdown matching the canonical backend download.
+8. Switch the shell to 中文 and confirm labels change while existing claim text
+   and canonical codes stay intact. A Chinese research generation is optional and
+   incurs an additional real request.
+
+When GUI access is unavailable, local HTTP/proxy validation and component tests
+are reported separately from **LIVE BROWSER SMOKE:
+MANUAL_USER_VERIFICATION_REQUIRED**. A valid BLOCKED response demonstrates its
+product behavior but does not satisfy the completed-report live acceptance.
+Provider outages or missing configuration likewise do not constitute a successful
+live smoke. Final Stage 7 freeze requires the successful browser demo.
+
+The workflow remains single-company, with no authentication, accounts, database,
+persistence, saved history, PDF, cloud deployment, streaming, comparison, valuation
+or mobile-native experience. LLM latency varies and external providers remain
+runtime dependencies. Stage 8 deployment and production operations are future
+work; this stage does not add deployment configuration or infrastructure.

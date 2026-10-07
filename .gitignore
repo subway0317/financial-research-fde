@@ -16,3 +16,6 @@ build/
 dist/
 artifacts/evals/
 artifacts/reports/
+frontend/node_modules/
+frontend/coverage/
+frontend/*.tsbuildinfo
