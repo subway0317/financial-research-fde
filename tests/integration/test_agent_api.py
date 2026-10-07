@@ -134,7 +134,7 @@ def test_default_agent_missing_env_is_503_and_health_docs_stay_independent(monke
         response = client.post("/v1/agent/research", json=BODY)
     assert response.status_code == 503
     assert response.json()["error_code"] == "AGENT_CONFIGURATION_ERROR"
-    assert len(schema["paths"]) == 7
+    assert len(schema["paths"]) == 8
     assert "/v1/agent/research" in schema["paths"]
     assert schema["paths"]["/v1/agent/research"]["post"]["requestBody"]["content"][
         "application/json"

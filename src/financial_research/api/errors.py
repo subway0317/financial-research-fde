@@ -25,10 +25,13 @@ from financial_research.exceptions import (
     UnsupportedMetricError,
 )
 from financial_research.llm.errors import AgentConfigurationError, LLMProviderError
+from financial_research.reports.errors import ReportCompilationError, ReportIntegrityError
 from financial_research.skills.errors import EvidenceIntegrityError
 
 logger = logging.getLogger(__name__)
 ERROR_MAP = (
+    (ReportCompilationError, 500, "REPORT_COMPILATION_ERROR", "Report compilation failed."),
+    (ReportIntegrityError, 500, "REPORT_INTEGRITY_ERROR", "Report integrity validation failed."),
     (
         PayloadBudgetExceeded,
         503,

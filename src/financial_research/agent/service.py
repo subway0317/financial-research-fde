@@ -126,6 +126,39 @@ class ResearchAgent:
         self._llm = llm
         self._config = config or AgentRuntimeConfig.from_env()
 
+    @property
+    def llm_provider(self) -> str:
+        return self._llm.provider
+
+    @property
+    def llm_model(self) -> str:
+        return self._llm.model
+
+    def execute_validated_plan(
+        self, request: ResearchAgentRequest, plan: AgentPlan
+    ) -> GroundedResearchAnswer:
+        """Validate an internally supplied plan and reuse the normal execution pipeline."""
+        execution = _Execution()
+        try:
+            try:
+                plan = AgentPlan.model_validate(plan.model_dump())
+            except ValidationError:
+                raise AgentPlanValidationError("INVALID_PLAN_SCHEMA") from None
+            validate_plan(plan, request, self._registry)
+            execution.record(AgentTraceAction.PLAN_VALIDATED, "deterministic-equity-report-plan-v1")
+            return self._execute(
+                request,
+                plan,
+                execution,
+                planner_prompt_version="deterministic-equity-report-plan-v1",
+            )
+        except (AgentIntegrityError, LLMProviderError) as exc:
+            exc.trace, exc.llm_usage = execution.trace(), tuple(execution.usage)
+            logger.warning(
+                "agent failure error_type=%s llm_calls=%d", type(exc).__name__, execution.calls
+            )
+            raise
+
     def run(self, request: ResearchAgentRequest) -> GroundedResearchAnswer:
         execution = _Execution()
         try:
@@ -255,6 +288,18 @@ class ResearchAgent:
             request_action=AgentTraceAction.PLAN_REQUEST,
             validation_action=AgentTraceAction.PLAN_VALIDATED,
         )
+        return self._execute(
+            request, plan, execution, planner_prompt_version=PLANNER_PROMPT_VERSION
+        )
+
+    def _execute(
+        self,
+        request: ResearchAgentRequest,
+        plan: AgentPlan,
+        execution: _Execution,
+        *,
+        planner_prompt_version: str,
+    ) -> GroundedResearchAnswer:
         started = time.perf_counter()
         try:
             result = self._registry.get(plan.selected_skill_id).run(
@@ -360,7 +405,7 @@ class ResearchAgent:
             calculation_provenance=calculations,
             trace=execution.trace(),
             llm_usage=tuple(execution.usage),
-            planner_prompt_version=PLANNER_PROMPT_VERSION,
+            planner_prompt_version=planner_prompt_version,
             synthesis_prompt_version=SYNTHESIS_PROMPT_VERSION,
             synthesis_payload_audit=payload_audit,
             response_language=response_language,

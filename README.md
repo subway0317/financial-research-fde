@@ -9,6 +9,8 @@ FDE Stage 3 — Research Skills & Controlled Orchestration composes those tools 
 four reusable domain workflows and one quality-gated equity evidence package.
 Stage 4 adds a bounded, evidence-grounded Agent. Stage 5 evaluates that Agent with
 frozen inputs, multilingual contracts and preregistered release rules.
+Stage 6 packages validated Agent claims into bilingual analyst research reports,
+with deterministic rendering, a stateless API and reproducible local audit bundles.
 
 This project is **not a demonstrated alpha-generating stock predictor**. Earlier
 Quant research found no robust multi-year predictive signal from Relative Market +
@@ -65,7 +67,7 @@ External source
   -> api (FastAPI transport only)
 ```
 
-The Python workflow direction is **core → tools → skills → agent → API**.
+The Python workflow direction is **core → tools → skills → agent → reports → API/CLI**.
 The independent evals layer calls Agent; production layers never import evals.
 The existing API remains a transport over tools; Stage 3 adds no HTTP endpoints.
 
@@ -1399,3 +1401,222 @@ External outages/quota failures are distinct from model quality. A low model sco
 is distinct from software implementation failure. Default pytest and GitHub CI remain
 fully offline and require no API keys; they cover dataset hashes, all prior stages,
 multilingual contracts, payload boundaries, Judge transport and release rules.
+
+## Stage 6 — Analyst Research Report & Reproducible Audit Bundle
+
+Analysts can request a complete equity research workflow with just a ticker,
+research date and explicit language. The report layer organizes already validated
+research into a stable product contract. The compiler makes **zero LLM calls,
+zero provider calls and zero financial recalculations**. It preserves claim IDs,
+types, exact statements, citations and existing calculation provenance; it does
+not summarize, translate, merge or add financial conclusions. There is no second
+report-writing LLM, executive-summary LLM or production semantic Judge.
+
+```text
+EquityResearchReportRequest (ticker, as_of_date, response_language)
+  -> fixed BROAD_RESEARCH / equity_research AgentPlan
+  -> ResearchAgent.execute_validated_plan
+  -> shared Agent execution (same path used after free-form planning)
+     registry validation -> Skill -> readiness -> evidence projection
+     -> synthesis -> grounding / recommendation / language checks -> bounded repair
+  -> validated GroundedResearchAnswer
+  -> deterministic ReportCompiler -> ResearchReport
+  -> Markdown + evidence artifact + manifest
+  -> optional CLI audit bundle export
+```
+
+Free-form `POST /v1/agent/research` still uses the existing Planner. Report requests
+skip planning explicitly: `planner_used=false`, `planner_call_count=0`,
+`planner_prompt_version=null` and `plan_version=deterministic-equity-report-plan-v1`.
+Users cannot supply a question, custom prompt, section, intent, Skill, tool or
+provider; extra fields are rejected. The existing payload guard, prompts, policy,
+one-repair bound and Stage 5 evaluation assets/thresholds remain unchanged.
+
+| Report outcome | Planner calls | Synthesis calls | Meaning |
+| --- | --- | --- | --- |
+| COMPLETED | 0 | 1, or 2 with repair | READY with validated claims |
+| COMPLETED_WITH_WARNINGS | 0 | 1, or 2 with repair | READY_WITH_WARNINGS with validated claims |
+| BLOCKED | 0 | 0 | NOT_READY; data quality/blocking reasons, no research conclusions |
+
+`BLOCKED` is a successful product result: HTTP 200 and CLI exit 0. It retains
+the selected Skill, quality diagnostics, mandatory limitations and blocking
+context. System or integrity failures use sanitized typed errors, and never
+produce a partial valid-looking report.
+
+### Report contract and bilingual presentation
+
+`research-report-v1` is defined in `financial_research.reports.schemas` through
+typed, frozen Pydantic models with extra fields forbidden. `ResearchReport` holds
+identity, status, authoritative quality/readiness, fixed sections, limitations,
+blocking reasons, evidence/calculation appendices, objective runtime metadata
+and content integrity. `ReportManifest` records execution counts, prompt/compiler
+versions, model/provider and bundle file hashes. The API returns a typed
+`EquityResearchReportResponse` containing `report`, `markdown` and
+`manifest_summary` (`file_hashes=null` until local export).
+
+Only **ENGLISH** (default) and **CHINESE** are supported by this request;
+AUTO is rejected. Heading mapping and order are deterministic:
+
+| English | Chinese |
+| --- | --- |
+| Equity Research Report | 股票研究报告 |
+| Research Scope | 研究范围 |
+| Company | 公司概况 |
+| Fundamentals | 基本面 |
+| Market Behavior | 市场表现 |
+| Data Quality | 数据质量 |
+| Limitations | 限制 |
+| Evidence Appendix | 证据附录 |
+| Calculation Appendix | 计算附录 |
+| Audit Metadata | 审计信息 |
+
+The Agent synthesizes in the requested language using its existing validation.
+The compiler renders those statements verbatim, without retranslating. Canonical
+diagnostic messages, identifiers, units and limitation codes retain original text,
+including English audit text in Chinese reports. BLOCKED omits Company,
+Fundamentals and Market Behavior sections, and displays Blocking Reasons / 阻塞原因
+within Data Quality. Status, quality, readiness and diagnostics appear near the top.
+
+### Citations, calculations and PIT
+
+Evidence entries sort by canonical evidence ID and receive deterministic
+presentation aliases `E1`, `E2`, ...; computations sort by canonical calculation
+ID and receive `C1`, `C2`, ... . Statements retain their original `evidence_ids`
+in JSON. Markdown appends `[E3][C1]` style references; appendix headings resolve
+them to original canonical IDs. Aliases never replace internal identities.
+
+The evidence appendix contains only directly cited evidence and its full transitive
+calculation input closure. `CalculationAppendixEntry` copies operation/formula,
+parameters, existing result/unit/period fields and original inputs with their
+display aliases. No formula is executed in the report layer. Missing upstream
+metadata is shown as `—`, rather than inferred.
+
+Research Scope explicitly states daily PIT rules and the requested as-of date.
+The appendix distinguishes observation date/period end, SEC `filed_at`, inferred
+`available_date`, `data_vintage`, provider and source reference. Fundamental
+availability remains the first observed trading session strictly after filing;
+the compiler does not establish a new calendar or recompute availability. Structural
+validation rejects any cited observation/period/filing/availability after the
+research date and inconsistent filing/availability ordering.
+
+### API demo
+
+Export the existing OpenAI and SEC configuration in your local WSL shell; keys
+must remain local. `.env.example` lists the variables; `.env` is not automatically
+loaded. No new external service or account is required. Start the API:
+
+```bash
+.venv/bin/uvicorn financial_research.api.app:app --host 127.0.0.1 --port 8000
+```
+
+```bash
+curl -X POST http://127.0.0.1:8000/v1/reports/equity-research \
+  -H 'Content-Type: application/json' \
+  -d '{"ticker":"NVDA","as_of_date":"2026-06-30","response_language":"ENGLISH"}'
+```
+
+Set `response_language` to `CHINESE` for Chinese synthesis and headings.
+The HTTP route returns the report in memory and never exports local bundle files
+or returns a local path. Error mappings preserve the existing transport conventions:
+invalid input 422, unknown ticker 404, provider failure 502, missing configuration
+503 and internal report/Agent integrity failures 500. `/health`, the five
+`/v1/research/*` routes and `/v1/agent/research` remain available in OpenAPI.
+
+### CLI, bundles and integrity
+
+```bash
+.venv/bin/python -m financial_research.reports.cli \
+  --ticker NVDA --as-of-date 2026-06-30 --language ENGLISH
+```
+
+Optional `--output-dir` overrides `artifacts/reports`. Each execution exports:
+
+```text
+artifacts/reports/<run UUID>/
+  report.json     # machine-readable source of truth
+  report.md       # deterministic rendering, rebuildable from report.json
+  evidence.json   # normalized evidence, alias mapping and calculation provenance
+  manifest.json   # identity, execution provenance, versions and file SHA-256 hashes
+```
+
+The directory uses a UUID rather than ticker-derived path components. Existing
+run directories are never silently overwritten. An exclusive sibling reservation
+protects cooperating writers; files are written into a sibling temporary directory,
+read back and validated, then finalized by a same-filesystem directory rename.
+Write or integrity failure removes staging and releases the reservation. A process
+kill can leave a hidden temporary directory/reservation for manual cleanup.
+`artifacts/reports/` is Git-ignored, including all live outputs.
+
+`ReportBundleValidator` checks semantic identity, unique claim IDs, fixed sections,
+evidence/calculation aliases, canonical references, exact transitive input closure,
+acyclic calculations, copied results, PIT dates, status/readiness and LLM budgets.
+Cross-file checks enforce exact Markdown reconstruction, preserved limitations,
+matching evidence and manifest identity/status/language/Skill/counts, citation
+resolution and SHA-256 of `report.json`, `report.md` and `evidence.json` bytes.
+The manifest does not hash itself, avoiding a recursive dependency. To validate:
+
+```python
+from pathlib import Path
+from financial_research.reports.validation import ReportBundleValidator
+
+report = ReportBundleValidator().validate_directory(Path("artifacts/reports/<run UUID>"))
+```
+
+`report_id = report:<SHA-256>` hashes stable canonical UTF-8 JSON containing report
+version, ticker/date/language/status/Skill, validated claims and canonical references,
+normalized evidence and calculations, limitations/blocking reasons and quality state.
+`run_id` distinguishes executions. All runtime metadata (creation time, trace timing,
+token use, provider/model and prompt metadata), `run_id`, `report_id` and the integrity
+field are excluded from the semantic hash. The same content compiles to the same ID;
+a different stochastic synthesis may legitimately create a different report ID.
+For a given full report, Markdown is byte deterministic; Audit Metadata displays the
+run ID and creation time, so different runs can have different file hashes.
+
+The CLI prints only a safe summary: report/run IDs, status, Skill, call/repair counts,
+claim/evidence/calculation counts, quality/readiness, bundle integrity/PIT result
+and path. It prints no key, SEC contact identity, environment content, raw provider
+payload or hidden reasoning. No prompts or Judge reasoning are stored in bundles.
+
+### Offline validation and real NVDA smoke
+
+The report suite exercises real provider normalization with `httpx.MockTransport`,
+the deterministic core, registered Skills and shared Agent path with FakeLLM.
+No credentials or network are needed:
+
+```bash
+.venv/bin/pytest tests/reports
+.venv/bin/pytest tests/reports/test_smoke.py::test_offline_report_smoke_covers_complete_pipeline
+.venv/bin/pytest
+.venv/bin/ruff check .
+.venv/bin/ruff format --check .
+.venv/bin/mypy src/financial_research
+.venv/bin/pip check
+git diff --check
+```
+
+Real smoke requires locally exported `OPENAI_API_KEY`, `OPENAI_MODEL`,
+`SEC_USER_AGENT` and `OPENAI_TIMEOUT_SECONDS`. It checks only configuration presence
+and never prints configured values. Run after offline/static validation passes:
+
+```bash
+.venv/bin/python -m financial_research.reports.smoke \
+  --ticker NVDA --as-of-date 2026-06-30 --language ENGLISH
+```
+
+PASS requires COMPLETED/COMPLETED_WITH_WARNINGS, equity_research, zero planner calls,
+one or two synthesis calls, nonempty claims/evidence, four exported files, valid
+bundle integrity and zero cited PIT violations. A valid BLOCKED bundle fails the
+live readiness acceptance, while remaining a legitimate product result. Smoke
+statuses/exit codes are PASS (0), USER_CONFIGURATION_REQUIRED (3), EXTERNAL_BLOCKED
+(2) and FAIL (1). Stage 6 implementation validation and real external smoke status
+are reported separately. The smoke invokes no Stage 5 Judge or large benchmark.
+
+### Current product limits
+
+Synthesis remains stochastic and existing deterministic grounding/policy checks
+retain their documented limits. Formal report support is EN/ZH only. The workflow
+is one fixed, single-company equity report; it includes no valuation, comparison,
+forecast, PDF/DOCX/Excel export, persistent history, database or Web UI. Existing
+SEC/Yahoo coverage, daily PIT calendar and provider availability limitations remain;
+provider and LLM latency/token use vary per run. The stable typed contract can be
+consumed by a future Analyst Web Application. Stage 6 adds no Stage 7 implementation.

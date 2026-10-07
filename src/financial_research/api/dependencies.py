@@ -6,8 +6,11 @@ from typing import cast
 from fastapi import Request
 
 from financial_research.agent.service import ResearchAgent
+from financial_research.api.runtime import live_agent
 from financial_research.api.schemas import AgentResearchRequest
 from financial_research.llm.openai_responses import OpenAIResponsesClient
+from financial_research.reports.schemas import EquityResearchReportRequest
+from financial_research.reports.service import ReportWorkflowService
 from financial_research.research.live import LiveContextBuilder
 from financial_research.skills.defaults import create_skill_registry
 from financial_research.tools.service import ResearchTools
@@ -34,3 +37,15 @@ def get_research_agent(request: Request, body: AgentResearchRequest) -> Iterator
                 ),
                 llm=client,
             )
+
+
+def get_report_workflow(
+    request: Request, body: EquityResearchReportRequest
+) -> Iterator[ReportWorkflowService]:
+    # The validated shared body prevents configuration errors from masking bad input.
+    factory = cast(AgentFactory | None, request.app.state.agent_factory)
+    if factory is not None:
+        yield ReportWorkflowService(factory())
+    else:
+        with live_agent(request.app.state.research_config) as agent:
+            yield ReportWorkflowService(agent)

@@ -11,6 +11,7 @@ from financial_research.api.dependencies import AgentFactory, ToolsFactory
 from financial_research.api.errors import install_error_handlers
 from financial_research.api.routes.agent import router as agent_router
 from financial_research.api.routes.health import router as health_router
+from financial_research.api.routes.reports import router as reports_router
 from financial_research.api.routes.research import router as research_router
 from financial_research.config import ResearchConfig
 from financial_research.research.live import LiveContextBuilder
@@ -53,6 +54,7 @@ def create_app(
     application.include_router(health_router)
     application.include_router(research_router)
     application.include_router(agent_router)
+    application.include_router(reports_router)
     return application
 
 

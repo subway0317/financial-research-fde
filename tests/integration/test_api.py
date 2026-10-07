@@ -180,6 +180,7 @@ def test_health_openapi_and_docs_never_construct_providers() -> None:
     assert set(schema["paths"]) == {
         "/health",
         "/v1/agent/research",
+        "/v1/reports/equity-research",
         *(
             f"/v1/research/{endpoint}"
             for endpoint in (
