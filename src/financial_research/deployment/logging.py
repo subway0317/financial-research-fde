@@ -17,6 +17,10 @@ FIELDS = (
     "report_id",
     "run_id",
     "repair_count",
+    "provider",
+    "operation",
+    "exception_type",
+    "upstream_status",
 )
 
 

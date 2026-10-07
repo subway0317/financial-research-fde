@@ -25,6 +25,7 @@ from financial_research.exceptions import (
     UnsupportedMetricError,
 )
 from financial_research.llm.errors import AgentConfigurationError, LLMProviderError
+from financial_research.provider_diagnostics import provider_failure_state
 from financial_research.reports.errors import ReportCompilationError, ReportIntegrityError
 from financial_research.skills.errors import EvidenceIntegrityError
 
@@ -98,6 +99,21 @@ def error_response(request: Request, status: int, code: str, message: str) -> JS
 async def domain_error(request: Request, exc: Exception) -> JSONResponse:
     for error_type, status, code, message in ERROR_MAP:
         if isinstance(exc, error_type):
+            if code == "PROVIDER_ERROR":
+                state = provider_failure_state.get()
+                failure = state.failure if state is not None else None
+                fields: dict[str, object] = {
+                    "event": "provider_failure",
+                    "request_id": str(request_id(request)),
+                    "provider": failure.provider if failure is not None else "unknown",
+                    "operation": failure.operation if failure is not None else "unknown",
+                    "exception_type": failure.exception_type
+                    if failure is not None
+                    else type(exc).__name__,
+                }
+                if failure is not None and failure.upstream_status is not None:
+                    fields["upstream_status"] = failure.upstream_status
+                logger.error("External data provider request failed", extra=fields)
             return error_response(request, status, code, message)
     return error_response(request, 500, "INTERNAL_ERROR", "Internal research service error.")
 

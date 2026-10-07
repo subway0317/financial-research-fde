@@ -12,6 +12,7 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 from financial_research.api.errors import error_response
 from financial_research.deployment.config import DeploymentConfig
 from financial_research.deployment.guard import ResearchGuard
+from financial_research.provider_diagnostics import ProviderFailureState, provider_failure_state
 
 logger = logging.getLogger(__name__)
 BUSY_MESSAGE = "Another research report is currently being generated. Please try again shortly."
@@ -40,6 +41,7 @@ class OperationalMiddleware:
         scope["state"]["started_at"] = started
         request = Request(scope, receive)
         status, response_started = 500, False
+        diagnostic_token = provider_failure_state.set(ProviderFailureState())
 
         async def send_metadata(message: Message) -> None:
             nonlocal status, response_started
@@ -83,6 +85,7 @@ class OperationalMiddleware:
                 request, 500, "INTERNAL_ERROR", "Internal research service error."
             )(scope, receive, send_metadata)
         finally:
+            provider_failure_state.reset(diagnostic_token)
             path = scope["path"]
             safe_path = (
                 path

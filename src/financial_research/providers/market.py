@@ -12,6 +12,7 @@ from zoneinfo import ZoneInfo
 import httpx
 
 from financial_research.exceptions import DataValidationError, ProviderError
+from financial_research.provider_diagnostics import capture_provider_failure
 from financial_research.providers.http import JsonTransport
 from financial_research.schemas.base import canonical_ticker
 from financial_research.schemas.market import (
@@ -41,6 +42,7 @@ class YahooMarketProvider:
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{quote(ticker, safe='')}"
         response = self._transport.get(
             url,
+            operation="fetch_market_history",
             params={
                 "period1": int(datetime.combine(start, time.min, UTC).timestamp()),
                 "period2": int(
@@ -55,7 +57,9 @@ class YahooMarketProvider:
             if not isinstance(chart, dict):
                 raise ValueError("chart must be an object")
             if chart.get("error") is not None:
-                raise ProviderError(f"Yahoo chart reported an error for {ticker}")
+                error = ProviderError(f"Yahoo chart reported an error for {ticker}")
+                capture_provider_failure("yahoo-chart", "fetch_market_history", error)
+                raise error
             results = chart["result"]
             if not isinstance(results, list) or len(results) != 1:
                 raise ValueError("expected one chart result")

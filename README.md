@@ -1941,6 +1941,17 @@ reasoning and raw provider/LLM responses. Uvicorn raw access logging is disabled
 Non-operational library log messages become generic runtime events. Filter Render
 logs by request ID; do not paste full reports or raw logs into the repository.
 
+When a typed data-provider failure maps to HTTP 502 / `PROVIDER_ERROR`, the API
+emits one ERROR `provider_failure` event with the same request ID. Its allowlisted
+diagnostics identify the existing provider (`sec-edgar` or `yahoo-chart`), the
+fixed retrieval operation, and the original exception type. `upstream_status` is
+included only when supplied by a typed HTTP status exception; transport failures
+and chart-level errors do not infer a status. Request-local state retains only
+these safe scalars across the existing Skill/Agent error conversion. Failures
+without captured diagnostics use `unknown` provider/operation. No exception text,
+URLs, headers, bodies or credentials are included, and the public error response
+is unchanged.
+
 ### Docker build and local infrastructure smoke
 
 The Node `24-bookworm-slim` builder uses the lockfile, `npm ci` and the production

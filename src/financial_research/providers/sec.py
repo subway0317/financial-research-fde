@@ -56,7 +56,7 @@ class SECProvider:
             ticker = canonical_ticker(ticker)
         except ValueError as exc:
             raise DataValidationError("invalid company ticker") from exc
-        response = self._transport.get(DIRECTORY_URL)
+        response = self._transport.get(DIRECTORY_URL, operation="fetch_company_tickers")
         try:
             fields = response.payload["fields"]
             rows = response.payload["data"]
@@ -99,7 +99,7 @@ class SECProvider:
 
     def get_fundamentals(self, company: CompanyProfile) -> FundamentalSourceDataset:
         url = f"https://data.sec.gov/api/xbrl/companyfacts/CIK{company.cik}.json"
-        response = self._transport.get(url)
+        response = self._transport.get(url, operation="fetch_companyfacts")
         metadata = None
         if self._fiscal_metadata_start is not None and self._fiscal_metadata_end is not None:
             metadata = filing_metadata(

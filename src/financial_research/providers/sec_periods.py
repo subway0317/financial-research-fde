@@ -27,7 +27,9 @@ class FilingMetadata:
 def filing_metadata(
     transport: JsonTransport, cik: str, start: date, end: date
 ) -> dict[str, FilingMetadata]:
-    response = transport.get(f"https://data.sec.gov/submissions/CIK{cik}.json")
+    response = transport.get(
+        f"https://data.sec.gov/submissions/CIK{cik}.json", operation="fetch_submissions"
+    )
     try:
         if str(response.payload["cik"]).zfill(10) != cik:
             raise ValueError("submissions CIK mismatch")
@@ -51,7 +53,9 @@ def filing_metadata(
         if len(relevant) > 20:
             raise ValueError("filing scope requires more than 20 metadata archives")
         for name in sorted(set(relevant)):
-            archived = transport.get(f"https://data.sec.gov/submissions/{name}")
+            archived = transport.get(
+                f"https://data.sec.gov/submissions/{name}", operation="fetch_submissions_archive"
+            )
             for accession, record in _filing_rows(archived.payload, archived, start, end).items():
                 previous = records.get(accession)
                 if previous and (previous.report_date, previous.filed_at, previous.form) != (

@@ -10,6 +10,7 @@ from typing import Any
 import httpx
 
 from financial_research.exceptions import DataValidationError, ProviderError
+from financial_research.provider_diagnostics import ProviderOperation, capture_provider_failure
 from financial_research.schemas.provenance import ProvenanceRecord, SourceType
 
 logger = logging.getLogger(__name__)
@@ -39,7 +40,13 @@ class JsonTransport:
         self._minimum_interval = minimum_interval
         self._last_request = 0.0
 
-    def get(self, url: str, *, params: dict[str, str | int] | None = None) -> JsonResponse:
+    def get(
+        self,
+        url: str,
+        *,
+        params: dict[str, str | int] | None = None,
+        operation: ProviderOperation = "request",
+    ) -> JsonResponse:
         delay = self._minimum_interval - (time.monotonic() - self._last_request)
         if delay > 0:
             time.sleep(delay)
@@ -51,6 +58,7 @@ class JsonTransport:
             )
             response.raise_for_status()
         except httpx.HTTPError as exc:
+            capture_provider_failure(self.provider, operation, exc)
             raise ProviderError(
                 f"{self.provider} request failed for {url}: {type(exc).__name__}"
             ) from exc

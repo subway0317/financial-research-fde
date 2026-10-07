@@ -14,6 +14,7 @@ from financial_research.api.routes.health import router as health_router
 from financial_research.api.routes.reports import router as reports_router
 from financial_research.api.routes.research import router as research_router
 from financial_research.config import ResearchConfig
+from financial_research.provider_diagnostics import ProviderFailureState, provider_failure_state
 from financial_research.research.live import LiveContextBuilder
 from financial_research.tools.service import ResearchTools
 
@@ -40,7 +41,11 @@ def create_app(
     ) -> Response:
         request.state.request_id = uuid4()
         request.state.started_at = time.perf_counter()
-        response = await call_next(request)
+        token = provider_failure_state.set(ProviderFailureState())
+        try:
+            response = await call_next(request)
+        finally:
+            provider_failure_state.reset(token)
         response.headers["X-Request-ID"] = str(request.state.request_id)
         logger.info(
             "HTTP request request_id=%s endpoint=%s status=%d duration_ms=%.3f",
