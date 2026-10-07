@@ -6,10 +6,14 @@ from typing import Annotated, Literal
 
 from pydantic import UUID4, AwareDatetime, BeforeValidator, Field, model_validator
 
-from financial_research.schemas.agent import GroundedResearchAnswer, ResponseLanguage
+from financial_research.public_research.schemas import (
+    PublicGroundedResearchAnswer,
+    PublicToolResult,
+)
+from financial_research.schemas.agent import ResponseLanguage
 from financial_research.schemas.base import CanonicalModel, NonEmpty, Ticker
 from financial_research.schemas.quality import QualityReport
-from financial_research.schemas.tools import ComparisonSpec, ToolResult
+from financial_research.schemas.tools import ComparisonSpec
 
 
 def _date_input(value: object) -> date:
@@ -34,7 +38,7 @@ class AgentResearchEnvelope(CanonicalModel):
     request_id: UUID4
     schema_version: Literal["1.0"] = "1.0"
     generated_at: AwareDatetime
-    data: GroundedResearchAnswer
+    data: PublicGroundedResearchAnswer
     quality: QualityReport
     limitations: tuple[str, ...]
 
@@ -58,7 +62,7 @@ class MarketBehaviorRequest(ResearchRequest):
     lookback_sessions: Annotated[int, Field(ge=2, le=504, strict=True)] = 60
 
 
-class ResearchEnvelope[T: ToolResult](CanonicalModel):
+class ResearchEnvelope[T: PublicToolResult](CanonicalModel):
     request_id: UUID4
     schema_version: Literal["1.0"] = "1.0"
     generated_at: AwareDatetime

@@ -4,7 +4,7 @@ import { expect, it, vi } from 'vitest'
 import { ReportView } from '../src/components/ReportView'
 import { downloadReport } from '../src/downloads'
 import { translations } from '../src/i18n'
-import { reportFixture } from './fixtures'
+import { marketReportFixture, reportFixture } from './fixtures'
 
 function readBlob(blob: Blob): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -15,8 +15,8 @@ function readBlob(blob: Blob): Promise<string> {
   })
 }
 
-it.each(['json', 'md'] as const)('downloads the canonical %s content through its UI control', async format => {
-  const fixture = reportFixture()
+it.each(['json', 'md'] as const)('downloads the public %s content through its UI control', async format => {
+  const fixture = marketReportFixture()
   let blob!: Blob
   const createURL = vi.fn((value: Blob) => { blob = value; return 'blob:synthetic-download' })
   const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => {})
@@ -28,6 +28,8 @@ it.each(['json', 'md'] as const)('downloads the canonical %s content through its
   const content = await readBlob(blob)
   if (format === 'json') expect(JSON.parse(content)).toEqual(fixture.report)
   else expect(content).toBe(fixture.markdown)
+  expect(content).not.toContain('#session=')
+  expect(fixture.report.calculation_appendix[1]!.provenance.input_evidence_ids).toEqual([])
   expect(document.querySelector('a[download]')).toBeNull()
 })
 

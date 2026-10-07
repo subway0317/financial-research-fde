@@ -10,6 +10,7 @@ from financial_research.agent.service import ResearchAgent
 from financial_research.api.dependencies import get_research_agent
 from financial_research.api.errors import request_id
 from financial_research.api.schemas import AgentResearchEnvelope, AgentResearchRequest
+from financial_research.public_research.projection import project_agent
 from financial_research.schemas.agent import ResearchAgentRequest
 
 router = APIRouter(prefix="/v1/agent", tags=["agent"])
@@ -37,7 +38,7 @@ def research(
     return AgentResearchEnvelope(
         request_id=request_id(request),
         generated_at=datetime.now(UTC),
-        data=result,
+        data=project_agent(result),
         quality=result.quality,
         limitations=result.limitations,
     )

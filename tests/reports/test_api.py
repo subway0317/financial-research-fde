@@ -4,8 +4,8 @@ from fastapi.testclient import TestClient
 from financial_research.api.app import create_app
 from financial_research.exceptions import ConfigurationError, ProviderError, UnknownTickerError
 from financial_research.llm.errors import AgentConfigurationError, LLMProviderError
+from financial_research.public_research.schemas import PublicEquityResearchReportResponse
 from financial_research.reports.errors import ReportCompilationError, ReportIntegrityError
-from financial_research.reports.schemas import EquityResearchReportResponse
 
 from .conftest import REQUEST
 
@@ -22,7 +22,7 @@ def test_report_api_is_typed_stateless_and_never_writes_bundles(
     with TestClient(create_app(agent_factory=lambda: agent)) as client:
         response = client.post(ENDPOINT, json={**BODY, "response_language": language})
     assert response.status_code == 200 and response.headers["X-Request-ID"]
-    parsed = EquityResearchReportResponse.model_validate(response.json())
+    parsed = PublicEquityResearchReportResponse.model_validate(response.json())
     assert parsed.report.language == language and parsed.manifest_summary.synthesis_call_count == 1
     assert parsed.report.status == "COMPLETED_WITH_WARNINGS"
     assert llm.call_count == 1
@@ -35,7 +35,7 @@ def test_report_api_blocked_is_200_with_no_llm_calls(report_agent_factory, nvda_
     with TestClient(create_app(agent_factory=lambda: agent)) as client:
         response = client.post(ENDPOINT, json=BODY)
     assert response.status_code == 200
-    data = EquityResearchReportResponse.model_validate(response.json())
+    data = PublicEquityResearchReportResponse.model_validate(response.json())
     assert data.report.status == "BLOCKED" and data.report.blocking_reasons
     assert data.manifest_summary.claim_count == llm.call_count == 0
 

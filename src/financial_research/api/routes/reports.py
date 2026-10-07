@@ -6,9 +6,10 @@ from fastapi import APIRouter, Depends
 
 from financial_research.api.dependencies import get_report_workflow
 from financial_research.api.schemas import ErrorResponse
+from financial_research.public_research.projection import project_report
+from financial_research.public_research.schemas import PublicEquityResearchReportResponse
 from financial_research.reports.schemas import (
     EquityResearchReportRequest,
-    EquityResearchReportResponse,
 )
 from financial_research.reports.service import ReportWorkflowService
 
@@ -19,9 +20,9 @@ router = APIRouter(
 )
 
 
-@router.post("/equity-research", response_model=EquityResearchReportResponse)
+@router.post("/equity-research", response_model=PublicEquityResearchReportResponse)
 def equity_research(
     body: EquityResearchReportRequest,
     service: Annotated[ReportWorkflowService, Depends(get_report_workflow)],
-) -> EquityResearchReportResponse:
-    return service.run(body)
+) -> PublicEquityResearchReportResponse:
+    return project_report(service.run(body))

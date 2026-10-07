@@ -40,6 +40,13 @@ describe('same-origin report client', () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ report: {} }))))
     await expect(generateEquityResearchReport(request)).rejects.toBeInstanceOf(ReportRequestError)
   })
+  it('rejects an older unprojected backend contract', async () => {
+    const fixture = reportFixture()
+    const internalReport: Partial<typeof fixture.report> = { ...fixture.report }
+    delete internalReport.projection_version
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(JSON.stringify({ ...fixture, report: internalReport }))))
+    await expect(generateEquityResearchReport(request)).rejects.toBeInstanceOf(ReportRequestError)
+  })
   it('passes an AbortSignal to frontend waiting without claiming backend cancellation', async () => {
     const fetch = vi.fn().mockRejectedValue(new DOMException('Aborted', 'AbortError'))
     vi.stubGlobal('fetch', fetch)

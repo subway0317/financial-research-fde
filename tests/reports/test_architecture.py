@@ -90,6 +90,8 @@ def test_api_route_contains_no_compilation_hashing_or_export_logic():
         for node in ast.walk(statement)
         if isinstance(node, ast.Call)
     ]
-    assert (
-        len(calls) == 1 and isinstance(calls[0].func, ast.Attribute) and calls[0].func.attr == "run"
-    )
+    # HTTP adds the explicit disclosure boundary; compilation/export remain in
+    # their existing internal layers. Only these two calls belong in the route.
+    assert len(calls) == 2
+    assert isinstance(calls[0].func, ast.Name) and calls[0].func.id == "project_report"
+    assert isinstance(calls[1].func, ast.Attribute) and calls[1].func.attr == "run"

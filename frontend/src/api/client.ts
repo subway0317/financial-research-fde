@@ -3,10 +3,10 @@ import type { components, operations } from './generated'
 type ReportOperation = operations['equity_research_v1_reports_equity_research_post']
 export type ReportRequest = ReportOperation['requestBody']['content']['application/json']
 export type ReportResponse = ReportOperation['responses'][200]['content']['application/json']
-export type ResearchReport = components['schemas']['ResearchReport']
+export type ResearchReport = components['schemas']['PublicResearchReport']
 export type Language = components['schemas']['ReportLanguage']
-export type EvidenceEntry = components['schemas']['EvidenceAppendixEntry']
-export type CalculationEntry = components['schemas']['CalculationAppendixEntry']
+export type EvidenceEntry = components['schemas']['PublicEvidenceAppendixEntry']
+export type CalculationEntry = components['schemas']['PublicCalculationAppendixEntry']
 export type Claim = components['schemas']['GroundedClaim']
 type ErrorResponse = components['schemas']['ErrorResponse']
 
@@ -48,6 +48,7 @@ export async function generateEquityResearchReport(request: ReportRequest,
   if (!body || typeof body !== 'object' || !('report' in body) || !('manifest_summary' in body) ||
     !('markdown' in body) || typeof body.markdown !== 'string' || !body.report ||
     typeof body.report !== 'object' || !('report_version' in body.report) ||
-    body.report.report_version !== 'research-report-v1') throw new ReportRequestError(500)
+    body.report.report_version !== 'research-report-v1' || !('projection_version' in body.report) ||
+    body.report.projection_version !== 'public-research-projection-v1') throw new ReportRequestError(500)
   return body as ReportResponse
 }

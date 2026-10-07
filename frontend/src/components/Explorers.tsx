@@ -58,6 +58,7 @@ export function DetailDrawer({ selection, references, asOf, onSelect, onClose, l
       {!evidence && !calculation && <p role="alert">{t.integrity}</p>}
       {evidence && <>
         <p className="pit-note">{t.pit}</p><p className="muted">{t.missing}</p>
+        {evidence.evidence.disclosure === 'MARKET_INPUT_SUMMARY' && <p>{t.marketSummary}</p>}
         <Metadata rows={[
           [t.alias, evidence.display_alias], [t.canonical, evidence.canonical_id], [t.kind, evidence.evidence.kind],
           [t.metric, evidence.evidence.metric], [t.value, evidence.evidence.value], [t.unit, evidence.evidence.unit],
@@ -66,6 +67,11 @@ export function DetailDrawer({ selection, references, asOf, onSelect, onClose, l
           [t.available, evidence.evidence.available_date], [t.asOf, asOf], [t.vintage, evidence.evidence.data_vintage],
           [t.provider, evidence.evidence.provider], [t.source, evidence.evidence.source_reference],
           [t.transformation, evidence.evidence.transformation?.join('; ')],
+          ...(evidence.evidence.disclosure === 'MARKET_INPUT_SUMMARY' ? [
+            [t.inputCount, evidence.evidence.observation_count],
+            [t.inputStart, evidence.evidence.input_range_start], [t.inputEnd, evidence.evidence.input_range_end],
+            [t.inputDigest, evidence.evidence.internal_input_digest],
+          ] as [string, ReactNode][] : []),
         ]} />
         {references.calculationsById.has(evidence.canonical_id) &&
           <button type="button" onClick={() => onSelect({ kind: 'calculation',
@@ -78,7 +84,15 @@ export function DetailDrawer({ selection, references, asOf, onSelect, onClose, l
           [t.operation, calculation.provenance.calculation_name], [t.formula, calculation.provenance.formula],
           [t.result, calculation.result], [t.unit, calculation.result_unit], [t.observation, calculation.date],
           [t.periodStart, calculation.period_start], [t.periodEnd, calculation.period_end], [t.asOf, asOf],
+          [t.methodology, calculation.provenance.methodology],
+          [t.inputCount, calculation.provenance.input_summary.input_count],
+          [t.inputStart, calculation.provenance.input_summary.input_range_start],
+          [t.inputEnd, calculation.provenance.input_summary.input_range_end],
+          [t.inputKind, calculation.provenance.input_summary.input_kind],
+          [t.inputMetrics, calculation.provenance.input_summary.input_metrics.join('; ')],
+          [t.inputDigest, calculation.provenance.input_summary.internal_input_digest],
         ]} />
+        {calculation.provenance.input_summary.withheld_market_input_count > 0 && <p>{t.marketSummary}</p>}
         <h3>{t.inputs}</h3><ul className="calculation-inputs">
           {calculation.provenance.input_evidence_ids.map((id, index) => {
             const alias = calculation.input_display_aliases[index]
@@ -101,6 +115,7 @@ export function AuditPanel({ response, labels: t }: { response: ReportResponse; 
   const manifest = response.manifest_summary
   return <div><h4>{t.audit}</h4><Metadata rows={[
     [t.reportId, report.report_id], [t.runId, report.run_id], [t.version, report.report_version],
+    [t.projectionVersion, report.projection_version],
     [t.skill, report.selected_skill_id], [t.model, runtime.model], [t.provider, runtime.provider],
     [t.promptVersion, runtime.synthesis_prompt_version], [t.compiler, runtime.report_compiler_version],
     [t.plan, runtime.plan_version], [t.claimCount, manifest.claim_count], [t.evidenceCount, manifest.evidence_count],

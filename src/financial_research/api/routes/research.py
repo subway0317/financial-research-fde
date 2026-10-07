@@ -14,12 +14,13 @@ from financial_research.api.schemas import (
     ResearchEnvelope,
     ResearchRequest,
 )
-from financial_research.schemas.tools import (
-    CompanySnapshotResult,
-    FundamentalTrendResult,
-    MarketBehaviorResult,
-    PeriodComparisonResult,
-    ResearchQualityResult,
+from financial_research.public_research.schemas import (
+    PublicCompanySnapshotResult,
+    PublicFundamentalTrendResult,
+    PublicMarketBehaviorResult,
+    PublicPeriodComparisonResult,
+    PublicResearchQualityResult,
+    PublicToolResult,
 )
 from financial_research.tools.service import ResearchTools
 
@@ -30,10 +31,10 @@ router = APIRouter(prefix="/v1/research", tags=["research"], responses=responses
 Tools = Annotated[ResearchTools, Depends(get_research_tools)]
 
 
-@router.post("/company-snapshot", response_model=ResearchEnvelope[CompanySnapshotResult])
+@router.post("/company-snapshot", response_model=ResearchEnvelope[PublicCompanySnapshotResult])
 def company_snapshot(
     body: ResearchRequest, request: Request, tools: Tools
-) -> ResearchEnvelope[CompanySnapshotResult]:
+) -> ResearchEnvelope[PublicToolResult]:
     return envelope(
         request,
         tools.get_company_snapshot(ticker=body.ticker, as_of_date=body.as_of_date),
@@ -41,10 +42,10 @@ def company_snapshot(
     )
 
 
-@router.post("/fundamental-trends", response_model=ResearchEnvelope[FundamentalTrendResult])
+@router.post("/fundamental-trends", response_model=ResearchEnvelope[PublicFundamentalTrendResult])
 def fundamental_trends(
     body: FundamentalTrendsRequest, request: Request, tools: Tools
-) -> ResearchEnvelope[FundamentalTrendResult]:
+) -> ResearchEnvelope[PublicToolResult]:
     return envelope(
         request,
         tools.analyze_fundamental_trends(
@@ -54,10 +55,10 @@ def fundamental_trends(
     )
 
 
-@router.post("/compare-periods", response_model=ResearchEnvelope[PeriodComparisonResult])
+@router.post("/compare-periods", response_model=ResearchEnvelope[PublicPeriodComparisonResult])
 def period_comparison(
     body: ComparePeriodsRequest, request: Request, tools: Tools
-) -> ResearchEnvelope[PeriodComparisonResult]:
+) -> ResearchEnvelope[PublicToolResult]:
     return envelope(
         request,
         tools.compare_periods(
@@ -70,10 +71,10 @@ def period_comparison(
     )
 
 
-@router.post("/market-behavior", response_model=ResearchEnvelope[MarketBehaviorResult])
+@router.post("/market-behavior", response_model=ResearchEnvelope[PublicMarketBehaviorResult])
 def market_behavior(
     body: MarketBehaviorRequest, request: Request, tools: Tools
-) -> ResearchEnvelope[MarketBehaviorResult]:
+) -> ResearchEnvelope[PublicToolResult]:
     return envelope(
         request,
         tools.summarize_market_behavior(
@@ -83,10 +84,10 @@ def market_behavior(
     )
 
 
-@router.post("/quality", response_model=ResearchEnvelope[ResearchQualityResult])
+@router.post("/quality", response_model=ResearchEnvelope[PublicResearchQualityResult])
 def research_quality(
     body: ResearchRequest, request: Request, tools: Tools
-) -> ResearchEnvelope[ResearchQualityResult]:
+) -> ResearchEnvelope[PublicToolResult]:
     return envelope(
         request,
         tools.inspect_research_quality(ticker=body.ticker, as_of_date=body.as_of_date),

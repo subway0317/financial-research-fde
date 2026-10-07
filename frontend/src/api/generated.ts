@@ -178,7 +178,7 @@ export interface components {
         AgentReasonCode: "COMPANY_INFORMATION_REQUEST" | "FUNDAMENTAL_ANALYSIS_REQUEST" | "MARKET_ANALYSIS_REQUEST" | "DATA_QUALITY_REQUEST" | "BROAD_EQUITY_RESEARCH_REQUEST";
         /** AgentResearchEnvelope */
         AgentResearchEnvelope: {
-            data: components["schemas"]["GroundedResearchAnswer"];
+            data: components["schemas"]["PublicGroundedResearchAnswer"];
             /**
              * Generated At
              * Format: date-time
@@ -240,25 +240,6 @@ export interface components {
             /** Target */
             target: string;
         };
-        /** CalculationAppendixEntry */
-        CalculationAppendixEntry: {
-            /** Canonical Id */
-            canonical_id: string;
-            /** Date */
-            date: string | null;
-            display_alias: components["schemas"]["CalculationDisplayAlias"];
-            /** Input Display Aliases */
-            input_display_aliases: components["schemas"]["EvidenceDisplayAlias"][];
-            /** Period End */
-            period_end: string | null;
-            /** Period Start */
-            period_start: string | null;
-            provenance: components["schemas"]["CalculationProvenance"];
-            /** Result */
-            result: string | null;
-            /** Result Unit */
-            result_unit: string | null;
-        };
         CalculationDisplayAlias: string;
         /** CalculationParameter */
         CalculationParameter: {
@@ -266,22 +247,6 @@ export interface components {
             name: string;
             /** Value */
             value: string | number | boolean;
-        };
-        /** CalculationProvenance */
-        CalculationProvenance: {
-            /** Calculation Name */
-            calculation_name: string;
-            /** Evidence Id */
-            evidence_id: string;
-            /** Formula */
-            formula: string;
-            /** Input Evidence Ids */
-            input_evidence_ids: string[];
-            /**
-             * Parameters
-             * @default []
-             */
-            parameters: components["schemas"]["CalculationParameter"][];
         };
         /**
          * ClaimSection
@@ -304,42 +269,6 @@ export interface components {
             /** Exchange */
             exchange: string;
             provenance: components["schemas"]["ProvenanceRecord"];
-            /** Ticker */
-            ticker: string;
-        };
-        /** CompanySnapshotResult */
-        CompanySnapshotResult: {
-            /**
-             * As Of Date
-             * Format: date
-             */
-            as_of_date: string;
-            /**
-             * Calculation Provenance
-             * @default []
-             */
-            calculation_provenance: components["schemas"]["CalculationProvenance"][];
-            company: components["schemas"]["CompanyProfile"];
-            /**
-             * Evidence
-             * @default []
-             */
-            evidence: components["schemas"]["EvidenceReference"][];
-            /** Fundamentals */
-            fundamentals: components["schemas"]["MetricSnapshot"][];
-            /** Latest Close */
-            latest_close?: number | null;
-            latest_market_features: components["schemas"]["LatestMarketFeatures"];
-            /** Latest Market Session */
-            latest_market_session?: string | null;
-            /**
-             * Limitations
-             * @default []
-             */
-            limitations: string[];
-            /** Market Windows */
-            market_windows: components["schemas"]["MarketWindowSummary"][];
-            quality: components["schemas"]["QualityReport"];
             /** Ticker */
             ticker: string;
         };
@@ -379,13 +308,6 @@ export interface components {
             /** Ticker */
             ticker: string;
         };
-        /** EquityResearchReportResponse */
-        EquityResearchReportResponse: {
-            manifest_summary: components["schemas"]["ReportManifest"];
-            /** Markdown */
-            markdown: string;
-            report: components["schemas"]["ResearchReport"];
-        };
         /** ErrorResponse */
         ErrorResponse: {
             /** Error Code */
@@ -398,52 +320,12 @@ export interface components {
              */
             request_id: string;
         };
-        /** EvidenceAppendixEntry */
-        EvidenceAppendixEntry: {
-            /** Canonical Id */
-            canonical_id: string;
-            display_alias: components["schemas"]["EvidenceDisplayAlias"];
-            evidence: components["schemas"]["EvidenceReference"];
-        };
         EvidenceDisplayAlias: string;
         /**
          * EvidenceKind
          * @enum {string}
          */
         EvidenceKind: "SOURCE_FACT" | "COMPUTATION";
-        /** EvidenceReference */
-        EvidenceReference: {
-            /** Available Date */
-            available_date?: string | null;
-            /** Data Vintage */
-            data_vintage?: string | null;
-            /** Date */
-            date?: string | null;
-            /** Evidence Id */
-            evidence_id: string;
-            /** Filed At */
-            filed_at?: string | null;
-            kind: components["schemas"]["EvidenceKind"];
-            /** Metric */
-            metric: string;
-            /** Period End */
-            period_end?: string | null;
-            /** Period Start */
-            period_start?: string | null;
-            /** Provider */
-            provider: string;
-            /** Source Reference */
-            source_reference: string;
-            /**
-             * Transformation
-             * @default []
-             */
-            transformation: string[];
-            /** Unit */
-            unit?: string | null;
-            /** Value */
-            value?: string | null;
-        };
         /** FiscalPeriod */
         FiscalPeriod: {
             /** Fiscal Quarter */
@@ -503,34 +385,6 @@ export interface components {
             /** Value */
             value: string;
         };
-        /** FundamentalTrendResult */
-        FundamentalTrendResult: {
-            /**
-             * As Of Date
-             * Format: date
-             */
-            as_of_date: string;
-            /**
-             * Calculation Provenance
-             * @default []
-             */
-            calculation_provenance: components["schemas"]["CalculationProvenance"][];
-            /**
-             * Evidence
-             * @default []
-             */
-            evidence: components["schemas"]["EvidenceReference"][];
-            /**
-             * Limitations
-             * @default []
-             */
-            limitations: string[];
-            /** Metrics */
-            metrics: components["schemas"]["MetricTrendResult"][];
-            quality: components["schemas"]["QualityReport"];
-            /** Ticker */
-            ticker: string;
-        };
         /** FundamentalTrendsRequest */
         FundamentalTrendsRequest: {
             /**
@@ -554,61 +408,6 @@ export interface components {
             /** Statement */
             statement: string;
         };
-        /** GroundedResearchAnswer */
-        GroundedResearchAnswer: {
-            agent_status: components["schemas"]["AgentStatus"];
-            /**
-             * As Of Date
-             * Format: date
-             */
-            as_of_date: string;
-            /** Calculation Provenance */
-            calculation_provenance: components["schemas"]["CalculationProvenance"][];
-            /** Citations */
-            citations: {
-                [key: string]: components["schemas"]["EvidenceReference"];
-            };
-            /** Claims */
-            claims: components["schemas"]["GroundedClaim"][];
-            /**
-             * Language Fallback
-             * @default false
-             */
-            language_fallback: boolean;
-            /** Limitations */
-            limitations: string[];
-            /** Llm Usage */
-            llm_usage: components["schemas"]["LLMUsageMetadata"][];
-            plan: components["schemas"]["AgentPlan"];
-            /** Planner Prompt Version */
-            planner_prompt_version: string;
-            quality: components["schemas"]["QualityReport"];
-            /**
-             * Rendered Answer
-             * @default
-             */
-            rendered_answer: string;
-            /**
-             * Response Language
-             * @default ENGLISH
-             * @enum {string}
-             */
-            response_language: "ENGLISH" | "CHINESE";
-            synthesis_payload_audit?: components["schemas"]["SynthesisPayloadAudit"] | null;
-            /** Synthesis Prompt Version */
-            synthesis_prompt_version: string;
-            synthesis_readiness: components["schemas"]["SynthesisReadiness"];
-            /** Ticker */
-            ticker: string;
-            trace: components["schemas"]["AgentExecutionTrace"];
-            /**
-             * Unavailable Context
-             * @default []
-             */
-            unavailable_context: string[];
-            /** Used Skill Ids */
-            used_skill_ids: string[];
-        };
         /** HTTPValidationError */
         HTTPValidationError: {
             /** Detail */
@@ -629,6 +428,8 @@ export interface components {
              */
             status: "ok";
         };
+        /** @constant */
+        IntegrityScope: "INTERNAL_RESEARCH_REPORT";
         /**
          * LLMPhase
          * @enum {string}
@@ -680,38 +481,6 @@ export interface components {
             /** Ticker */
             ticker: string;
         };
-        /** MarketBehaviorResult */
-        MarketBehaviorResult: {
-            /**
-             * As Of Date
-             * Format: date
-             */
-            as_of_date: string;
-            /**
-             * Calculation Provenance
-             * @default []
-             */
-            calculation_provenance: components["schemas"]["CalculationProvenance"][];
-            /**
-             * Evidence
-             * @default []
-             */
-            evidence: components["schemas"]["EvidenceReference"][];
-            /** Latest Close */
-            latest_close?: number | null;
-            latest_market_features: components["schemas"]["LatestMarketFeatures"];
-            /** Latest Market Session */
-            latest_market_session?: string | null;
-            /**
-             * Limitations
-             * @default []
-             */
-            limitations: string[];
-            quality: components["schemas"]["QualityReport"];
-            /** Ticker */
-            ticker: string;
-            window: components["schemas"]["MarketWindowSummary"];
-        };
         /** MarketWindowSummary */
         MarketWindowSummary: {
             /**
@@ -758,76 +527,18 @@ export interface components {
             observation?: components["schemas"]["FundamentalObservation"] | null;
             status: components["schemas"]["ResultStatus"];
         };
-        /** MetricTrendResult */
-        MetricTrendResult: {
-            /** Absolute Change */
-            absolute_change?: string | null;
-            /**
-             * Calculation Provenance
-             * @default []
-             */
-            calculation_provenance: components["schemas"]["CalculationProvenance"][];
-            comparable_observation?: components["schemas"]["FundamentalObservation"] | null;
-            comparison_status: components["schemas"]["ResultStatus"];
-            /** @default YEAR_OVER_YEAR */
-            comparison_type: components["schemas"]["ComparisonType"];
-            current_observation?: components["schemas"]["FundamentalObservation"] | null;
-            direction: components["schemas"]["TrendDirection"];
-            /**
-             * Evidence
-             * @default []
-             */
-            evidence: components["schemas"]["EvidenceReference"][];
-            /**
-             * Limitations
-             * @default []
-             */
-            limitations: string[];
-            /** Metric */
-            metric: string;
-            metric_kind: components["schemas"]["MetricKind"];
-            /** Percentage Change */
-            percentage_change?: string | null;
-            percentage_change_status: components["schemas"]["PercentageChangeStatus"];
-        };
         /**
          * PercentageChangeStatus
          * @enum {string}
          */
         PercentageChangeStatus: "MEANINGFUL" | "NOT_MEANINGFUL" | "UNAVAILABLE";
-        /** PeriodComparisonResult */
-        PeriodComparisonResult: {
-            /**
-             * As Of Date
-             * Format: date
-             */
-            as_of_date: string;
-            /**
-             * Calculation Provenance
-             * @default []
-             */
-            calculation_provenance: components["schemas"]["CalculationProvenance"][];
-            comparison_spec: components["schemas"]["ComparisonSpec"];
-            /**
-             * Evidence
-             * @default []
-             */
-            evidence: components["schemas"]["EvidenceReference"][];
-            /**
-             * Limitations
-             * @default []
-             */
-            limitations: string[];
-            quality: components["schemas"]["QualityReport"];
-            result: components["schemas"]["MetricTrendResult"];
-            /** Ticker */
-            ticker: string;
-        };
         /**
          * PeriodFrequency
          * @enum {string}
          */
         PeriodFrequency: "QUARTERLY" | "ANNUAL";
+        /** @constant */
+        ProjectionVersion: "public-research-projection-v1";
         /** ProvenanceRecord */
         ProvenanceRecord: {
             /** Content Hash */
@@ -850,55 +561,347 @@ export interface components {
              */
             transformation: string[];
         };
-        /** QualityIssue */
-        QualityIssue: {
-            /** Affected Context */
-            affected_context?: string | null;
-            /** Affected Date */
-            affected_date?: string | null;
-            /** Affected Field */
-            affected_field?: string | null;
-            /** Code */
-            code: string;
-            /** Message */
-            message: string;
-            severity: components["schemas"]["Severity"];
+        /** PublicCalculationAppendixEntry */
+        PublicCalculationAppendixEntry: {
+            /** Canonical Id */
+            canonical_id: string;
+            /** Date */
+            date: string | null;
+            display_alias: components["schemas"]["CalculationDisplayAlias"];
+            /** Input Display Aliases */
+            input_display_aliases: components["schemas"]["EvidenceDisplayAlias"][];
+            /** Period End */
+            period_end: string | null;
+            /** Period Start */
+            period_start: string | null;
+            provenance: components["schemas"]["PublicCalculationProvenance"];
+            /** Result */
+            result: string | null;
+            /** Result Unit */
+            result_unit: string | null;
         };
-        /** QualityReport */
-        QualityReport: {
+        /** PublicCalculationProvenance */
+        PublicCalculationProvenance: {
+            /** Calculation Name */
+            calculation_name: string;
+            /** Evidence Id */
+            evidence_id: string;
+            /** Formula */
+            formula: string;
+            /** Input Evidence Ids */
+            input_evidence_ids: string[];
+            input_summary: components["schemas"]["PublicInputSummary"];
+            /** Methodology */
+            methodology: string;
+            /** Metric */
+            metric: string;
             /**
-             * Issues
+             * Parameters
              * @default []
              */
-            issues: components["schemas"]["QualityIssue"][];
-            status: components["schemas"]["QualityStatus"];
+            parameters: components["schemas"]["CalculationParameter"][];
+            /** Result */
+            result: string | null;
+            /** Unit */
+            unit: string | null;
         };
-        /**
-         * QualityStatus
-         * @enum {string}
-         */
-        QualityStatus: "PASS" | "PASS_WITH_WARNINGS" | "FAIL";
-        /** ReportFileHashes */
-        ReportFileHashes: {
-            "evidence.json": components["schemas"]["SHA256"];
-            "report.json": components["schemas"]["SHA256"];
-            "report.md": components["schemas"]["SHA256"];
-        };
-        ReportID: string;
-        /** ReportIntegrity */
-        ReportIntegrity: {
+        /** PublicCompanySnapshotResult */
+        PublicCompanySnapshotResult: {
             /**
-             * Algorithm
-             * @default SHA-256
-             * @constant
+             * As Of Date
+             * Format: date
              */
-            algorithm: "SHA-256";
-            semantic_hash: components["schemas"]["SHA256"];
+            as_of_date: string;
+            /**
+             * Calculation Provenance
+             * @default []
+             */
+            calculation_provenance: components["schemas"]["PublicCalculationProvenance"][];
+            company: components["schemas"]["CompanyProfile"];
+            /**
+             * Evidence
+             * @default []
+             */
+            evidence: components["schemas"]["PublicEvidenceReference"][];
+            /** Fundamentals */
+            fundamentals: components["schemas"]["MetricSnapshot"][];
+            /** Latest Close */
+            latest_close?: number | null;
+            latest_market_features: components["schemas"]["LatestMarketFeatures"];
+            /** Latest Market Session */
+            latest_market_session?: string | null;
+            /**
+             * Limitations
+             * @default []
+             */
+            limitations: string[];
+            /** Market Windows */
+            market_windows: components["schemas"]["MarketWindowSummary"][];
+            /** @default public-research-projection-v1 */
+            projection_version: components["schemas"]["ProjectionVersion"];
+            quality: components["schemas"]["QualityReport"];
+            /** Ticker */
+            ticker: string;
         };
-        /** @enum {string} */
-        ReportLanguage: "ENGLISH" | "CHINESE";
-        /** ReportManifest */
-        ReportManifest: {
+        /** PublicEquityResearchReportResponse */
+        PublicEquityResearchReportResponse: {
+            manifest_summary: components["schemas"]["PublicReportManifest"];
+            /** Markdown */
+            markdown: string;
+            report: components["schemas"]["PublicResearchReport"];
+        };
+        /** PublicEvidenceAppendixEntry */
+        PublicEvidenceAppendixEntry: {
+            /** Canonical Id */
+            canonical_id: string;
+            display_alias: components["schemas"]["EvidenceDisplayAlias"];
+            evidence: components["schemas"]["PublicEvidenceReference"];
+        };
+        /** PublicEvidenceReference */
+        PublicEvidenceReference: {
+            /** Available Date */
+            available_date?: string | null;
+            /** Data Vintage */
+            data_vintage?: string | null;
+            /** Date */
+            date?: string | null;
+            /**
+             * Disclosure
+             * @enum {string}
+             */
+            disclosure: "FULL_FACT" | "MARKET_INPUT_SUMMARY";
+            /** Evidence Id */
+            evidence_id: string;
+            /** Filed At */
+            filed_at?: string | null;
+            /** Input Range End */
+            input_range_end?: string | null;
+            /** Input Range Start */
+            input_range_start?: string | null;
+            internal_input_digest?: components["schemas"]["SHA256"] | null;
+            kind: components["schemas"]["EvidenceKind"];
+            /** Metric */
+            metric: string;
+            /** Observation Count */
+            observation_count?: number | null;
+            /** Period End */
+            period_end?: string | null;
+            /** Period Start */
+            period_start?: string | null;
+            /** Provider */
+            provider: string;
+            /** Source Reference */
+            source_reference: string;
+            /**
+             * Transformation
+             * @default []
+             */
+            transformation: string[];
+            /** Unit */
+            unit?: string | null;
+            /** Value */
+            value?: string | null;
+        };
+        /** PublicFundamentalTrendResult */
+        PublicFundamentalTrendResult: {
+            /**
+             * As Of Date
+             * Format: date
+             */
+            as_of_date: string;
+            /**
+             * Calculation Provenance
+             * @default []
+             */
+            calculation_provenance: components["schemas"]["PublicCalculationProvenance"][];
+            /**
+             * Evidence
+             * @default []
+             */
+            evidence: components["schemas"]["PublicEvidenceReference"][];
+            /**
+             * Limitations
+             * @default []
+             */
+            limitations: string[];
+            /** Metrics */
+            metrics: components["schemas"]["PublicMetricTrendResult"][];
+            /** @default public-research-projection-v1 */
+            projection_version: components["schemas"]["ProjectionVersion"];
+            quality: components["schemas"]["QualityReport"];
+            /** Ticker */
+            ticker: string;
+        };
+        /** PublicGroundedResearchAnswer */
+        PublicGroundedResearchAnswer: {
+            agent_status: components["schemas"]["AgentStatus"];
+            /**
+             * As Of Date
+             * Format: date
+             */
+            as_of_date: string;
+            /** Calculation Provenance */
+            calculation_provenance: components["schemas"]["PublicCalculationProvenance"][];
+            /** Citations */
+            citations: {
+                [key: string]: components["schemas"]["PublicEvidenceReference"];
+            };
+            /** Claims */
+            claims: components["schemas"]["GroundedClaim"][];
+            /**
+             * Language Fallback
+             * @default false
+             */
+            language_fallback: boolean;
+            /** Limitations */
+            limitations: string[];
+            /** Llm Usage */
+            llm_usage: components["schemas"]["LLMUsageMetadata"][];
+            plan: components["schemas"]["AgentPlan"];
+            /** Planner Prompt Version */
+            planner_prompt_version: string;
+            /** @default public-research-projection-v1 */
+            projection_version: components["schemas"]["ProjectionVersion"];
+            quality: components["schemas"]["QualityReport"];
+            /** Rendered Answer */
+            rendered_answer: string;
+            /**
+             * Response Language
+             * @enum {string}
+             */
+            response_language: "ENGLISH" | "CHINESE";
+            synthesis_payload_audit?: components["schemas"]["SynthesisPayloadAudit"] | null;
+            /** Synthesis Prompt Version */
+            synthesis_prompt_version: string;
+            synthesis_readiness: components["schemas"]["SynthesisReadiness"];
+            /** Ticker */
+            ticker: string;
+            trace: components["schemas"]["AgentExecutionTrace"];
+            /**
+             * Unavailable Context
+             * @default []
+             */
+            unavailable_context: string[];
+            /** Used Skill Ids */
+            used_skill_ids: string[];
+        };
+        /** PublicInputSummary */
+        PublicInputSummary: {
+            /** Input Count */
+            input_count: number;
+            /**
+             * Input Kind
+             * @enum {string}
+             */
+            input_kind: "SESSION_MARKET_OBSERVATIONS" | "NON_MARKET_OR_DERIVED_FACTS";
+            /** Input Metrics */
+            input_metrics: string[];
+            /** Input Range End */
+            input_range_end: string | null;
+            /** Input Range Start */
+            input_range_start: string | null;
+            internal_input_digest: components["schemas"]["SHA256"];
+            /** Withheld Market Input Count */
+            withheld_market_input_count: number;
+        };
+        /** PublicMarketBehaviorResult */
+        PublicMarketBehaviorResult: {
+            /**
+             * As Of Date
+             * Format: date
+             */
+            as_of_date: string;
+            /**
+             * Calculation Provenance
+             * @default []
+             */
+            calculation_provenance: components["schemas"]["PublicCalculationProvenance"][];
+            /**
+             * Evidence
+             * @default []
+             */
+            evidence: components["schemas"]["PublicEvidenceReference"][];
+            /** Latest Close */
+            latest_close?: number | null;
+            latest_market_features: components["schemas"]["LatestMarketFeatures"];
+            /** Latest Market Session */
+            latest_market_session?: string | null;
+            /**
+             * Limitations
+             * @default []
+             */
+            limitations: string[];
+            /** @default public-research-projection-v1 */
+            projection_version: components["schemas"]["ProjectionVersion"];
+            quality: components["schemas"]["QualityReport"];
+            /** Ticker */
+            ticker: string;
+            window: components["schemas"]["MarketWindowSummary"];
+        };
+        /** PublicMetricTrendResult */
+        PublicMetricTrendResult: {
+            /** Absolute Change */
+            absolute_change?: string | null;
+            /**
+             * Calculation Provenance
+             * @default []
+             */
+            calculation_provenance: components["schemas"]["PublicCalculationProvenance"][];
+            comparable_observation?: components["schemas"]["FundamentalObservation"] | null;
+            comparison_status: components["schemas"]["ResultStatus"];
+            /** @default YEAR_OVER_YEAR */
+            comparison_type: components["schemas"]["ComparisonType"];
+            current_observation?: components["schemas"]["FundamentalObservation"] | null;
+            direction: components["schemas"]["TrendDirection"];
+            /**
+             * Evidence
+             * @default []
+             */
+            evidence: components["schemas"]["PublicEvidenceReference"][];
+            /**
+             * Limitations
+             * @default []
+             */
+            limitations: string[];
+            /** Metric */
+            metric: string;
+            metric_kind: components["schemas"]["MetricKind"];
+            /** Percentage Change */
+            percentage_change?: string | null;
+            percentage_change_status: components["schemas"]["PercentageChangeStatus"];
+        };
+        /** PublicPeriodComparisonResult */
+        PublicPeriodComparisonResult: {
+            /**
+             * As Of Date
+             * Format: date
+             */
+            as_of_date: string;
+            /**
+             * Calculation Provenance
+             * @default []
+             */
+            calculation_provenance: components["schemas"]["PublicCalculationProvenance"][];
+            comparison_spec: components["schemas"]["ComparisonSpec"];
+            /**
+             * Evidence
+             * @default []
+             */
+            evidence: components["schemas"]["PublicEvidenceReference"][];
+            /**
+             * Limitations
+             * @default []
+             */
+            limitations: string[];
+            /** @default public-research-projection-v1 */
+            projection_version: components["schemas"]["ProjectionVersion"];
+            quality: components["schemas"]["QualityReport"];
+            result: components["schemas"]["PublicMetricTrendResult"];
+            /** Ticker */
+            ticker: string;
+        };
+        /** PublicReportManifest */
+        PublicReportManifest: {
             agent_status: components["schemas"]["AgentStatus"];
             /**
              * As Of Date
@@ -922,8 +925,11 @@ export interface components {
             created_at: string;
             /** Evidence Count */
             evidence_count: number;
-            file_hashes?: components["schemas"]["ReportFileHashes"] | null;
+            /** File Hashes */
+            file_hashes?: null;
             integrity: components["schemas"]["ReportIntegrity"];
+            /** @default INTERNAL_RESEARCH_REPORT */
+            integrity_scope: components["schemas"]["IntegrityScope"];
             language: components["schemas"]["ReportLanguage"];
             /** Model */
             model: string;
@@ -947,6 +953,8 @@ export interface components {
              * @constant
              */
             planner_used: false;
+            /** @default public-research-projection-v1 */
+            projection_version: components["schemas"]["ProjectionVersion"];
             /** Provider */
             provider: string;
             quality_status: components["schemas"]["QualityStatus"];
@@ -985,6 +993,141 @@ export interface components {
             /** Ticker */
             ticker: string;
         };
+        /** PublicResearchQualityResult */
+        PublicResearchQualityResult: {
+            /**
+             * As Of Date
+             * Format: date
+             */
+            as_of_date: string;
+            /** Available Registered Metrics */
+            available_registered_metrics: string[];
+            /**
+             * Calculation Provenance
+             * @default []
+             */
+            calculation_provenance: components["schemas"]["PublicCalculationProvenance"][];
+            /**
+             * Evidence
+             * @default []
+             */
+            evidence: components["schemas"]["PublicEvidenceReference"][];
+            /** Fundamental Age Calendar Days */
+            fundamental_age_calendar_days?: number | null;
+            /** Issues */
+            issues: components["schemas"]["QualityIssue"][];
+            /** Latest Fundamental Available Date */
+            latest_fundamental_available_date?: string | null;
+            /** Latest Market Session */
+            latest_market_session?: string | null;
+            /**
+             * Limitations
+             * @default []
+             */
+            limitations: string[];
+            /** Market Age Calendar Days */
+            market_age_calendar_days?: number | null;
+            /** Missing Registered Metrics */
+            missing_registered_metrics: string[];
+            overall_status: components["schemas"]["QualityStatus"];
+            /** @default public-research-projection-v1 */
+            projection_version: components["schemas"]["ProjectionVersion"];
+            /** Provenance Summary */
+            provenance_summary: components["schemas"]["ProvenanceRecord"][];
+            quality: components["schemas"]["QualityReport"];
+            /** Ticker */
+            ticker: string;
+        };
+        /** PublicResearchReport */
+        PublicResearchReport: {
+            /**
+             * As Of Date
+             * Format: date
+             */
+            as_of_date: string;
+            /** Blocking Reasons */
+            blocking_reasons: string[];
+            /** Calculation Appendix */
+            calculation_appendix: components["schemas"]["PublicCalculationAppendixEntry"][];
+            /** Evidence Appendix */
+            evidence_appendix: components["schemas"]["PublicEvidenceAppendixEntry"][];
+            integrity: components["schemas"]["ReportIntegrity"];
+            /** @default INTERNAL_RESEARCH_REPORT */
+            integrity_scope: components["schemas"]["IntegrityScope"];
+            language: components["schemas"]["ReportLanguage"];
+            /** Limitations */
+            limitations: string[];
+            /** @default public-research-projection-v1 */
+            projection_version: components["schemas"]["ProjectionVersion"];
+            quality: components["schemas"]["QualityReport"];
+            quality_status: components["schemas"]["QualityStatus"];
+            report_id: components["schemas"]["ReportID"];
+            /**
+             * Report Version
+             * @default research-report-v1
+             * @constant
+             */
+            report_version: "research-report-v1";
+            /**
+             * Run Id
+             * Format: uuid
+             */
+            run_id: string;
+            runtime_metadata: components["schemas"]["ReportRuntimeMetadata"];
+            /** Sections */
+            sections: components["schemas"]["ReportSection"][];
+            /**
+             * Selected Skill Id
+             * @default equity_research
+             * @constant
+             */
+            selected_skill_id: "equity_research";
+            status: components["schemas"]["ReportStatus"];
+            synthesis_readiness: components["schemas"]["SynthesisReadiness"];
+            /** Ticker */
+            ticker: string;
+        };
+        /** QualityIssue */
+        QualityIssue: {
+            /** Affected Context */
+            affected_context?: string | null;
+            /** Affected Date */
+            affected_date?: string | null;
+            /** Affected Field */
+            affected_field?: string | null;
+            /** Code */
+            code: string;
+            /** Message */
+            message: string;
+            severity: components["schemas"]["Severity"];
+        };
+        /** QualityReport */
+        QualityReport: {
+            /**
+             * Issues
+             * @default []
+             */
+            issues: components["schemas"]["QualityIssue"][];
+            status: components["schemas"]["QualityStatus"];
+        };
+        /**
+         * QualityStatus
+         * @enum {string}
+         */
+        QualityStatus: "PASS" | "PASS_WITH_WARNINGS" | "FAIL";
+        ReportID: string;
+        /** ReportIntegrity */
+        ReportIntegrity: {
+            /**
+             * Algorithm
+             * @default SHA-256
+             * @constant
+             */
+            algorithm: "SHA-256";
+            semantic_hash: components["schemas"]["SHA256"];
+        };
+        /** @enum {string} */
+        ReportLanguage: "ENGLISH" | "CHINESE";
         /** ReportRuntimeMetadata */
         ReportRuntimeMetadata: {
             /**
@@ -1052,9 +1195,9 @@ export interface components {
          * @enum {string}
          */
         ReportStatus: "COMPLETED" | "COMPLETED_WITH_WARNINGS" | "BLOCKED";
-        /** ResearchEnvelope[CompanySnapshotResult] */
-        ResearchEnvelope_CompanySnapshotResult_: {
-            data: components["schemas"]["CompanySnapshotResult"];
+        /** ResearchEnvelope[PublicCompanySnapshotResult] */
+        ResearchEnvelope_PublicCompanySnapshotResult_: {
+            data: components["schemas"]["PublicCompanySnapshotResult"];
             /**
              * Generated At
              * Format: date-time
@@ -1075,9 +1218,9 @@ export interface components {
              */
             schema_version: "1.0";
         };
-        /** ResearchEnvelope[FundamentalTrendResult] */
-        ResearchEnvelope_FundamentalTrendResult_: {
-            data: components["schemas"]["FundamentalTrendResult"];
+        /** ResearchEnvelope[PublicFundamentalTrendResult] */
+        ResearchEnvelope_PublicFundamentalTrendResult_: {
+            data: components["schemas"]["PublicFundamentalTrendResult"];
             /**
              * Generated At
              * Format: date-time
@@ -1098,9 +1241,9 @@ export interface components {
              */
             schema_version: "1.0";
         };
-        /** ResearchEnvelope[MarketBehaviorResult] */
-        ResearchEnvelope_MarketBehaviorResult_: {
-            data: components["schemas"]["MarketBehaviorResult"];
+        /** ResearchEnvelope[PublicMarketBehaviorResult] */
+        ResearchEnvelope_PublicMarketBehaviorResult_: {
+            data: components["schemas"]["PublicMarketBehaviorResult"];
             /**
              * Generated At
              * Format: date-time
@@ -1121,9 +1264,9 @@ export interface components {
              */
             schema_version: "1.0";
         };
-        /** ResearchEnvelope[PeriodComparisonResult] */
-        ResearchEnvelope_PeriodComparisonResult_: {
-            data: components["schemas"]["PeriodComparisonResult"];
+        /** ResearchEnvelope[PublicPeriodComparisonResult] */
+        ResearchEnvelope_PublicPeriodComparisonResult_: {
+            data: components["schemas"]["PublicPeriodComparisonResult"];
             /**
              * Generated At
              * Format: date-time
@@ -1144,9 +1287,9 @@ export interface components {
              */
             schema_version: "1.0";
         };
-        /** ResearchEnvelope[ResearchQualityResult] */
-        ResearchEnvelope_ResearchQualityResult_: {
-            data: components["schemas"]["ResearchQualityResult"];
+        /** ResearchEnvelope[PublicResearchQualityResult] */
+        ResearchEnvelope_PublicResearchQualityResult_: {
+            data: components["schemas"]["PublicResearchQualityResult"];
             /**
              * Generated At
              * Format: date-time
@@ -1166,94 +1309,6 @@ export interface components {
              * @constant
              */
             schema_version: "1.0";
-        };
-        /** ResearchQualityResult */
-        ResearchQualityResult: {
-            /**
-             * As Of Date
-             * Format: date
-             */
-            as_of_date: string;
-            /** Available Registered Metrics */
-            available_registered_metrics: string[];
-            /**
-             * Calculation Provenance
-             * @default []
-             */
-            calculation_provenance: components["schemas"]["CalculationProvenance"][];
-            /**
-             * Evidence
-             * @default []
-             */
-            evidence: components["schemas"]["EvidenceReference"][];
-            /** Fundamental Age Calendar Days */
-            fundamental_age_calendar_days?: number | null;
-            /** Issues */
-            issues: components["schemas"]["QualityIssue"][];
-            /** Latest Fundamental Available Date */
-            latest_fundamental_available_date?: string | null;
-            /** Latest Market Session */
-            latest_market_session?: string | null;
-            /**
-             * Limitations
-             * @default []
-             */
-            limitations: string[];
-            /** Market Age Calendar Days */
-            market_age_calendar_days?: number | null;
-            /** Missing Registered Metrics */
-            missing_registered_metrics: string[];
-            overall_status: components["schemas"]["QualityStatus"];
-            /** Provenance Summary */
-            provenance_summary: components["schemas"]["ProvenanceRecord"][];
-            quality: components["schemas"]["QualityReport"];
-            /** Ticker */
-            ticker: string;
-        };
-        /** ResearchReport */
-        ResearchReport: {
-            /**
-             * As Of Date
-             * Format: date
-             */
-            as_of_date: string;
-            /** Blocking Reasons */
-            blocking_reasons: string[];
-            /** Calculation Appendix */
-            calculation_appendix: components["schemas"]["CalculationAppendixEntry"][];
-            /** Evidence Appendix */
-            evidence_appendix: components["schemas"]["EvidenceAppendixEntry"][];
-            integrity: components["schemas"]["ReportIntegrity"];
-            language: components["schemas"]["ReportLanguage"];
-            /** Limitations */
-            limitations: string[];
-            quality: components["schemas"]["QualityReport"];
-            quality_status: components["schemas"]["QualityStatus"];
-            report_id: components["schemas"]["ReportID"];
-            /**
-             * Report Version
-             * @default research-report-v1
-             * @constant
-             */
-            report_version: "research-report-v1";
-            /**
-             * Run Id
-             * Format: uuid
-             */
-            run_id: string;
-            runtime_metadata: components["schemas"]["ReportRuntimeMetadata"];
-            /** Sections */
-            sections: components["schemas"]["ReportSection"][];
-            /**
-             * Selected Skill Id
-             * @default equity_research
-             * @constant
-             */
-            selected_skill_id: "equity_research";
-            status: components["schemas"]["ReportStatus"];
-            synthesis_readiness: components["schemas"]["SynthesisReadiness"];
-            /** Ticker */
-            ticker: string;
         };
         /** ResearchRequest */
         ResearchRequest: {
@@ -1430,7 +1485,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EquityResearchReportResponse"];
+                    "application/json": components["schemas"]["PublicEquityResearchReportResponse"];
                 };
             };
             /** @description Not Found */
@@ -1499,7 +1554,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ResearchEnvelope_CompanySnapshotResult_"];
+                    "application/json": components["schemas"]["ResearchEnvelope_PublicCompanySnapshotResult_"];
                 };
             };
             /** @description Not Found */
@@ -1568,7 +1623,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ResearchEnvelope_PeriodComparisonResult_"];
+                    "application/json": components["schemas"]["ResearchEnvelope_PublicPeriodComparisonResult_"];
                 };
             };
             /** @description Not Found */
@@ -1637,7 +1692,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ResearchEnvelope_FundamentalTrendResult_"];
+                    "application/json": components["schemas"]["ResearchEnvelope_PublicFundamentalTrendResult_"];
                 };
             };
             /** @description Not Found */
@@ -1706,7 +1761,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ResearchEnvelope_MarketBehaviorResult_"];
+                    "application/json": components["schemas"]["ResearchEnvelope_PublicMarketBehaviorResult_"];
                 };
             };
             /** @description Not Found */
@@ -1775,7 +1830,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ResearchEnvelope_ResearchQualityResult_"];
+                    "application/json": components["schemas"]["ResearchEnvelope_PublicResearchQualityResult_"];
                 };
             };
             /** @description Not Found */

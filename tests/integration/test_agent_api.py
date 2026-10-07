@@ -14,7 +14,7 @@ from financial_research.agent.service import ResearchAgent
 from financial_research.api.app import create_app
 from financial_research.llm.errors import AgentConfigurationError, LLMProviderError
 from financial_research.llm.fake import FakeLLMClient
-from financial_research.schemas.agent import GroundedResearchAnswer
+from financial_research.public_research.schemas import PublicGroundedResearchAnswer
 from financial_research.skills.defaults import create_skill_registry
 from financial_research.skills.errors import EvidenceIntegrityError
 
@@ -76,7 +76,7 @@ def test_agent_success_envelope_and_stateless_request_ids(fiscal_context):
     assert data["schema_version"] == "1.0"
     assert data["quality"] == data["data"]["quality"]
     assert data["limitations"] == data["data"]["limitations"]
-    answer = GroundedResearchAnswer.model_validate(data["data"])
+    answer = PublicGroundedResearchAnswer.model_validate(data["data"])
     assert answer.agent_status == "COMPLETED_WITH_WARNINGS"
     assert answer.used_skill_ids == ("fundamental_analysis",)
     assert answer.claims and answer.rendered_answer and answer.citations

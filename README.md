@@ -1468,9 +1468,10 @@ typed, frozen Pydantic models with extra fields forbidden. `ResearchReport` hold
 identity, status, authoritative quality/readiness, fixed sections, limitations,
 blocking reasons, evidence/calculation appendices, objective runtime metadata
 and content integrity. `ReportManifest` records execution counts, prompt/compiler
-versions, model/provider and bundle file hashes. The API returns a typed
-`EquityResearchReportResponse` containing `report`, `markdown` and
-`manifest_summary` (`file_hashes=null` until local export).
+versions, model/provider and bundle file hashes. The internal workflow returns
+`EquityResearchReportResponse`. HTTP now returns `PublicEquityResearchReportResponse`
+containing a projected `report`, public `markdown` and `manifest_summary`;
+public `file_hashes` is always null. See the Stage 8 disclosure contract below.
 
 Only **ENGLISH** (default) and **CHINESE** are supported by this request;
 AUTO is rejected. Heading mapping and order are deterministic:
@@ -1499,11 +1500,11 @@ within Data Quality. Status, quality, readiness and diagnostics appear near the 
 
 Evidence entries sort by canonical evidence ID and receive deterministic
 presentation aliases `E1`, `E2`, ...; computations sort by canonical calculation
-ID and receive `C1`, `C2`, ... . Statements retain their original `evidence_ids`
-in JSON. Markdown appends `[E3][C1]` style references; appendix headings resolve
-them to original canonical IDs. Aliases never replace internal identities.
+ID and receive `C1`, `C2`, ... . Internal statements retain their original
+`evidence_ids`; public source-market citations resolve to safe summary IDs.
+Markdown appends `[E3][C1]` style references. Aliases never replace internal identities.
 
-The evidence appendix contains only directly cited evidence and its full transitive
+The internal evidence appendix contains directly cited evidence and its full transitive
 calculation input closure. `CalculationAppendixEntry` copies operation/formula,
 parameters, existing result/unit/period fields and original inputs with their
 display aliases. No formula is executed in the report layer. Missing upstream
@@ -1759,8 +1760,10 @@ button; focus returns to the opening citation. Buttons support keyboard access,
 the UI has visible focus indicators, and statuses always have text.
 
 Computed evidence also links to the existing `C#` provenance. The calculation
-drawer shows the supplied operation, formula, parameters, input canonical IDs,
-input `E#` links, results, units and periods without evaluating the formula.
+drawer shows the supplied operation, formula, parameters, result, unit, methodology,
+input count/range/type and opaque internal input digest without evaluating the formula.
+Non-market inputs retain their canonical IDs and `E#` links; session market inputs
+are represented by aggregate metadata only.
 The lower explorer provides Evidence, Calculations and Audit controls. Evidence
 search filters only the returned entries and never makes another network request.
 Aliases are preserved. Missing/duplicate references and inconsistent calculation
@@ -1779,7 +1782,7 @@ in another language. The browser never translates substantive statements.
 
 ### Downloads and security boundary
 
-Download JSON exports **only `response.report`**, the structured `ResearchReport`,
+Download JSON exports **only `response.report`**, the structured `PublicResearchReport`,
 with readable UTF-8 JSON. Download Markdown saves **`response.markdown` verbatim**;
 Markdown is not the primary HTML renderer and no frontend Markdown formatter exists.
 Both use browser Blobs and temporary object URLs, then revoke the URLs. Filenames
@@ -1856,6 +1859,59 @@ persistence, saved history, PDF, cloud deployment, streaming, comparison, valuat
 or mobile-native experience. LLM latency varies and external providers remain
 runtime dependencies. Stage 8 deployment and production operations are future
 work; this stage does not add deployment configuration or infrastructure.
+
+## Stage 8 — Public research disclosure contract
+
+All seven public POST research routes use the centralized, deterministic
+`financial_research.public_research` projection, version
+`public-research-projection-v1`. The public API is not a raw market-data API.
+The backend contract is the disclosure boundary, including for visitors with a
+valid `X-Demo-Access` code. The browser receives the public representation only.
+
+Public reports, Agent citations and Tool responses retain derived research,
+quality diagnostics, selected safe facts and calculation audit summaries. Daily
+market source values (open/high/low/close/volume and adjusted equivalents) and
+their input ID sequences stay internal. Vendor-neutral classification uses
+session-source evidence semantics, including unknown dated source fields. Market
+source citations become grouped records with provider, adjustment transformations,
+requested window, observation count, input date range and an opaque internal digest;
+they contain no session values, dates or per-session source references. Existing
+Tool `latest_close`/`latest_market_session` fields remain a bounded scalar snapshot,
+alongside returns, volatility, relative SMA and window high/low calculations.
+
+Public calculations preserve the exact internal ID, metric, formula, result, unit
+and parameters. Input summaries state count, range, type, metrics, methodology and
+digest; complete market input arrays are withheld. SEC filing facts, period values,
+filing/availability dates and non-market calculation input links retain their audit
+detail. Claims keep their grounded narrative; public citation IDs resolve to safe
+evidence. Grounding still validates against the complete internal evidence before
+the public projection runs.
+
+`ResearchReport`, Skills, Agent grounding and the CLI bundle remain authoritative
+internal representations with full evidence, provenance and calculation dependency
+closure. CLI `report.json`, `report.md`, `evidence.json` and `manifest.json` remain
+complete audit artifacts; there is no public bundle/artifact/download HTTP route.
+Internal and public Markdown have separate renderers. Public Markdown is rendered
+directly from `PublicResearchReport`; downloads export that public JSON and Markdown.
+Evidence and Calculation Explorers show the same public audit summaries, retaining
+SEC fact inspection and small non-market input links.
+
+Public output retains the internal report identity and semantic hash, explicitly
+labelled `integrity_scope=INTERNAL_RESEARCH_REPORT`; this hash does not claim to
+hash the projected bytes. Public manifest counts describe the public appendices,
+and no internal bundle file hashes are attached to public exports.
+
+Offline regression coverage uses the NVDA 730-calendar-day fixture with 501 sessions.
+The full report's 180 internal daily H/L/C facts become three value-free summaries;
+all 29 calculations retain their results. Public 60- and 501-session responses
+contain no reconstructable daily source series, while internal evidence and CLI
+bundles retain the full inputs. OpenAPI and generated frontend types describe
+the public models explicitly.
+
+The implementation is designed to respect the technical display-vs-bulk boundary
+described by Tiingo Sales. This describes the implementation boundary, not a legal
+conclusion or a guarantee of licensing compliance. License activation remains a
+separate non-technical step.
 
 ## Stage 8 — Production deployment and operations
 

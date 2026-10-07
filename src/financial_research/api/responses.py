@@ -8,12 +8,16 @@ from fastapi import Request
 
 from financial_research.api.errors import request_id
 from financial_research.api.schemas import ResearchEnvelope
+from financial_research.public_research.projection import project_tool_result
+from financial_research.public_research.schemas import PublicToolResult
 from financial_research.schemas.tools import ToolResult
 
 logger = logging.getLogger(__name__)
 
 
-def envelope[T: ToolResult](request: Request, result: T, tool_name: str) -> ResearchEnvelope[T]:
+def envelope(
+    request: Request, result: ToolResult, tool_name: str
+) -> ResearchEnvelope[PublicToolResult]:
     identifier = request_id(request)
     duration = (time.perf_counter() - request.state.started_at) * 1000
     logger.info(
@@ -30,7 +34,7 @@ def envelope[T: ToolResult](request: Request, result: T, tool_name: str) -> Rese
     return ResearchEnvelope(
         request_id=identifier,
         generated_at=datetime.now(UTC),
-        data=result,
+        data=project_tool_result(result),
         quality=result.quality,
         limitations=result.limitations,
     )
