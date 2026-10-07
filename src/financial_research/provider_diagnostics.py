@@ -13,6 +13,7 @@ ProviderOperation = Literal[
     "fetch_submissions",
     "fetch_submissions_archive",
     "fetch_market_history",
+    "fetch_market_metadata",
 ]
 
 
@@ -42,7 +43,7 @@ def capture_provider_failure(provider: str, operation: ProviderOperation, exc: E
         return
     status = exc.response.status_code if isinstance(exc, httpx.HTTPStatusError) else None
     state.failure = ProviderFailure(
-        provider=provider if provider in {"sec-edgar", "yahoo-chart"} else "unknown",
+        provider=provider if provider in {"sec-edgar", "yahoo-chart", "tiingo-eod"} else "unknown",
         operation=operation,
         exception_type=type(exc).__name__,
         upstream_status=status if type(status) is int and 100 <= status <= 599 else None,

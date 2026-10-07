@@ -17,9 +17,15 @@ FAKE_CONFIG = {
     "SEC_USER_AGENT": "__SEC_SENTINEL__",
     "DEMO_ACCESS_TOKEN": "__DEMO_ACCESS_SENTINEL__",
     "LOG_LEVEL": "INFO",
+    "MARKET_DATA_PROVIDER": "tiingo",
+    "TIINGO_API_TOKEN": "__CI_FAKE_TIINGO_TOKEN__",
     "RENDER_GIT_COMMIT": "1234567890abcdef1234567890abcdef12345678",
 }
-SENTINELS = [FAKE_CONFIG[key] for key in ("OPENAI_API_KEY", "SEC_USER_AGENT", "DEMO_ACCESS_TOKEN")]
+SENTINELS = [
+    FAKE_CONFIG[key]
+    for key in ("OPENAI_API_KEY", "SEC_USER_AGENT", "DEMO_ACCESS_TOKEN", "TIINGO_API_TOKEN")
+]
+SENTINELS.append("__TIINGO_SECRET_SENTINEL__")
 REPORT_BODY = json.dumps(
     {"ticker": "NVDA", "as_of_date": "2026-06-30", "response_language": "ENGLISH"}
 ).encode()
@@ -107,8 +113,9 @@ assert not list(root.rglob('.env*'))
 for file in root.rglob('*'):
     if file.is_file():
         data = file.read_bytes()
-        names = ('OPENAI_API_KEY', 'SEC_USER_AGENT', 'DEMO_ACCESS_TOKEN')
+        names = ('OPENAI_API_KEY', 'SEC_USER_AGENT', 'DEMO_ACCESS_TOKEN', 'TIINGO_API_TOKEN')
         assert all(os.environ[name].encode() not in data for name in names)
+        assert b'__TIINGO_SECRET_SENTINEL__' not in data
 print('Runtime filesystem, user and secret boundary passed.')
 """
 
@@ -155,7 +162,7 @@ def main() -> None:
     parser.add_argument("--image", default="financial-research-fde:local")
     arguments = parser.parse_args()
     run_container(arguments.image)
-    for missing in ("DEMO_ACCESS_TOKEN", "OPENAI_API_KEY"):
+    for missing in ("DEMO_ACCESS_TOKEN", "OPENAI_API_KEY", "TIINGO_API_TOKEN"):
         run_container(arguments.image, missing=missing)
 
 

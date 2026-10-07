@@ -1,0 +1,20 @@
+{
+  "metadata": {"ticker": "AAPL", "exchangeCode": "NASDAQ"},
+  "prices": [
+    {"date": "2026-08-03T00:00:00.000Z","open": 309.58,"high": 311.8,"low": 302.56,"close": 303.42,"volume": 75051951,"adjOpen": 309.3090811266,"adjHigh": 311.5271383658,"adjLow": 302.2952244514,"adjClose": 303.1544718504,"adjVolume": 75051951,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-04T00:00:00.000Z","open": 302.725,"high": 310.42,"low": 301.32,"close": 309.38,"volume": 68000969,"adjOpen": 302.460080057,"adjHigh": 310.1483460279,"adjLow": 301.0563095971,"adjClose": 309.1092561501,"adjVolume": 68000969,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-05T00:00:00.000Z","open": 309.36,"high": 311.71,"low": 305.67,"close": 311.0,"volume": 49438763,"adjOpen": 309.0892736525,"adjHigh": 311.4372171264,"adjLow": 305.402502836,"adjClose": 310.7278384598,"adjVolume": 49438763,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-06T00:00:00.000Z","open": 314.34,"high": 316.2894,"low": 309.23,"close": 312.41,"volume": 46139901,"adjOpen": 314.0649155674,"adjHigh": 316.0126096133,"adjLow": 308.9593874178,"adjClose": 312.1366045441,"adjVolume": 46139901,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-07T00:00:00.000Z","open": 311.45,"high": 314.81,"low": 310.74,"close": 313.33,"volume": 34437191,"adjOpen": 311.1774446569,"adjHigh": 314.5345042621,"adjLow": 310.4680659903,"adjClose": 313.055799436,"adjVolume": 34437191,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-10T00:00:00.000Z","open": 306.83,"high": 308.26,"low": 304.61,"close": 308.26,"volume": 44812503,"adjOpen": 306.83,"adjHigh": 308.26,"adjLow": 304.61,"adjClose": 308.26,"adjVolume": 44812503,"divCash": 0.27,"splitFactor": 1.0},
+    {"date": "2026-08-11T00:00:00.000Z","open": 307.75,"high": 309.97,"low": 302.79,"close": 304.91,"volume": 37476746,"adjOpen": 307.75,"adjHigh": 309.97,"adjLow": 302.79,"adjClose": 304.91,"adjVolume": 37476746,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-12T00:00:00.000Z","open": 305.1,"high": 305.66,"low": 300.57,"close": 302.25,"volume": 41657768,"adjOpen": 305.1,"adjHigh": 305.66,"adjLow": 300.57,"adjClose": 302.25,"adjVolume": 41657768,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-13T00:00:00.000Z","open": 304.21,"high": 306.0,"low": 302.05,"close": 305.26,"volume": 40349289,"adjOpen": 304.21,"adjHigh": 306.0,"adjLow": 302.05,"adjClose": 305.26,"adjVolume": 40349289,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-14T00:00:00.000Z","open": 306.0,"high": 307.49,"low": 304.3,"close": 305.93,"volume": 28229375,"adjOpen": 306.0,"adjHigh": 307.49,"adjLow": 304.3,"adjClose": 305.93,"adjVolume": 28229375,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-17T00:00:00.000Z","open": 306.21,"high": 307.66,"low": 302.939,"close": 305.59,"volume": 38169263,"adjOpen": 306.21,"adjHigh": 307.66,"adjLow": 302.939,"adjClose": 305.59,"adjVolume": 38169263,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-18T00:00:00.000Z","open": 307.58,"high": 311.49,"low": 305.74,"close": 310.03,"volume": 53424535,"adjOpen": 307.58,"adjHigh": 311.49,"adjLow": 305.74,"adjClose": 310.03,"adjVolume": 53424535,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-19T00:00:00.000Z","open": 310.14,"high": 319.2799,"low": 309.6,"close": 316.83,"volume": 50505646,"adjOpen": 310.14,"adjHigh": 319.2799,"adjLow": 309.6,"adjClose": 316.83,"adjVolume": 50505646,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-20T00:00:00.000Z","open": 317.455,"high": 320.28,"low": 310.65,"close": 311.3,"volume": 40959184,"adjOpen": 317.455,"adjHigh": 320.28,"adjLow": 310.65,"adjClose": 311.3,"adjVolume": 40959184,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2026-08-21T00:00:00.000Z","open": 312.05,"high": 312.38,"low": 307.01,"close": 309.35,"volume": 46876815,"adjOpen": 312.05,"adjHigh": 312.38,"adjLow": 307.01,"adjClose": 309.35,"adjVolume": 46876815,"divCash": 0.0,"splitFactor": 1.0}
+  ]
+}

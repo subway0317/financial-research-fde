@@ -6,9 +6,9 @@ import { describe, expect, it } from 'vitest'
 import { scanDirectory, sentinels, unsafeContent } from '../scripts/security-check.mjs'
 
 describe('browser security boundary', () => {
-  it.each([...sentinels, 'OPENAI_API_KEY', 'SEC_USER_AGENT', 'VITE_PROVIDER_KEY', 'DEMO_ACCESS_TOKEN', 'VITE_DEMO_ACCESS_TOKEN',
+  it.each([...sentinels, 'OPENAI_API_KEY', 'SEC_USER_AGENT', 'TIINGO_API_TOKEN', 'VITE_PROVIDER_KEY', 'DEMO_ACCESS_TOKEN', 'VITE_DEMO_ACCESS_TOKEN',
     'https://api.openai.com/v1/responses', 'https://www.sec.gov/data',
-    'https://query1.finance.yahoo.com/', 'system_prompt', 'chain_of_thought', 'raw_provider_payload',
+    'https://query1.finance.yahoo.com/', 'https://api.tiingo.com/', 'system_prompt', 'chain_of_thought', 'raw_provider_payload',
     '/home/zbw21/private', 'C:\\Users\\private'])('rejects forbidden browser content %s', content => {
     expect(unsafeContent(content)).toBe(true)
   })

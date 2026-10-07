@@ -38,7 +38,8 @@ def test_container_build_context_and_runtime_boundaries_are_declared():
     assert "COPY --from=frontend-build /build/frontend/dist/" in runtime
     assert "node_modules" not in runtime and "[dev]" not in runtime
     assert all(
-        key not in dockerfile for key in ("OPENAI_API_KEY", "SEC_USER_AGENT", "DEMO_ACCESS_TOKEN")
+        key not in dockerfile
+        for key in ("OPENAI_API_KEY", "SEC_USER_AGENT", "DEMO_ACCESS_TOKEN", "TIINGO_API_TOKEN")
     )
 
 
@@ -51,12 +52,26 @@ def test_render_blueprint_and_canonical_ci_remain_bounded():
         "autoDeployTrigger: checksPass",
     ):
         assert required in blueprint
-    for secret in ("OPENAI_API_KEY", "OPENAI_MODEL", "SEC_USER_AGENT", "DEMO_ACCESS_TOKEN"):
+    for secret in (
+        "OPENAI_API_KEY",
+        "OPENAI_MODEL",
+        "SEC_USER_AGENT",
+        "DEMO_ACCESS_TOKEN",
+        "TIINGO_API_TOKEN",
+    ):
         assert f"- key: {secret}\n        sync: false" in blueprint
+    assert "- key: MARKET_DATA_PROVIDER\n        value: tiingo" in blueprint
     workflow = (ROOT / ".github/workflows/ci.yml").read_text()
     assert 'python-version: ["3.12", "3.14"]' in workflow
     assert 'python-version: "3.14"' in workflow.split("  frontend:", 1)[1]
     assert "docker build" in workflow and "scripts/container_smoke.py" in workflow
+    assert "TIINGO_API_TOKEN: __TIINGO_SECRET_SENTINEL__" in workflow
+
+
+def test_container_smoke_uses_fake_tiingo_without_authorized_research(smoke):
+    assert smoke.FAKE_CONFIG["MARKET_DATA_PROVIDER"] == "tiingo"
+    assert smoke.FAKE_CONFIG["TIINGO_API_TOKEN"] == "__CI_FAKE_TIINGO_TOKEN__"
+    assert "TIINGO_API_TOKEN" in smoke.IMAGE_CHECK
 
 
 def test_infrastructure_smoke_cannot_send_valid_research_authorization(smoke):

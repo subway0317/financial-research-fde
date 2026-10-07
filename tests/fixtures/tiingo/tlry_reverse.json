@@ -1,0 +1,12 @@
+{
+  "metadata": {"ticker": "TLRY", "exchangeCode": "NASDAQ"},
+  "prices": [
+    {"date": "2025-11-26T00:00:00.000Z","open": 1.0,"high": 1.06,"low": 0.9861,"close": 1.03,"volume": 39197216,"adjOpen": 10.0,"adjHigh": 10.6,"adjLow": 9.861,"adjClose": 10.3,"adjVolume": 3919721,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-28T00:00:00.000Z","open": 0.8851,"high": 0.8999,"low": 0.8002,"close": 0.813,"volume": 98561825,"adjOpen": 8.851,"adjHigh": 8.999,"adjLow": 8.002,"adjClose": 8.13,"adjVolume": 9856182,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-12-01T00:00:00.000Z","open": 0.7902,"high": 0.8125,"low": 0.7708,"close": 0.7824,"volume": 53847601,"adjOpen": 7.902,"adjHigh": 8.125,"adjLow": 7.708,"adjClose": 7.824,"adjVolume": 5384760,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-12-02T00:00:00.000Z","open": 7.8,"high": 8.9798,"low": 7.165,"close": 7.71,"volume": 8969800,"adjOpen": 7.8,"adjHigh": 8.9798,"adjLow": 7.165,"adjClose": 7.71,"adjVolume": 8969800,"divCash": 0.0,"splitFactor": 0.1},
+    {"date": "2025-12-03T00:00:00.000Z","open": 7.65,"high": 7.6745,"low": 7.03,"close": 7.06,"volume": 8576596,"adjOpen": 7.65,"adjHigh": 7.6745,"adjLow": 7.03,"adjClose": 7.06,"adjVolume": 8576596,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-12-04T00:00:00.000Z","open": 7.05,"high": 7.3793,"low": 6.9,"close": 7.22,"volume": 8893599,"adjOpen": 7.05,"adjHigh": 7.3793,"adjLow": 6.9,"adjClose": 7.22,"adjVolume": 8893599,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-12-05T00:00:00.000Z","open": 7.25,"high": 7.48,"low": 7.06,"close": 7.35,"volume": 8172726,"adjOpen": 7.25,"adjHigh": 7.48,"adjLow": 7.06,"adjClose": 7.35,"adjVolume": 8172726,"divCash": 0.0,"splitFactor": 1.0}
+  ]
+}

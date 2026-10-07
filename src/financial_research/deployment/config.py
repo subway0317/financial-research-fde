@@ -7,6 +7,8 @@ from typing import Literal, Self
 
 from pydantic import BaseModel, ConfigDict, Field, SecretStr, ValidationError
 
+from financial_research.config import MarketDataProvider
+
 
 class DeploymentConfig(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
@@ -19,6 +21,8 @@ class DeploymentConfig(BaseModel):
     openai_timeout_seconds: float | None = Field(default=None, gt=0, allow_inf_nan=False)
     sec_user_agent: SecretStr | None = None
     demo_access_token: SecretStr | None = None
+    market_data_provider: MarketDataProvider = "yahoo"
+    tiingo_api_token: SecretStr | None = None
     commit: str = "unknown"
 
     @classmethod
@@ -45,6 +49,8 @@ class DeploymentConfig(BaseModel):
                 openai_timeout_seconds=timeout,
                 sec_user_agent=secret("SEC_USER_AGENT"),
                 demo_access_token=secret("DEMO_ACCESS_TOKEN"),
+                market_data_provider=os.environ.get("MARKET_DATA_PROVIDER", "yahoo"),
+                tiingo_api_token=secret("TIINGO_API_TOKEN"),
                 commit=commit if re.fullmatch(r"[0-9a-fA-F]{7,64}", commit) else "unknown",
             )
         except (ValidationError, ValueError):
@@ -58,6 +64,10 @@ class DeploymentConfig(BaseModel):
             (self.sec_user_agent, "SEC_CONFIG_UNAVAILABLE"),
         )
         codes = [code for value, code in fields if not value]
+        if self.market_data_provider == "tiingo" and (
+            self.tiingo_api_token is None or not self.tiingo_api_token.get_secret_value().strip()
+        ):
+            codes.append("TIINGO_CONFIG_UNAVAILABLE")
         if self.environment == "production" and not self.demo_access_token:
             codes.append("DEMO_ACCESS_UNAVAILABLE")
         return codes

@@ -1,0 +1,15 @@
+{
+  "metadata": {"ticker": "NFLX", "exchangeCode": "NASDAQ"},
+  "prices": [
+    {"date": "2025-11-10T00:00:00.000Z","open": 1106.715,"high": 1128.2,"low": 1104.05,"close": 1120.07,"volume": 3692900,"adjOpen": 110.6715,"adjHigh": 112.82,"adjLow": 110.405,"adjClose": 112.007,"adjVolume": 36929000,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-11T00:00:00.000Z","open": 1117.6,"high": 1139.2199,"low": 1112.8,"close": 1136.44,"volume": 2796594,"adjOpen": 111.76,"adjHigh": 113.92199,"adjLow": 111.28,"adjClose": 113.644,"adjVolume": 27965940,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-12T00:00:00.000Z","open": 1138.17,"high": 1164.3399,"low": 1128.26,"close": 1157.5,"volume": 3922057,"adjOpen": 113.817,"adjHigh": 116.43399,"adjLow": 112.826,"adjClose": 115.75,"adjVolume": 39220570,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-13T00:00:00.000Z","open": 1158.5,"high": 1167.33,"low": 1145.69,"close": 1154.23,"volume": 4014359,"adjOpen": 115.85,"adjHigh": 116.733,"adjLow": 114.569,"adjClose": 115.423,"adjVolume": 40143590,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-14T00:00:00.000Z","open": 1142.73,"high": 1142.73,"low": 1107.21,"close": 1112.17,"volume": 4760713,"adjOpen": 114.273,"adjHigh": 114.273,"adjLow": 110.721,"adjClose": 111.217,"adjVolume": 47607130,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-17T00:00:00.000Z","open": 110.75,"high": 111.85,"low": 109.55,"close": 110.29,"volume": 25945780,"adjOpen": 110.75,"adjHigh": 111.85,"adjLow": 109.55,"adjClose": 110.29,"adjVolume": 25945780,"divCash": 0.0,"splitFactor": 10.0},
+    {"date": "2025-11-18T00:00:00.000Z","open": 110.29,"high": 115.25,"low": 109.2,"close": 114.09,"volume": 43440565,"adjOpen": 110.29,"adjHigh": 115.25,"adjLow": 109.2,"adjClose": 114.09,"adjVolume": 43440565,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-19T00:00:00.000Z","open": 113.0,"high": 113.34,"low": 108.61,"close": 110.0,"volume": 31868089,"adjOpen": 113.0,"adjHigh": 113.34,"adjLow": 108.61,"adjClose": 110.0,"adjVolume": 31868089,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-20T00:00:00.000Z","open": 111.0,"high": 111.1,"low": 105.39,"close": 105.67,"volume": 36918546,"adjOpen": 111.0,"adjHigh": 111.1,"adjLow": 105.39,"adjClose": 105.67,"adjVolume": 36918546,"divCash": 0.0,"splitFactor": 1.0},
+    {"date": "2025-11-21T00:00:00.000Z","open": 105.13,"high": 106.53,"low": 103.81,"close": 104.31,"volume": 41232687,"adjOpen": 105.13,"adjHigh": 106.53,"adjLow": 103.81,"adjClose": 104.31,"adjVolume": 41232687,"divCash": 0.0,"splitFactor": 1.0}
+  ]
+}

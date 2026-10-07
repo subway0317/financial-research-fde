@@ -47,6 +47,7 @@ jobs:
           SEC_USER_AGENT: __SEC_CONTACT_SENTINEL__
           VITE_OPENAI_API_KEY: __VITE_SECRET_SENTINEL__
           DEMO_ACCESS_TOKEN: __DEMO_ACCESS_SENTINEL__
+          TIINGO_API_TOKEN: __TIINGO_SECRET_SENTINEL__
   container:
     runs-on: ubuntu-latest
     needs: [checks, frontend]
@@ -56,6 +57,6 @@ jobs:
         with:
           python-version: "3.14"
       - name: Add ignored context sentinel
-        run: python -c 'from pathlib import Path; Path(".env.stage8-ci").write_text("__OPENAI_SECRET_SENTINEL__")'
+        run: python -c 'from pathlib import Path; Path(".env.stage8-ci").write_text("__OPENAI_SECRET_SENTINEL__\n__TIINGO_SECRET_SENTINEL__")'
       - run: docker build -t financial-research-fde:ci .
       - run: python scripts/container_smoke.py --image financial-research-fde:ci

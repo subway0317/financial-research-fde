@@ -11,6 +11,7 @@ from starlette.staticfiles import StaticFiles
 from financial_research.api.app import create_app
 from financial_research.api.dependencies import AgentFactory, ToolsFactory
 from financial_research.api.errors import error_response
+from financial_research.config import ResearchConfig
 from financial_research.deployment.assets import frontend_available
 from financial_research.deployment.config import DeploymentConfig
 from financial_research.deployment.guard import DemoBusyError, ResearchGuard, install_guards
@@ -41,7 +42,15 @@ def create_production_app(
     settings = deployment_config or DeploymentConfig.from_env()
     directory = frontend_dir or Path("frontend/dist")
     application = create_app(
-        agent_factory=agent_factory, tools_factory=tools_factory, include_metadata=False
+        agent_factory=agent_factory,
+        tools_factory=tools_factory,
+        config=ResearchConfig.from_env().model_copy(
+            update={
+                "market_data_provider": settings.market_data_provider,
+                "tiingo_api_token": settings.tiingo_api_token,
+            }
+        ),
+        include_metadata=False,
     )
     application.state.deployment_config = settings
     application.state.initialized = True

@@ -1863,6 +1863,121 @@ to show the access-code input only in a production build. `api:check` continues
 exporting the existing API contract under canonical Python 3.14; the wrapper's
 operational endpoints do not require generated frontend API types.
 
+### Stage 8 Tiingo production market remediation
+
+The production target is now an explicitly selected Tiingo EOD adapter. The
+previous Render research smoke identified `yahoo-chart / fetch_market_history /
+HTTP 429`; changing this repository does not establish a successful replacement
+deployment. Yahoo remains a legacy/development option. `MARKET_DATA_PROVIDER`
+accepts only `yahoo` or `tiingo`, defaults to `yahoo` for existing development
+workflows, and is independent of `APP_ENV`. The Render Blueprint explicitly
+selects `tiingo`. Provider failures propagate without a Yahoo or other fallback.
+
+The Stage 8 Tiingo production universe is **U.S.-listed, USD-quoted equities on
+an explicit supported U.S. exchange allowlist**, initially only `NASDAQ` and
+`NYSE`. No global equity coverage, ETF research, foreign primary listing, IFRS or
+20-F support is added. A U.S.-listed USD ADR can resolve market metadata, while
+the existing US-GAAP/10-Q/10-K fundamentals limitations still apply. An exchange
+mapping does not establish support for every security type listed there.
+
+`TiingoMarketProvider.get_market(ticker, start, end)` uses the official
+`/tiingo/daily/{ticker}` metadata and `/tiingo/daily/{ticker}/prices` endpoints,
+with `startDate`, `endDate` and daily frequency. Authentication uses only
+`Authorization: Token <secret>`; redirects are refused. Its dedicated dict/list
+transport leaves the existing SEC dict-only transport unchanged. Clients created
+by the adapter are closed per build; injected clients remain caller-owned.
+
+Candidate B preserves the frozen uniform price transformation:
+
+```text
+factor = adjClose / close
+canonical.open  = open * factor
+canonical.high = high * factor
+canonical.low  = low * factor
+canonical.close = adjClose
+canonical.volume = adjVolume
+policy = SPLIT_AND_DIVIDEND_ADJUSTED
+```
+
+Computed O/H/L must match supplied `adjOpen`/`adjHigh`/`adjLow` with explicit
+absolute and relative tolerance `1e-10`. Nonpositive/nonfinite prices, inconsistent
+OHLC, missing required fields, malformed arrays, duplicate/unsorted dates and
+out-of-range observations fail canonical validation. Both volume fields must be
+nonnegative JSON integers, matching the canonical strict integer policy; floats,
+including integral floats, are rejected. `adjVolume` is preserved without another
+split/dividend adjustment or local rounding. NFLX forward-split, TLRY reverse-split,
+AAPL dividend and NVDA multiple-dividend fixtures protect those semantics.
+
+Tiingo daily UTC-midnight dates are **session-date labels**: parse their date
+component without converting to New York time. The requested inclusive window
+remains `[as_of_date - 730 calendar days, as_of_date]`. The 730-day NVDA fixture
+contains 501 sessions, but other tickers need not. The adapter requests the whole
+interval, rejects empty/malformed responses and preserves coverage in provenance.
+It does not silently chunk, synthesize sessions or claim independent-calendar
+completeness; an apparently valid partial vendor series cannot be fully detected
+without such a calendar. Observed sessions continue to drive the unchanged PIT
+rules, returns, sample volatility (`ddof=1`) and relative SMA calculations.
+
+The immutable local registry in `market_reference.py`, version
+`us-exchanges-v1`, maps exact observed Tiingo codes:
+
+| Code | Canonical exchange | Currency | IANA timezone |
+| --- | --- | --- | --- |
+| NASDAQ | The Nasdaq Stock Market | USD | America/New_York |
+| NYSE | New York Stock Exchange | USD | America/New_York |
+
+Currency comes from the scoped USD product contract, **not the Tiingo response**.
+Timezone comes from official [Nasdaq ET hours](https://www.nasdaq.com/market-activity/stock-market-holiday-schedule),
+[NYSE ET hours](https://www.nyse.com/trade/hours-calendars) and the
+[IANA America/New_York rules](https://data.iana.org/time-zones/tzdb/northamerica).
+Winter, summer and DST transition tests protect ET behavior. Missing/null/empty,
+malformed or unknown exchange codes fail with `DataValidationError` and the
+existing public HTTP 422 `DATA_VALIDATION_ERROR`. There are no aliases or defaults
+for unsupported codes. A new mapping requires manual official-source verification,
+code review, tests and a registry version update; no runtime website scrape,
+OpenFIGI call or separate metadata service is used.
+
+Provenance distinguishes Tiingo prices/exchangeCode/retrieval timestamp from
+registry-sourced currency/timezone/canonical exchange. It records registry and
+product-contract versions, source URLs, response hashes, mapping and date-label
+transformations. A stable provider/range reference contains no credential URL.
+A deterministic manifest hash combines both response hashes, requested range and
+registry/product versions. `retrieved_at` records completion of the acquisition;
+timestamps stay out of transformation text and the deterministic hash, preserving
+the existing normalized business-content reproducibility contract.
+Prices remain retrieval-vintage adjustments, not an archived historical as-of
+adjustment vintage. Public report/OpenAPI schemas and research semantics are unchanged.
+
+For local development, explicitly export `MARKET_DATA_PROVIDER=yahoo`, or select
+`tiingo` and supply `TIINGO_API_TOKEN` privately in the backend environment.
+`.env.example` is not automatically loaded. To check only the local market path
+after exporting the token, without SEC or OpenAI calls:
+
+```python
+from datetime import date, timedelta
+from financial_research.config import ResearchConfig
+from financial_research.research.live import create_market_provider
+
+config = ResearchConfig.from_env()  # MARKET_DATA_PROVIDER=tiingo
+provider = create_market_provider(config)
+try:
+    end = date(2026, 6, 30)
+    market = provider.get_market("NVDA", end - timedelta(days=730), end)
+    print(len(market.observations), market.metadata.currency, market.metadata.exchange_timezone)
+finally:
+    provider.close()
+```
+
+**Licensing status: NOT YET OBTAINED. PUBLIC RENDER DEPLOYMENT BLOCKED BY LICENSE.**
+A free/internal-use token must not be used for a public Render demo. Tiingo
+display/redistribution permission is required before public deployment; internal
+commercial access alone does not authorize website/app distribution. See
+[Tiingo's official licensing documentation](https://www.tiingo.com/documentation/).
+This implementation does not purchase permission, publish commits or deploy.
+Review and local technical acceptance come first; the user's possible one-month
+license arrangement is a later step. Stage 8 final freeze still requires license,
+remote commit/CI/deployment and one real NVDA production report smoke.
+
 ### Runtime configuration and secrets
 
 The deployment configuration reads exported runtime environment variables,
@@ -1876,6 +1991,8 @@ template, with no automatic dotenv loading.
 | `OPENAI_MODEL` | Explicit model configuration, no silent fallback |
 | `OPENAI_TIMEOUT_SECONDS` | Required positive finite timeout; Blueprint sets 120 |
 | `SEC_USER_AGENT` | Backend-only organization/contact identity for SEC access |
+| `MARKET_DATA_PROVIDER` | Explicit `yahoo` / `tiingo`; development default `yahoo`, Render target `tiingo` |
+| `TIINGO_API_TOKEN` | Backend-only secret, required only when Tiingo is selected |
 | `DEMO_ACCESS_TOKEN` | Private random demo code, required in production |
 | `LOG_LEVEL` | DEBUG/INFO/WARNING/ERROR/CRITICAL; default INFO |
 | `PORT` | Render-provided listening port; default 10000 locally |
@@ -1918,7 +2035,8 @@ network calls and says only that the process is live.
 only when the application is initialized, required runtime configuration is
 present/valid, and `frontend/dist/index.html` plus every JS/CSS asset it references
 exist. Missing OpenAI/model/timeout/SEC configuration, a missing production demo
-token or absent/partial assets return 503 with safe diagnostic codes. Missing
+token, missing `TIINGO_API_TOKEN` when Tiingo is selected, or absent/partial assets
+return 503 with safe diagnostic codes. Yahoo requires no Tiingo token. Missing
 credentials do not prevent `/health` from working. Readiness does not probe
 providers, authorize credentials or perform research, so it cannot guarantee
 external availability. Invalid APP_ENV/LOG_LEVEL/PORT fail startup with a generic
@@ -1943,7 +2061,7 @@ logs by request ID; do not paste full reports or raw logs into the repository.
 
 When a typed data-provider failure maps to HTTP 502 / `PROVIDER_ERROR`, the API
 emits one ERROR `provider_failure` event with the same request ID. Its allowlisted
-diagnostics identify the existing provider (`sec-edgar` or `yahoo-chart`), the
+diagnostics identify the provider (`sec-edgar`, `yahoo-chart` or `tiingo-eod`), the
 fixed retrieval operation, and the original exception type. `upstream_status` is
 included only when supplied by a typed HTTP status exception; transport failures
 and chart-level errors do not infer a status. Request-local state retains only
@@ -1951,6 +2069,9 @@ these safe scalars across the existing Skill/Agent error conversion. Failures
 without captured diagnostics use `unknown` provider/operation. No exception text,
 URLs, headers, bodies or credentials are included, and the public error response
 is unchanged.
+
+Tiingo uses `fetch_market_metadata` and `fetch_market_history`; neither diagnostic
+includes URLs, auth headers, upstream bodies or raw exception messages.
 
 ### Docker build and local infrastructure smoke
 
@@ -1973,8 +2094,9 @@ python scripts/container_smoke.py --image financial-research-fde:local
 ```
 
 The smoke supplies only fake values, publishes a random loopback port and runs
-three short-lived containers: complete configuration, missing demo token and
-missing OpenAI key. It checks boot, liveness, readiness/503, homepage, version,
+four short-lived containers: complete fake Tiingo configuration, missing demo
+token, missing OpenAI key and missing Tiingo token. It checks boot, liveness,
+readiness/503, homepage, version,
 compiled assets, unauthenticated/wrong-code refusal, API 404, request-ID logs,
 sentinel leakage, non-root execution and image filesystem exclusions. It refuses
 to send valid research authorization, makes **zero real research/provider calls**,
@@ -2014,6 +2136,11 @@ environment that will run the build and smoke, not just another terminal.
 
 ### Render deployment
 
+The Tiingo migration must remain undeployed until display/redistribution permission
+has been obtained and the user has reviewed the implementation. Because this
+Blueprint can deploy after CI, do not publish to the connected branch before
+clearing that gate. This task performs no remote commit, push, sync or deployment.
+
 1. Review the changes and finish local checks. Publish the reviewed implementation
    to the connected GitHub branch yourself; this task does not stage, commit or
    push. Confirm the backend, frontend and container CI jobs pass for that revision.
@@ -2023,9 +2150,11 @@ environment that will run the build and smoke, not just another terminal.
 3. Keep Dockerfile/context at the repository root, one instance, the image's CMD
    as startup command and `/ready` as health-check path. `autoDeployTrigger:
    checksPass` waits for GitHub checks before automatic deploys.
-4. Enter `OPENAI_API_KEY`, `OPENAI_MODEL`, `SEC_USER_AGENT` and `DEMO_ACCESS_TOKEN`
+4. Enter `OPENAI_API_KEY`, `OPENAI_MODEL`, `SEC_USER_AGENT`, `DEMO_ACCESS_TOKEN`
+   and `TIINGO_API_TOKEN`
    privately in Render. Their Blueprint entries use `sync: false`; no values are
-   committed. Confirm `APP_ENV=production`, `OPENAI_TIMEOUT_SECONDS=120` and
+   committed. Confirm `MARKET_DATA_PROVIDER=tiingo`, `APP_ENV=production`,
+   `OPENAI_TIMEOUT_SECONDS=120` and
    `LOG_LEVEL=INFO`. Use a random private demo code and share it only with intended
    demo users. Configure secrets again for each new service/environment.
 5. Deploy the intended revision and open the actual Render-provided HTTPS URL.
