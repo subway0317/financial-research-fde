@@ -1,5 +1,6 @@
 """Transport-independent Stage 4 contracts; LLM outputs contain no reasoning fields."""
 
+import hashlib
 import json
 from datetime import date
 from enum import StrEnum
@@ -178,9 +179,26 @@ class SynthesisQualitySummary(CanonicalModel):
         return self
 
 
+class SynthesisEvidenceProvenance(CanonicalModel):
+    """Exact shared fields, not a summary or inferred provider policy."""
+
+    provider: NonEmpty
+    data_vintage: str | None = None
+    transformation: tuple[str, ...] = ()
+
+    def stable_id(self) -> str:
+        serialized = json.dumps(self.model_dump(mode="json"), sort_keys=True, separators=(",", ":"))
+        return "prov_" + hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
 class SynthesisEvidenceDefinition(EvidenceReference):
     # Dictionary key already carries the immutable canonical ID.
     evidence_id: NonEmpty = Field(exclude=True)
+    # Keep originals in memory for integrity checks; serialize their shared record once.
+    provider: NonEmpty = Field(exclude=True)
+    data_vintage: str | None = Field(default=None, exclude=True)
+    transformation: tuple[str, ...] = Field(default=(), exclude=True)
+    provenance_id: NonEmpty
 
 
 class SynthesisCalculation(CalculationProvenance):
@@ -195,7 +213,7 @@ class SynthesisFinding(ProjectedFinding):
 class SynthesisProjection(CanonicalModel):
     """Compact LLM representation; canonical projection remains the grounding source."""
 
-    projection_version: Literal["2.0"] = "2.0"
+    projection_version: Literal["3.0"] = "3.0"
     ticker: Ticker
     as_of_date: date
     skill_id: NonEmpty
@@ -206,6 +224,7 @@ class SynthesisProjection(CanonicalModel):
     market_windows: tuple[MarketWindowSummary, ...]
     findings: tuple[SynthesisFinding, ...]
     evidence_index: dict[str, SynthesisEvidenceDefinition]
+    provenance_index: dict[str, SynthesisEvidenceProvenance]
     calculation_provenance: dict[str, SynthesisCalculation]
     limitations: tuple[str, ...]
 
@@ -214,6 +233,22 @@ class SynthesisProjection(CanonicalModel):
         ids = set(self.evidence_index)
         if any(key != ref.evidence_id for key, ref in self.evidence_index.items()):
             raise ValueError("synthesis evidence keys must preserve canonical IDs")
+        if any(key != record.stable_id() for key, record in self.provenance_index.items()):
+            raise ValueError("synthesis provenance keys must match their content")
+        for ref in self.evidence_index.values():
+            record = self.provenance_index.get(ref.provenance_id)
+            if record is None:
+                raise ValueError("synthesis provenance references must resolve")
+            if (ref.provider, ref.data_vintage, ref.transformation) != (
+                record.provider,
+                record.data_vintage,
+                record.transformation,
+            ):
+                raise ValueError("synthesis provenance must preserve exact evidence fields")
+        if {ref.provenance_id for ref in self.evidence_index.values()} != set(
+            self.provenance_index
+        ):
+            raise ValueError("synthesis provenance must be used by evidence")
         for finding in self.findings:
             if not set(finding.evidence_ids) <= ids:
                 raise ValueError("synthesis finding references must resolve")

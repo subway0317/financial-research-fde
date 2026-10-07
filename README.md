@@ -1213,6 +1213,20 @@ returns 503 / SYNTHESIS_PAYLOAD_BUDGET_EXCEEDED with a safe message. Evidence is
 silently removed to fit. Frozen benchmark runs use the locked threshold explicitly,
 so shell overrides cannot silently change benchmark conditions.
 
+Stage 8 Tiingo remediation uses synthesis projection v3: exact duplicate
+`provider`, `data_vintage` and ordered `transformation` fields are stored once in a
+content-addressed `provenance_index`. Each evidence definition retains its original
+canonical ID, distinct source reference and all financial/PIT fields, and references
+the shared record by `provenance_id`. No provenance text is summarized or removed;
+canonical grounding evidence and report bundle appendices still contain the full
+original fields. The numeric audit's `evidence_definitions_bytes` includes both
+indexes. The 200,000-byte ceiling, initial/repair checks and prompts are unchanged.
+The offline NVDA 2026-06-30 report regression uses existing Tiingo prices and
+explicitly synthetic SEC fiscal facts corroborated by synthetic filings, plus
+equivalent Yahoo prices and FakeLLMClient. It checks lossless evidence recovery,
+complete calculation inputs, bundle integrity and rejection of genuinely oversized
+financial evidence without live provider or OpenAI calls.
+
 ### Preregistered model release rules
 
 | Rule | Threshold |

@@ -71,6 +71,7 @@ def test_compact_payload_is_bounded_and_avoids_full_packages_and_provider_data(h
         "market_windows",
         "findings",
         "evidence_index",
+        "provenance_index",
         "calculation_provenance",
         "limitations",
     }
@@ -100,7 +101,11 @@ def test_definitions_are_singletons_and_all_provenance_references_resolve(histor
         original = history_projection.evidence_index[key].model_dump(
             mode="json", exclude={"evidence_id"}, exclude_none=True
         )
-        assert definition == original
+        shared = data["provenance_index"][definition["provenance_id"]]
+        assert {
+            **{field: value for field, value in definition.items() if field != "provenance_id"},
+            **shared,
+        } == original
     assert source_definitions == len(history_projection.evidence_index)
     original_calcs = {calc.evidence_id: calc for calc in history_projection.calculation_provenance}
     assert set(data["calculation_provenance"]) == set(original_calcs)
@@ -223,6 +228,37 @@ def test_compact_projection_rejects_unresolved_calculation_input(history_project
                     **compact.calculation_provenance,
                     key: calc.model_copy(update={"input_evidence_ids": ("unknown",)}),
                 },
+            }
+        )
+
+
+@pytest.mark.parametrize("invalid", ["missing", "wrong_binding", "changed_content", "unused"])
+def test_shared_provenance_rejects_broken_or_inexact_references(history_projection, invalid):
+    from financial_research.schemas.agent import SynthesisEvidenceProvenance
+
+    compact = synthesis_projection(history_projection)
+    evidence = dict(compact.evidence_index)
+    provenance = dict(compact.provenance_index)
+    evidence_id, ref = next(iter(evidence.items()))
+    if invalid == "missing":
+        evidence[evidence_id] = ref.model_copy(update={"provenance_id": "missing"})
+    elif invalid == "wrong_binding":
+        other_id = next(key for key in provenance if key != ref.provenance_id)
+        evidence[evidence_id] = ref.model_copy(update={"provenance_id": other_id})
+    elif invalid == "changed_content":
+        provenance[ref.provenance_id] = provenance[ref.provenance_id].model_copy(
+            update={"transformation": ("different adjustment semantics",)}
+        )
+    else:
+        unused = SynthesisEvidenceProvenance(provider="unused-provider")
+        provenance[unused.stable_id()] = unused
+    with pytest.raises(ValidationError, match="synthesis provenance"):
+        type(compact).model_validate(
+            {
+                **compact.model_dump(),
+                "evidence_index": evidence,
+                "provenance_index": provenance,
+                "calculation_provenance": compact.calculation_provenance,
             }
         )
 

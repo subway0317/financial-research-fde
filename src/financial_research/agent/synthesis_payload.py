@@ -13,6 +13,7 @@ from financial_research.schemas.agent import (
     ResponseLanguage,
     SynthesisCalculation,
     SynthesisEvidenceDefinition,
+    SynthesisEvidenceProvenance,
     SynthesisFinding,
     SynthesisOutput,
     SynthesisPayloadAudit,
@@ -100,6 +101,19 @@ def _quality_summary(projection: EvidenceProjection) -> SynthesisQualitySummary:
 
 def synthesis_projection(projection: EvidenceProjection) -> SynthesisProjection:
     """Keep every canonical evidence ID and input chain; group repetitive diagnostics."""
+    evidence_index = {}
+    provenance_index = {}
+    for key, ref in sorted(projection.evidence_index.items()):
+        provenance = SynthesisEvidenceProvenance(
+            provider=ref.provider,
+            data_vintage=ref.data_vintage,
+            transformation=ref.transformation,
+        )
+        provenance_id = provenance.stable_id()
+        provenance_index[provenance_id] = provenance
+        evidence_index[key] = SynthesisEvidenceDefinition.model_validate(
+            {**ref.model_dump(), "provenance_id": provenance_id}
+        )
     return SynthesisProjection(
         ticker=projection.ticker,
         as_of_date=projection.as_of_date,
@@ -117,10 +131,8 @@ def synthesis_projection(projection: EvidenceProjection) -> SynthesisProjection:
                 projection.findings, key=lambda row: (row.section, row.metric, row.evidence_ids)
             )
         ),
-        evidence_index={
-            key: SynthesisEvidenceDefinition.model_validate(ref.model_dump())
-            for key, ref in sorted(projection.evidence_index.items())
-        },
+        evidence_index=evidence_index,
+        provenance_index=dict(sorted(provenance_index.items())),
         calculation_provenance={
             calc.evidence_id: SynthesisCalculation.model_validate(calc.model_dump())
             for calc in sorted(projection.calculation_provenance, key=lambda calc: calc.evidence_id)
@@ -150,6 +162,7 @@ def synthesis_payload(
         not in {
             "findings",
             "evidence_index",
+            "provenance_index",
             "calculation_provenance",
             "quality",
             "limitations",
@@ -165,7 +178,14 @@ def synthesis_payload(
         components=SynthesisPayloadComponents(
             request_metadata_bytes=_bytes({"question": question, **language_metadata, **metadata}),
             findings_bytes=_bytes(data["findings"]),
-            evidence_definitions_bytes=_bytes(data["evidence_index"]),
+            # Include both evidence definitions and their shared provenance without
+            # changing the public numeric-only audit contract.
+            evidence_definitions_bytes=_bytes(
+                {
+                    "evidence_index": data["evidence_index"],
+                    "provenance_index": data["provenance_index"],
+                }
+            ),
             calculation_provenance_bytes=_bytes(data["calculation_provenance"]),
             quality_bytes=_bytes(data["quality"]),
             limitations_bytes=_bytes(data["limitations"]),
