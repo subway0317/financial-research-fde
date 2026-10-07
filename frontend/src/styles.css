@@ -25,6 +25,9 @@ main { max-width: 1444px; margin: 0 auto; padding: 28px 32px 64px; }
 .research-form { display: grid; grid-template-columns: minmax(160px, 1.4fr) minmax(175px, 1fr) minmax(140px, .8fr) auto; gap: 20px; align-items: end; }
 .field label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 650; color: #455964; }
 .ticker-input { text-transform: uppercase; }
+.demo-access-field { grid-column: 1 / -1; max-width: 620px; }
+.demo-access-field input { max-width: 360px; display: block; }
+.demo-access-field p { margin-top: 7px; }
 .primary { background: #225963; color: white; border-color: #225963; min-height: 46px; font-weight: 600; padding-inline: 24px; }
 .primary:hover:not(:disabled) { background: #194750; color: white; }
 .result-region { margin-top: 24px; }

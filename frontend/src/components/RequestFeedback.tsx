@@ -17,7 +17,8 @@ export function LoadingState({ startedAt, labels: t }: { startedAt: number; labe
 
 export function ErrorState({ error, labels: t }: { error: Error; labels: Labels }) {
   const status = error instanceof ReportRequestError ? error.status : 0
-  const messages: Record<number, string> = { 422: t.error422, 404: t.error404, 502: t.error502,
+  const messages: Record<number, string> = { 401: t.errorAccess, 403: t.errorAccess, 429: t.error429,
+    422: t.error422, 404: t.error404, 502: t.error502,
     503: t.error503, 500: t.error500, 0: t.errorNetwork }
   return <section className="feedback error" role="alert">
     <h2>{t.errorTitle}</h2><p>{messages[status] ?? t.errorOther}</p>

@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: financial-research-fde
+    runtime: docker
+    plan: free
+    branch: main
+    numInstances: 1
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /ready
+    autoDeployTrigger: checksPass
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: INFO
+      - key: OPENAI_TIMEOUT_SECONDS
+        value: "120"
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        sync: false
+      - key: SEC_USER_AGENT
+        sync: false
+      - key: DEMO_ACCESS_TOKEN
+        sync: false

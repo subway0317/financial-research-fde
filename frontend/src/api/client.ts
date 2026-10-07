@@ -29,10 +29,11 @@ function safeErrorMetadata(body: unknown): { requestId?: string; code?: string }
 }
 
 export async function generateEquityResearchReport(request: ReportRequest,
-  signal?: AbortSignal): Promise<ReportResponse> {
+  signal?: AbortSignal, demoAccessCode?: string): Promise<ReportResponse> {
   const response = await fetch('/v1/reports/equity-research', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json',
+      ...(demoAccessCode ? { 'X-Demo-Access': demoAccessCode } : {}) },
     body: JSON.stringify(request),
     signal,
   })

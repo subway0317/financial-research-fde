@@ -1,9 +1,10 @@
 import { readdir, readFile } from 'node:fs/promises'
 import { fileURLToPath } from 'node:url'
 
-export const sentinels = ['__FRONTEND_SECRET_SENTINEL__', '__SEC_CONTACT_SENTINEL__', '__VITE_SECRET_SENTINEL__']
+export const sentinels = ['__FRONTEND_SECRET_SENTINEL__', '__SEC_CONTACT_SENTINEL__', '__VITE_SECRET_SENTINEL__',
+  '__OPENAI_SECRET_SENTINEL__', '__DEMO_ACCESS_SENTINEL__', '__SEC_SENTINEL__']
 const forbidden = [
-  /OPENAI_API_KEY|SEC_USER_AGENT|VITE_[A-Z_]*(?:KEY|SECRET|TOKEN)/,
+  /OPENAI_API_KEY|SEC_USER_AGENT|DEMO_ACCESS_TOKEN|VITE_[A-Z_]*(?:KEY|SECRET|TOKEN)/,
   /api\.openai\.com|(?:www\.)?sec\.gov|query[12]\.finance\.yahoo\.com/,
   /system_prompt|chain_of_thought|raw_provider_payload/,
   /\/home\/zbw21\/|[A-Z]:\\(?:Users|Windows)\\/,

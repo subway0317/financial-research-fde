@@ -13,10 +13,11 @@ function today() {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 }
 
-export function App() {
+export function App({ production = import.meta.env.PROD }: { production?: boolean } = {}) {
   const [ticker, setTicker] = useState('')
   const [date, setDate] = useState(today)
   const [language, setLanguage] = useState<Language>('ENGLISH')
+  const [demoAccessCode, setDemoAccessCode] = useState('')
   const [request, setRequest] = useState<RequestState>({ status: 'IDLE' })
   const activeRequest = useRef<AbortController | null>(null)
   const resultRegion = useRef<HTMLDivElement>(null)
@@ -32,12 +33,12 @@ export function App() {
   }, [request.status])
 
   async function generate(input: ReportRequest) {
-    if (activeRequest.current) return
+    if (activeRequest.current || (production && !demoAccessCode)) return
     const controller = new AbortController()
     activeRequest.current = controller
     setRequest({ status: 'LOADING', startedAt: Date.now() })
     try {
-      const response = await generateEquityResearchReport(input, controller.signal)
+      const response = await generateEquityResearchReport(input, controller.signal, production ? demoAccessCode : undefined)
       if (!controller.signal.aborted) setRequest({ status: 'SUCCESS', response })
     } catch (error) {
       if (!controller.signal.aborted) setRequest({ status: 'ERROR', error: error instanceof Error ? error : new Error('Request failed') })
@@ -53,7 +54,8 @@ export function App() {
     <main>
       <section className="input-panel" id="research-input" aria-label={t.workspace}>
         <ResearchForm ticker={ticker} date={date} language={language} loading={request.status === 'LOADING'}
-          labels={t} onTicker={setTicker} onDate={setDate} onLanguage={setLanguage} onGenerate={generate} />
+          labels={t} onTicker={setTicker} onDate={setDate} onLanguage={setLanguage} onGenerate={generate}
+          demoAccess={production ? { code: demoAccessCode, onChange: setDemoAccessCode } : undefined} />
       </section>
       <div ref={resultRegion} tabIndex={-1} className="result-region" aria-label={t.report}>
         {request.status === 'IDLE' && <section className="empty-state"><p className="eyebrow">{t.workspace}</p>

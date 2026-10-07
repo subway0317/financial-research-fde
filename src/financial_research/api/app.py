@@ -25,6 +25,7 @@ def create_app(
     tools_factory: ToolsFactory | None = None,
     config: ResearchConfig | None = None,
     agent_factory: AgentFactory | None = None,
+    include_metadata: bool = True,
 ) -> FastAPI:
     application = FastAPI(title="Financial Research FDE", version="0.4.0")
     application.state.agent_factory = agent_factory
@@ -34,7 +35,6 @@ def create_app(
     )
     install_error_handlers(application)
 
-    @application.middleware("http")
     async def metadata(
         request: Request, call_next: Callable[[Request], Awaitable[Response]]
     ) -> Response:
@@ -50,6 +50,9 @@ def create_app(
             (time.perf_counter() - request.state.started_at) * 1000,
         )
         return response
+
+    if include_metadata:
+        application.middleware("http")(metadata)
 
     application.include_router(health_router)
     application.include_router(research_router)

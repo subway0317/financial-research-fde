@@ -13,6 +13,8 @@ Stage 6 packages validated Agent claims into bilingual analyst research reports,
 with deterministic rendering, a stateless API and reproducible local audit bundles.
 Stage 7 consumes that frozen report contract in a React/TypeScript analyst workspace,
 with interactive evidence, calculation provenance, audit metadata and downloads.
+Stage 8 adds the Docker/Render production composition and demo operations described
+below; remote deployment and a real production browser smoke remain separate gates.
 
 This project is **not a demonstrated alpha-generating stock predictor**. Earlier
 Quant research found no robust multi-year predictive signal from Relative Market +
@@ -1840,3 +1842,245 @@ persistence, saved history, PDF, cloud deployment, streaming, comparison, valuat
 or mobile-native experience. LLM latency varies and external providers remain
 runtime dependencies. Stage 8 deployment and production operations are future
 work; this stage does not add deployment configuration or infrastructure.
+
+## Stage 8 — Production deployment and operations
+
+One Render Docker Web Service runs the compiled React frontend and FastAPI API
+on the same origin. The production entrypoint is
+`python -m financial_research.deployment.run`, binding `0.0.0.0:$PORT` (default
+10000, validated range 1–65535), with exactly one uvicorn worker. The image runs
+as non-root UID/GID 10001. There is no separate frontend service, CORS deployment,
+database, persistent disk, server-side report history, queue or background job.
+SEC, market data and OpenAI remain external runtime dependencies.
+
+The production wrapper composes the existing API, without changing its report
+schemas, research logic, prompts, grounding, policy, calculations or Stage 5 evals.
+`/` serves the compiled index and `/assets/*` serves its JS/CSS. Unknown `/v1/*`
+paths keep normal API 404 behavior; they do not fall through to frontend HTML.
+`financial_research.api.app:app` remains the development entrypoint with the
+existing Vite proxy and no demo gate. The frontend uses `import.meta.env.PROD`
+to show the access-code input only in a production build. `api:check` continues
+exporting the existing API contract under canonical Python 3.14; the wrapper's
+operational endpoints do not require generated frontend API types.
+
+### Runtime configuration and secrets
+
+The deployment configuration reads exported runtime environment variables,
+never a checked-in credential file. `.env.example` remains a names-only local
+template, with no automatic dotenv loading.
+
+| Name | Purpose |
+| --- | --- |
+| `APP_ENV` | `production` on Docker/Render; `development`/`test` bypass the production gate |
+| `OPENAI_API_KEY` | Backend-only OpenAI credential |
+| `OPENAI_MODEL` | Explicit model configuration, no silent fallback |
+| `OPENAI_TIMEOUT_SECONDS` | Required positive finite timeout; Blueprint sets 120 |
+| `SEC_USER_AGENT` | Backend-only organization/contact identity for SEC access |
+| `DEMO_ACCESS_TOKEN` | Private random demo code, required in production |
+| `LOG_LEVEL` | DEBUG/INFO/WARNING/ERROR/CRITICAL; default INFO |
+| `PORT` | Render-provided listening port; default 10000 locally |
+| `RENDER_GIT_COMMIT` | Render deployment revision; safe hex-only version metadata |
+
+Set credentials through Render's environment settings. No secret belongs in
+`render.yaml`, a Dockerfile, a build argument, a `VITE_*` variable or chat.
+Vite dotenv loading and public environment prefixes remain disabled. The browser
+receives no OpenAI key or SEC contact identity; it makes no direct provider calls.
+
+Production requires `X-Demo-Access` for **all existing `/v1/*` POST operations**,
+including the Report, Agent and deterministic research tools, before provider
+dependencies run. Wrong/missing codes return the same sanitized 401 envelope;
+an absent server token returns 503. Comparison uses `hmac.compare_digest`.
+Homepage, assets, `/health`, `/ready` and `/version` remain public. Access does
+not authenticate a user or grant separate roles.
+
+The user enters the code into a masked field held only in React memory. It goes
+only in the request header: never the request JSON, URL, localStorage,
+sessionStorage, cookies, report, audit or downloads. Refresh clears it. The
+frontend presents bilingual 401/403 and 429 messages and makes no automatic
+research retry. All existing report, evidence, calculation, audit and download
+behavior stays intact.
+
+One in-process slot covers actual Report **and Agent** execution, preventing an
+Agent bypass of the LLM cost guard. A concurrent authorized generation gets a
+sanitized 429 (`DEMO_BUSY`) and the user retries manually. The lock releases in
+`finally` when the synchronous worker really ends, including error paths.
+Canceling browser waiting does not release a still-running worker. Health,
+readiness and static assets stay available while research runs. This requires
+one instance and one worker; it is not distributed rate limiting.
+
+### Liveness, readiness, deployment revision and logs
+
+`GET /health` keeps its existing response exactly:
+`{"status":"ok","service":"financial-research-fde"}`. It performs **zero**
+network calls and says only that the process is live.
+
+`GET /ready` returns 200 with `status: ready`, `environment` and empty `codes`
+only when the application is initialized, required runtime configuration is
+present/valid, and `frontend/dist/index.html` plus every JS/CSS asset it references
+exist. Missing OpenAI/model/timeout/SEC configuration, a missing production demo
+token or absent/partial assets return 503 with safe diagnostic codes. Missing
+credentials do not prevent `/health` from working. Readiness does not probe
+providers, authorize credentials or perform research, so it cannot guarantee
+external availability. Invalid APP_ENV/LOG_LEVEL/PORT fail startup with a generic
+configuration error. Render checks `/ready`.
+
+`GET /version` exposes only app name, API version, environment and the sanitized
+`RENDER_GIT_COMMIT`; outside Render an absent/invalid revision is `unknown`.
+It contains no credentials, filesystem paths or provider payloads. Verify this
+commit against the intended deployed revision before the formal smoke.
+
+Every HTTP response has a new UUID4 `X-Request-ID`, which matches its structured
+stdout JSON completion log. Incoming IDs are not trusted. Fields include UTC
+timestamp, level, event, request_id, method, known route path, status_code and
+duration_ms. Asset paths are grouped as `/assets/*`; unknown paths are logged as
+`unmatched`, without queries. Successful report execution adds ticker, as-of
+date, report status, report_id, run_id and repair_count with the same request ID.
+Log serialization uses an allowlist and omits arbitrary messages, exceptions,
+headers, bodies, credential values, SEC contact, access code, prompts, hidden
+reasoning and raw provider/LLM responses. Uvicorn raw access logging is disabled.
+Non-operational library log messages become generic runtime events. Filter Render
+logs by request ID; do not paste full reports or raw logs into the repository.
+
+### Docker build and local infrastructure smoke
+
+The Node `24-bookworm-slim` builder uses the lockfile, `npm ci` and the production
+build/security scan. The Python `3.14-slim-bookworm` runtime installs only backend
+runtime dependencies and compiled `dist`; it contains no Node, node_modules or
+backend dev tools. Neither build stage receives production secrets. `.dockerignore`
+excludes `.env`/`.env.*`, `.venv`, `.git`, local artifacts, caches, node_modules,
+prebuilt dist and local agent/cloud configuration. Explicit runtime COPY rules
+also exclude credential files. Actual image verification is part of the smoke,
+not a claim based solely on these declarations.
+
+From the repository root, after confirming a usable Docker daemon:
+
+```bash
+docker --version
+docker info
+docker build -t financial-research-fde:local .
+python scripts/container_smoke.py --image financial-research-fde:local
+```
+
+The smoke supplies only fake values, publishes a random loopback port and runs
+three short-lived containers: complete configuration, missing demo token and
+missing OpenAI key. It checks boot, liveness, readiness/503, homepage, version,
+compiled assets, unauthenticated/wrong-code refusal, API 404, request-ID logs,
+sentinel leakage, non-root execution and image filesystem exclusions. It refuses
+to send valid research authorization, makes **zero real research/provider calls**,
+uses bounded startup retry and stops each container on success or failure.
+CI also creates a fake `.env` context sentinel to detect accidental copying.
+
+For an optional locally configured container, create an ignored
+`.env.production.local` from `.env.example`, edit it privately and supply the
+required runtime names above. The template's development environment is explicitly
+overridden here:
+
+```bash
+docker run --rm --env-file .env.production.local \
+  -p 127.0.0.1:10000:10000 -e PORT=10000 -e APP_ENV=production \
+  financial-research-fde:local
+```
+
+Do not submit a valid research request during infrastructure checks. The single
+formal live research smoke belongs on the deployed Render URL.
+
+If Docker is unavailable in Windows/WSL, report **LOCAL CONTAINER VALIDATION:
+USER_CONFIGURATION_REQUIRED**. The user must install/start
+[Docker Desktop for Windows](https://docs.docker.com/desktop/setup/install/windows-install/),
+use Linux containers with the WSL 2 engine and enable this distribution under
+Settings → Resources → WSL Integration. Reopen the WSL terminal and verify both
+commands above before building. See [Docker's WSL instructions](https://docs.docker.com/desktop/features/wsl/).
+No automated installer, Windows service change or WSL integration modification
+is part of this implementation. A host Python HTTP smoke does not substitute
+for an image build or container boot.
+If the CLI exists but `docker info` reports socket permission denied, fix access
+in the user's own Docker/WSL environment and restart the relevant terminal/agent
+session. For a native Linux Engine use the
+[official post-installation steps](https://docs.docker.com/engine/install/linux-postinstall/);
+for Docker Desktop use the WSL integration steps above. Socket ownership or
+permissions are not changed by this task. Verify daemon access from the same
+environment that will run the build and smoke, not just another terminal.
+
+### Render deployment
+
+1. Review the changes and finish local checks. Publish the reviewed implementation
+   to the connected GitHub branch yourself; this task does not stage, commit or
+   push. Confirm the backend, frontend and container CI jobs pass for that revision.
+2. Create/sign in to your Render account and connect the Financial Research FDE
+   GitHub repository. Create a Blueprint from this repository's `render.yaml` on
+   `main`, or create one Docker Web Service with the same settings.
+3. Keep Dockerfile/context at the repository root, one instance, the image's CMD
+   as startup command and `/ready` as health-check path. `autoDeployTrigger:
+   checksPass` waits for GitHub checks before automatic deploys.
+4. Enter `OPENAI_API_KEY`, `OPENAI_MODEL`, `SEC_USER_AGENT` and `DEMO_ACCESS_TOKEN`
+   privately in Render. Their Blueprint entries use `sync: false`; no values are
+   committed. Confirm `APP_ENV=production`, `OPENAI_TIMEOUT_SECONDS=120` and
+   `LOG_LEVEL=INFO`. Use a random private demo code and share it only with intended
+   demo users. Configure secrets again for each new service/environment.
+5. Deploy the intended revision and open the actual Render-provided HTTPS URL.
+   Confirm homepage/assets, `/health` 200, `/ready` 200 and `/version`'s commit.
+   A readiness 503 needs configuration/assets correction, not an LLM test.
+6. Follow the single-request browser acceptance below. Record the deployment URL,
+   commit and safe request metadata only after successful verification.
+
+The Blueprint is one free Docker Web Service and has no disk/database. See the
+[Render Blueprint reference](https://render.com/docs/blueprint-spec) and
+[health-check documentation](https://render.com/docs/health-checks). A free
+service may spin down after 15 minutes of inactivity and take about a minute to
+wake; wait for health/readiness before generating a report. Cold start alone does
+not establish an application defect. Free-tier resources and external request
+latencies still require real verification; a paid plan is a user choice. See
+[Render's free-service limits](https://render.com/docs/free).
+
+### Formal production browser acceptance: one live report
+
+Use the actual deployed HTTPS homepage, not a development URL. Do not run a
+Stage 5 live Judge benchmark or repeat expensive requests to debug the UI.
+
+1. Verify HTTPS, homepage/assets, `/health`, `/ready` and deployment commit.
+2. Enter an incorrect demo code and try Generate Research. Confirm 401/access
+   feedback and no provider or LLM execution, then enter the correct code.
+3. Generate **once**: ticker `NVDA`, as-of `2026-06-30`, language `ENGLISH`.
+   Confirm loading behavior followed by a completed report, rather than BLOCKED
+   or an external failure. Record report status, quality, readiness and warnings.
+4. Inspect original report sections, evidence aliases/details and supplied
+   filing/available/as-of dates. Confirm zero PIT violations from the existing
+   report/audit diagnostics; do not calculate PIT in the frontend or invent a
+   new count. Inspect supplied calculation formulas/results/input evidence.
+5. Check audit IDs, planner not used/zero planner calls and supplied synthesis/
+   repair counts. Verify keyboard drawers and narrow-screen presentation, and
+   JSON/Markdown downloads matching the backend report and canonical Markdown.
+6. Match the response `X-Request-ID` to Render's safe structured request/report
+   logs (method, path, status, duration and report/run metadata). Confirm secrets,
+   prompts, provider payloads and hidden reasoning are absent without copying
+   full logs into README. Record the real request count: one authorized report.
+
+A deployed service with a provider failure can be DEPLOYMENT PASS and PRODUCTION
+SMOKE EXTERNAL_BLOCKED. Do not automatically alter frozen research behavior to
+mask provider outages. With no Render access report REMOTE DEPLOYMENT:
+USER_ACTION_REQUIRED and PRODUCTION SMOKE: NOT RUN. Neither static tests nor fake
+credentials establish remote deployment, real credential validity, browser layout
+or operational stability. Stage 8 cannot freeze before the container and formal
+production smoke gates are satisfied; future extensions remain blocked.
+
+### Validation and operating limits
+
+Run the existing full offline backend and frontend commands above. Deployment
+tests add configuration/readiness failures, exact API/OpenAPI preservation, early
+access refusal, atomic concurrency/cancellation behavior, UUID correlation and
+log sanitization. Frontend tests add memory-only access, header-only transport,
+401/403/429 behavior and no retry. Source/dist scans include demo credential
+sentinels. No backend or frontend dependency was added.
+
+The existing Python 3.12/3.14 compatibility matrix stays unchanged. Canonical
+OpenAPI export and the container runtime use Python 3.14. The new container CI
+job builds and runs the fake-only infrastructure smoke after backend/frontend
+checks. All CI jobs are offline with respect to research providers and OpenAI;
+image/package downloads still require network access.
+
+This deployment supports one instance, one worker and an in-process execution
+guard only. There are no user accounts, real authentication, saved reports,
+distributed rate limits, background jobs or multi-region deployment. The demo
+code is a cost/access boundary, not per-user quotas; anyone knowing it can make
+sequential requests. Free-tier cold starts, LLM latency and external provider
+availability remain limitations. No Stage 9 implementation is included.

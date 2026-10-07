@@ -1,6 +1,9 @@
 import type { Language } from './api/client'
 
 const english = {
+  demoAccess: 'Demo access code', demoAccessHelp: 'Required for the public demo. Kept in memory until this page is closed or refreshed.',
+  errorAccess: 'A valid demo access code is required. Check the code and try again.',
+  error429: 'Another research report is currently being generated. Please try again shortly.',
   brand: 'Financial Research', workspace: 'Analyst research workspace',
   ticker: 'Ticker', asOf: 'As-of date', language: 'Language', generate: 'Generate Research',
   idleTitle: 'Start with a company and a research date',
@@ -44,6 +47,9 @@ const english = {
 type Translation = { [Key in keyof typeof english]: string }
 
 const chinese: Translation = {
+  demoAccess: '演示访问码', demoAccessHelp: '公开演示需要访问码；仅保存在当前页面内存中，关闭或刷新后清除。',
+  errorAccess: '需要有效的演示访问码，请检查访问码后重试。',
+  error429: '当前已有研究任务正在生成，请稍后重试。',
   brand: '金融研究', workspace: '分析师研究工作台', ticker: '股票代码', asOf: '研究日期',
   language: '语言', generate: '生成研究报告', idleTitle: '从公司和研究日期开始',
   idleText: '生成结构化股票研究报告，然后探索每条研究陈述背后的证据。',
